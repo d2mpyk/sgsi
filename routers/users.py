@@ -199,9 +199,9 @@ def get_forgot_password_view(request: Request):
     """Muestra el formulario para solicitar restablecimiento de contraseña."""
     flash_message, flash_type = get_flash_messages(request)
     response = templates.TemplateResponse(
+        request,
         "auth/forgot-password.html",
         {
-            "request": request,
             "flash_message": flash_message,
             "flash_type": flash_type,
         },
@@ -836,8 +836,9 @@ def resend_verification_view(request: Request):
     """Muestra el formulario dedicado para reenviar verificación."""
     flash_message, flash_type = get_flash_messages(request)
     response = templates.TemplateResponse(
+        request,
         "auth/resend-verification.html",
-        {"request": request, "flash_message": flash_message, "flash_type": flash_type},
+        {"flash_message": flash_message, "flash_type": flash_type},
     )
     if flash_message:
         response.delete_cookie("flash_message")

@@ -6,6 +6,7 @@ from models.users import ApprovedUsers, User
 from utils.auth import (
     generate_verification_token,
     hash_password,
+    verify_password,
 )
 
 
@@ -86,6 +87,65 @@ def test_update_current_user_password_rejects_incorrect_current_password(client,
 
     assert response.status_code == 401
     assert response.json()["detail"] == "La contraseña actual es incorrecta."
+
+
+def test_forgot_password_view_renders_flash_message_and_clears_flash_cookies(client):
+    client.cookies.set("flash_message", "Correo enviado")
+    client.cookies.set("flash_type", "green")
+
+    response = client.get("/api/v1/users/forgot-password")
+
+    assert response.status_code == 200
+    assert "Correo enviado" in response.text
+    delete_headers = response.headers.get_list("set-cookie")
+    assert any("flash_message=\"\"" in value for value in delete_headers)
+    assert any("flash_type=\"\"" in value for value in delete_headers)
+
+
+def test_reset_password_returns_error_when_passwords_do_not_match(client):
+    response = client.post(
+        "/api/v1/users/reset-password/invalid-token",
+        data={"new_password": "NewPassword123!", "confirm_password": "DistinctPassword123!"},
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 303
+    assert response.headers["location"].endswith("/api/v1/users/reset-password/invalid-token")
+    flash_messages = response.headers.get_list("set-cookie")
+    assert any("Las contraseñas no coinciden." in decode_cookie_text(value) for value in flash_messages)
+
+
+def test_reset_password_returns_error_when_password_is_too_short(client):
+    response = client.post(
+        "/api/v1/users/reset-password/invalid-token",
+        data={"new_password": "short", "confirm_password": "short"},
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 303
+    assert response.headers["location"].endswith("/api/v1/users/reset-password/invalid-token")
+    flash_messages = response.headers.get_list("set-cookie")
+    assert any(
+        "La contraseña debe tener al menos 8 caracteres." in decode_cookie_text(value)
+        for value in flash_messages
+    )
+
+
+def test_reset_password_redirects_to_login_when_token_is_invalid(client):
+    response = client.post(
+        "/api/v1/users/reset-password/invalid-token",
+        data={"new_password": "ValidPass123!", "confirm_password": "ValidPass123!"},
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 303
+    assert response.headers["location"].endswith("/api/v1/auth/login")
+    flash_messages = response.headers.get_list("set-cookie")
+    assert any(
+        "El enlace para restablecer la contraseña es inválido o ha expirado."
+        in decode_cookie_text(value)
+        for value in flash_messages
+    )
 
 
 def test_get_users_admin_view_renders_departments(client, db_session):
@@ -280,6 +340,91 @@ def test_post_user_edit_view_blocks_admin_self_deactivation(client, db_session):
     assert admin.is_active is True
 
 
+def test_post_user_edit_view_updates_user_password_for_admin(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="edit.password.admin",
+        email="edit.password.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+        department_id=get_department_id(db_session),
+    )
+    target_user = User(
+        username="target.password.user",
+        email="target.password.user@example.com",
+        password_hash=hash_password("OldPassword123!"),
+        role="user",
+        is_active=True,
+        department_id=get_department_id(db_session),
+    )
+    db_session.add_all([admin, target_user])
+    db_session.commit()
+
+    login_as_admin(client, "edit.password.admin", admin_pass)
+
+    response = client.post(
+        f"/api/v1/users/{target_user.id}/edit",
+        data={
+            "username": target_user.username,
+            "role": "user",
+            "department_id": str(target_user.department_id),
+            "is_active": "on",
+            "password": "UpdatedPassword123!",
+        },
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 303
+    assert response.headers["location"].endswith("/api/v1/users")
+    db_session.refresh(target_user)
+    assert verify_password("UpdatedPassword123!", target_user.password_hash) is True
+
+
+def test_post_user_edit_view_rejects_short_password(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="edit.short.password.admin",
+        email="edit.short.password.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+        department_id=get_department_id(db_session),
+    )
+    target_user = User(
+        username="target.short.password",
+        email="target.short.password@example.com",
+        password_hash=hash_password("OldPassword123!"),
+        role="user",
+        is_active=True,
+        department_id=get_department_id(db_session),
+    )
+    db_session.add_all([admin, target_user])
+    db_session.commit()
+
+    login_as_admin(client, "edit.short.password.admin", admin_pass)
+
+    response = client.post(
+        f"/api/v1/users/{target_user.id}/edit",
+        data={
+            "username": target_user.username,
+            "role": "user",
+            "department_id": str(target_user.department_id),
+            "is_active": "on",
+            "password": "short",
+        },
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 303
+    assert response.headers["location"].endswith(f"/api/v1/users/{target_user.id}/edit")
+    flash_messages = response.headers.get_list("set-cookie")
+    assert any(
+        "La contraseña debe tener al menos 8 caracteres." in decode_cookie_text(value)
+        for value in flash_messages
+    )
+
+
 def test_verify_user_email_returns_blue_when_account_is_already_active(client, db_session):
     user = User(
         username="already.active",
@@ -375,6 +520,19 @@ def test_resend_verification_email_sends_for_inactive_user(client, db_session):
     assert mock_email.called
 
 
+def test_resend_verification_view_renders_flash_message_and_clears_flash_cookies(client):
+    client.cookies.set("flash_message", "Reenvio listo")
+    client.cookies.set("flash_type", "blue")
+
+    response = client.get("/api/v1/users/resend-verification")
+
+    assert response.status_code == 200
+    assert "Reenvio listo" in response.text
+    delete_headers = response.headers.get_list("set-cookie")
+    assert any("flash_message=\"\"" in value for value in delete_headers)
+    assert any("flash_type=\"\"" in value for value in delete_headers)
+
+
 def test_update_user_role_rejects_admin_self_role_change(client, db_session):
     admin_pass = "AdminPass123!"
     admin = User(
@@ -437,6 +595,75 @@ def test_update_user_partial_rejects_duplicate_email(client, db_session):
 
     assert response.status_code == 400
     assert response.json()["detail"] == "Este Email ya está registrado."
+
+
+def test_get_user_returns_404_when_user_does_not_exist(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="get.missing.admin",
+        email="get.missing.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+        department_id=get_department_id(db_session),
+    )
+    db_session.add(admin)
+    db_session.commit()
+
+    login_as_admin(client, "get.missing.admin", admin_pass)
+
+    response = client.get("/api/v1/users/9999")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Este usuario no existe"
+
+
+def test_update_user_role_returns_404_when_target_user_does_not_exist(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="role.missing.admin",
+        email="role.missing.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+        department_id=get_department_id(db_session),
+    )
+    db_session.add(admin)
+    db_session.commit()
+
+    login_as_admin(client, "role.missing.admin", admin_pass)
+
+    response = client.patch(
+        "/api/v1/users/9999/role",
+        json={"role": "user"},
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Este usuario no existe"
+
+
+def test_update_user_partial_returns_404_when_target_user_does_not_exist(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="partial.missing.admin",
+        email="partial.missing.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+        department_id=get_department_id(db_session),
+    )
+    db_session.add(admin)
+    db_session.commit()
+
+    login_as_admin(client, "partial.missing.admin", admin_pass)
+
+    response = client.patch(
+        "/api/v1/users/9999",
+        json={"username": "new.name"},
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Este usuario no existe"
 
 
 def test_view_security_logs_renders_filtered_html(client, db_session):

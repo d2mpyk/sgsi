@@ -73,9 +73,9 @@ def dashboard(
     pending_documents = [doc for doc in policies if doc.id not in user_reads]
 
     return templates.TemplateResponse(
+        request,
         "dashboard/dashboard.html",
         {
-            "request": request,
             "user": current_user,
             "data": data,
             "pending_documents": pending_documents,
