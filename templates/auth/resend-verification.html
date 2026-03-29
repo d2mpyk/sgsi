@@ -1,0 +1,29 @@
+{% extends "auth/base_login.html" %}
+
+{% set title = 'Activar Cuenta' %}
+
+{% block content %}
+<div id="form-container">
+    <p class="auth-helper-copy">
+        Si tu cuenta está inactiva, ingresa tu correo para recibir un nuevo enlace de verificación.
+    </p>
+
+    <form id="resendVerificationForm" action="{{ url_for('resend_verification') }}" method="POST" class="auth-form-stack">
+        <label class="auth-label" for="resend_email">Correo registrado</label>
+        <p class="auth-field-wrap">
+            <span class="auth-field-icon"><i class="fa fa-envelope-o"></i></span>
+            <input id="resend_email" class="w3-input w3-border w3-round-large auth-input" type="email" name="email" placeholder="usuario@empresa.com"
+                required>
+        </p>
+
+        <p>
+            <button class="w3-button w3-block w3-round-large auth-primary-btn"
+                type="submit"><strong>Reenviar correo</strong></button>
+        </p>
+    </form>
+</div>
+
+<div class="w3-small w3-margin-top auth-links">
+    <a href="{{ url_for('login') }}" class="auth-link-primary">Volver al inicio</a>
+</div>
+{% endblock %}

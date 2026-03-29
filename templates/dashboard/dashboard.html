@@ -1,0 +1,73 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Dashboard - Resumen{% endblock %}
+
+{% block content %}
+<div class="w3-row-padding w3-margin-top">
+  <div class="w3-col l8 m12">
+    <section class="w3-card w3-round-xlarge dashboard-panel w3-margin-bottom">
+      <header class="dashboard-panel-header">
+        <div>
+          <span class="dashboard-section-kicker">Atención prioritaria</span>
+          <h3><i class="fa fa-book"></i> Mis lecturas pendientes</h3>
+        </div>
+        <span class="dashboard-count-badge">{{ pending_documents|length }} abiertas</span>
+      </header>
+
+      <div class="w3-container w3-padding-large">
+        {% if pending_documents %}
+        <div class="w3-panel dashboard-notice dashboard-notice-warn w3-round-large">
+          <p>Tienes <strong>{{ pending_documents|length }}</strong> políticas que requieren tu atención.
+            El cumplimiento de estas lecturas es obligatorio.</p>
+        </div>
+        <div class="dashboard-list">
+          {% for doc in pending_documents %}
+          <article class="dashboard-list-item">
+            <div>
+              <span class="dashboard-list-title">{{ doc.title }}</span>
+              <span class="dashboard-list-meta">Código: {{ doc.code or 'S/C' }} | Versión: {{ doc.version }}</span>
+            </div>
+            <a href="{{ url_for('documents_view') }}"
+              class="w3-button w3-round-large dashboard-action-btn">
+              <i class="fa fa-eye"></i> Revisar
+            </a>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="w3-panel dashboard-notice dashboard-notice-ok w3-round-large">
+          <p><i class="fa fa-check-circle"></i> Estás al día con todas las políticas vigentes.</p>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+  </div>
+
+  <div class="w3-col l4 m12">
+    <section class="w3-card w3-round-xlarge dashboard-panel dashboard-side-panel w3-margin-bottom">
+      <header class="dashboard-panel-header">
+        <div>
+          <span class="dashboard-section-kicker">Vista rápida</span>
+          <h3><i class="fa fa-compass"></i> Enfoque del día</h3>
+        </div>
+      </header>
+      <div class="w3-container w3-padding-large">
+        <div class="dashboard-mini-stat">
+          <span class="dashboard-mini-label">Pendientes</span>
+          <strong>{{ pending_documents|length }}</strong>
+        </div>
+        <div class="dashboard-mini-stat">
+          <span class="dashboard-mini-label">Repositorio</span>
+          <strong>{{ data.total_documents }}</strong>
+        </div>
+        <div class="dashboard-side-copy">
+          <p>Usa el módulo documental para confirmar lecturas, descargar archivos y revisar el estado general del sistema.</p>
+        </div>
+        <a href="{{ url_for('documents_view') }}" class="w3-button w3-block w3-round-large dashboard-primary-link">
+          <i class="fa fa-files-o"></i> Ir a documentos
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

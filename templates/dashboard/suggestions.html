@@ -1,0 +1,77 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Sugerencias{% endblock %}
+
+{% block content %}
+<section class="w3-card w3-round-xlarge admin-panel-card">
+    <div class="admin-panel-head">
+        <div>
+            <span class="dashboard-section-kicker">Mejora continua</span>
+            <h3>{% if is_admin_view %}Sugerencias de todos los usuarios{% else %}Mis sugerencias para la aplicación{% endif %}</h3>
+            <p>{% if is_admin_view %}Consulta las propuestas enviadas por todos los usuarios, incluidas las tuyas, para mejorar la experiencia y operación del SGSI.{% else %}Consulta tus propuestas enviadas para mejorar la experiencia y operación del SGSI.{% endif %}</p>
+        </div>
+        <span class="dashboard-count-badge">{{ suggestions|length }} registradas</span>
+    </div>
+
+    <div class="admin-table-shell w3-responsive">
+        <table class="w3-table w3-hoverable admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    {% if is_admin_view %}
+                    <th>Usuario</th>
+                    {% endif %}
+                    <th>Sugerencia</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in suggestions %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    {% if is_admin_view %}
+                    <td>{{ item.username }}</td>
+                    {% endif %}
+                    <td>{{ item.suggestion }}</td>
+                    <td>{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="{% if is_admin_view %}4{% else %}3{% endif %}">{% if is_admin_view %}Aún no hay sugerencias registradas.{% else %}Aún no has enviado sugerencias.{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<button
+    class="w3-button w3-xlarge w3-circle documents-fab"
+    onclick="document.getElementById('modalAddSuggestion').style.display='block'"
+    title="Agregar sugerencia">
+    <i class="fa fa-plus"></i>
+</button>
+
+<div id="modalAddSuggestion" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-xlarge documents-modal" style="max-width:720px">
+        <header class="w3-container w3-round-top-large documents-modal-header">
+            <span onclick="document.getElementById('modalAddSuggestion').style.display='none'"
+                class="w3-button w3-hover-red w3-display-topright"><strong>&times;</strong></span>
+            <h3>Agregar sugerencia</h3>
+        </header>
+        <form class="w3-container w3-padding-16" method="POST" action="{{ url_for('create_suggestion') }}">
+            <label><b>Describe tu sugerencia de mejora</b></label>
+            <textarea
+                class="w3-input w3-border w3-round-large documents-input w3-margin-top w3-margin-bottom"
+                name="suggestion"
+                rows="8"
+                minlength="10"
+                placeholder="Cuéntanos qué se puede mejorar, por qué y cómo debería verse o funcionar."
+                required></textarea>
+            <button
+                class="w3-button w3-block w3-round-large documents-primary-btn w3-section"
+                type="submit">Enviar sugerencia</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

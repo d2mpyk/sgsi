@@ -1,0 +1,106 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<div class="w3-container w3-margin-top">
+    <div class="w3-card-4 w3-round-xlarge admin-form-card" style="max-width: 680px; margin: auto;">
+        <header class="w3-container w3-round-top-large documents-modal-header">
+            <h4><i class="fa fa-user-circle"></i> {% if user.role == 'admin' %}Editar Usuario: {{ target_user.username }}{% else %}Mi información de usuario{% endif %}</h4>
+        </header>
+
+        {% if user.role == 'admin' %}
+        <form class="w3-container w3-padding-24" action="{{ url_for('post_user_edit_view', user_id=target_user.id) }}"
+            method="post">
+            <div class="w3-section">
+                <label><b>Nombre de Usuario</b></label>
+                <input class="w3-input w3-border w3-round-large documents-input" type="text" name="username"
+                    value="{{ target_user.username }}" required>
+            </div>
+
+            <div class="w3-section">
+                <label><b>Nueva Contraseña</b> (dejar en blanco para no cambiar)</label>
+                <input class="w3-input w3-border w3-round-large documents-input" type="password" name="password" placeholder="********"
+                    minlength="8">
+            </div>
+
+            <div class="w3-section">
+                <label><b>Rol de Sistema</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="role">
+                    <option value="user" {{ 'selected' if target_user.role=='user' }}>Usuario Estándar</option>
+                    <option value="admin" {{ 'selected' if target_user.role=='admin' }}>Administrador</option>
+                </select>
+            </div>
+
+            <div class="w3-section">
+                <label><b>Departamento</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="department_id" required>
+                    {% for department in departments %}
+                    <option value="{{ department.id }}" {{ 'selected' if target_user.department_id == department.id }}>
+                        {{ department.departamento }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="w3-section admin-checkbox-row">
+                <input class="w3-check" type="checkbox" name="is_active" {{ 'checked' if target_user.is_active }}>
+                <label> Usuario Activo (Permitir Login)</label>
+            </div>
+
+            <div class="w3-padding-16">
+                <button type="submit" class="w3-button w3-round-large w3-block documents-primary-btn">
+                    <i class="fa fa-save"></i> Guardar Cambios
+                </button>
+                <a href="{{ url_for('get_users') }}"
+                    class="w3-button w3-round-large w3-block w3-margin-top documents-tertiary-btn">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+        {% else %}
+        <div class="w3-container w3-padding-24">
+            <div class="w3-panel w3-round-large app-inline-alert">
+                <p>Este formulario es informativo. Para cambios administrativos debes contactar a un administrador.</p>
+            </div>
+
+            <div class="w3-section">
+                <label><b>Nombre de Usuario</b></label>
+                <input class="w3-input w3-border w3-round-large documents-input" type="text"
+                    value="{{ target_user.username }}" readonly>
+            </div>
+
+            <div class="w3-section">
+                <label><b>Email</b></label>
+                <input class="w3-input w3-border w3-round-large documents-input" type="email"
+                    value="{{ target_user.email }}" readonly>
+            </div>
+
+            <div class="w3-row-padding" style="margin: 0 -16px;">
+                <div class="w3-half w3-section">
+                    <label><b>Rol</b></label>
+                    <input class="w3-input w3-border w3-round-large documents-input" type="text"
+                        value="{{ target_user.role|capitalize }}" readonly>
+                </div>
+                <div class="w3-half w3-section">
+                    <label><b>Estado</b></label>
+                    <input class="w3-input w3-border w3-round-large documents-input" type="text"
+                        value="{{ 'Activo' if target_user.is_active else 'Inactivo' }}" readonly>
+                </div>
+            </div>
+
+            <div class="w3-section">
+                <label><b>Departamento</b></label>
+                <input class="w3-input w3-border w3-round-large documents-input" type="text"
+                    value="{{ target_user.department_name }}" readonly>
+            </div>
+
+            <div class="w3-padding-16">
+                <a href="{{ url_for('dashboard') }}"
+                    class="w3-button w3-round-large w3-block documents-tertiary-btn">
+                    Volver al panel
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

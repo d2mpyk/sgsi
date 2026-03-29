@@ -1,0 +1,95 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<section class="w3-card w3-round-xlarge admin-panel-card">
+    <div class="admin-panel-head">
+        <div>
+            <span class="dashboard-section-kicker">Administración</span>
+            <h3>Lista de usuarios registrados</h3>
+            <p>Consulta rápida de cuentas, roles y estado de activación.</p>
+        </div>
+        <span class="dashboard-count-badge">{{ users|length }} usuarios</span>
+    </div>
+    <div class="admin-table-shell w3-responsive">
+        <table class="w3-table w3-hoverable admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Departamento</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Creado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.department_name }}</td>
+                    <td><span class="w3-tag w3-round admin-role-tag">{{ u.role }}</span></td>
+                    <td>
+                        <span class="w3-tag w3-round {{ 'admin-status-ok' if u.is_active else 'admin-status-off' }}">
+                            {{ "Activo" if u.is_active else "Inactivo" }}
+                        </span>
+                    </td>
+                    <td>{{ u.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <a href="{{ url_for('get_user_edit_view', user_id=u.id) }}"
+                            class="w3-button w3-round-large admin-action-btn">
+                            <i class="fa fa-edit"></i> Editar
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% if user.role == 'admin' %}
+<button
+    class="w3-button w3-xlarge w3-circle documents-fab"
+    onclick="document.getElementById('modalAddUser').style.display='block'" title="Agregar Usuario">
+    <i class="fa fa-plus"></i>
+</button>
+
+<div id="modalAddUser" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-xlarge documents-modal" style="max-width:500px">
+        <header class="w3-container w3-round-top-large documents-modal-header">
+            <span onclick="document.getElementById('modalAddUser').style.display='none'"
+                class="w3-button w3-hover-red w3-display-topright"><strong>&times;</strong></span>
+            <h3>Agregar Usuario</h3>
+        </header>
+        <form id="addUserForm" class="w3-container w3-padding-16" method="POST" action="{{ url_for('create_user') }}">
+            <label>Nombre de Usuario</label>
+            <input class="w3-input w3-border w3-round-large documents-input w3-margin-bottom" type="text" id="new_username" name="username"
+                required>
+            <label>Email</label>
+            <input class="w3-input w3-border w3-round-large documents-input w3-margin-bottom" type="email" id="new_email" name="email"
+                required>
+            <label>Contraseña</label>
+            <input class="w3-input w3-border w3-round-large documents-input w3-margin-bottom" type="password" id="new_password"
+                name="password" required minlength="8">
+            <label>Departamento</label>
+            <select class="w3-select w3-border w3-round-large documents-input w3-margin-bottom" id="new_department_id"
+                name="department_id" required>
+                <option value="" disabled selected>Selecciona un departamento</option>
+                {% for department in departments %}
+                <option value="{{ department.id }}">{{ department.departamento }}</option>
+                {% endfor %}
+            </select>
+            <button
+                class="w3-button w3-block w3-round-large documents-primary-btn w3-section"
+                type="submit">Crear Usuario</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}{% endblock %}

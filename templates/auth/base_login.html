@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or 'Login' }}</title>
+    <script src="{{ url_for('static', path='js/theme-init.js') }}"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Montserrat:wght@600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+</head>
+
+<body class="auth-shell w3-display-container"
+    data-root-path="{{ request.scope.get('root_path', '') }}">
+    <div class="auth-background-grid"></div>
+    <div class="w3-content auth-stage">
+        <div class="theme-switcher auth-theme-switcher">
+            <button type="button" class="w3-button w3-round-xlarge theme-toggle-btn" data-theme-toggle
+                aria-label="Cambiar tema">
+                <i class="fa fa-moon-o theme-toggle-icon" aria-hidden="true"></i>
+                <span class="theme-toggle-label">Modo oscuro</span>
+            </button>
+        </div>
+        <div class="w3-row auth-layout">
+            <section class="w3-col l6 m12 auth-brand-panel">
+                <div class="auth-brand-card">
+                    <div class="auth-badge">SGSI · Wise Management</div>
+                    <h1 class="auth-title">Control de documentos del SGSI - (Sistema de Gestión de Seguridad de la Información).</h1>
+                    <p class="auth-lead">
+                        Accede al sistema de gestión documental del SGSI con un entorno visual moderno, diseñado para
+                        lectura, trazabilidad y operación diaria.
+                    </p>
+                    <div class="auth-highlights">
+                        <div class="auth-highlight-item">
+                            <span class="auth-highlight-icon"><i class="fa fa-shield"></i></span>
+                            <div>
+                                <strong>Seguridad operativa</strong>
+                                <p>Acceso controlado, trazabilidad y políticas obligatorias siempre visibles.</p>
+                            </div>
+                        </div>
+                        <div class="auth-highlight-item">
+                            <span class="auth-highlight-icon"><i class="fa fa-files-o"></i></span>
+                            <div>
+                                <strong>Documentación centralizada</strong>
+                                <p>Consulta políticas, registros y evidencias desde un mismo tablero.</p>
+                            </div>
+                        </div>
+                        <div class="auth-highlight-item">
+                            <span class="auth-highlight-icon"><i class="fa fa-line-chart"></i></span>
+                            <div>
+                                <strong>Seguimiento visible</strong>
+                                <p>Estado de lecturas, actividad y cumplimiento con una interfaz más directa.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="w3-col l6 m12 auth-form-panel">
+                <div class="w3-card auth-card">
+                    <div class="auth-card-media">
+                        <img class="w3-image auth-hero-image"
+                            src="{{ url_for('static', path='images/bg-login.jpg') }}"
+                            alt="Fondo institucional SGSI">
+                        <div class="auth-card-overlay"></div>
+                    </div>
+                    <div class="auth-card-body">
+                        <div class="auth-section-kicker">Plataforma interna</div>
+                        <h2 class="auth-form-title">{{ title }}</h2>
+                        <p class="auth-form-subtitle">Ingresa con tus credenciales para continuar en el entorno SGSI.</p>
+
+                        {% if flash_message %}
+                        <div class="w3-panel auth-alert auth-alert-{{ flash_type or 'red' }} w3-display-container w3-round-large w3-animate-top">
+                            <span onclick="this.parentElement.style.display='none'"
+                                class="w3-button w3-large w3-display-topright">&times;</span>
+                            <p>{{ flash_message }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>    
+    {% block scripts %}
+    <script src="{{ url_for('static', path='js/theme.js') }}"></script>
+    <script src="{{ url_for('static', path='js/login.js') }}"></script>
+    {% endblock %}
+</body>
+
+</html>

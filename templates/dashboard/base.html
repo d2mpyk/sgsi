@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ title or 'Dashboard' }} - Document Management{% endblock %}</title>
+    <script src="{{ url_for('static', path='js/theme-init.js') }}"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Montserrat:wght@600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+    {% block head %}{% endblock %}
+</head>
+
+<body class="app-shell" data-root-path="{{ request.scope.get('root_path', '') }}">
+
+    <div class="app-topbar w3-top">
+        <div class="w3-bar app-topbar-inner">
+            <button class="w3-bar-item w3-button w3-hide-large app-menu-toggle" onclick="w3_open();">
+                <i class="fa fa-bars"></i> Menú
+            </button>
+            <div class="w3-bar-item app-topbar-brand">
+                <span class="app-brand-mark">SGSI</span>
+                <div class="app-brand-copy">
+                    <strong>{{ request.app.state.company_name }}</strong>
+                    <span>{{ request.app.state.project_name }}</span>
+                </div>
+            </div>
+            <div class="w3-bar-item w3-right app-topbar-actions">
+                <button type="button" class="w3-button w3-round-xlarge theme-toggle-btn" data-theme-toggle
+                    aria-label="Cambiar tema">
+                    <i class="fa fa-moon-o theme-toggle-icon" aria-hidden="true"></i>
+                    <span class="theme-toggle-label">Modo oscuro</span>
+                </button>
+            </div>
+            <div class="w3-bar-item w3-right app-topbar-status">
+                <span class="app-status-dot"></span>
+                <span>Sesión activa</span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="w3-sidebar w3-collapse w3-animate-left app-sidebar" id="mySidebar">
+        <div class="app-sidebar-inner">
+            <div class="app-sidebar-header">
+                <div class="app-user-row">
+                    <div class="app-avatar-wrap">
+                {% if user.image_file %}
+                <img src="{{ url_for('media', path='profile_pics/' + user.image_file) }}"
+                    class="w3-circle app-avatar" style="width:56px">
+                {% else %}
+                <img src="{{ url_for('static', path='profile_pics/avatar3.png') }}" class="w3-circle app-avatar"
+                    style="width:56px">
+                {% endif %}
+                    </div>
+                    <div class="app-user-meta">
+                        <span class="app-user-label">Usuario autenticado</span>
+                        <strong>{{ user.username }}</strong>
+                        <span class="app-user-role">{{ user.role|capitalize }}</span>
+                    </div>
+                </div>
+                <div class="app-sidebar-actions">
+                    <a href="{{ url_for('get_user_edit_view', user_id=user.id) }}" class="w3-button w3-round-large app-icon-btn" title="Perfil y usuarios">
+                        <i class="fa fa-user"></i>
+                    </a>
+                    <form action="{{ url_for('logout') }}" method="POST" class="app-logout-form">
+                        <button type="submit" class="w3-button w3-round-large app-logout-btn">
+                            <i class="fa fa-sign-out"></i> Salir
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="app-sidebar-section">
+                <span class="app-nav-caption">Navegación</span>
+                <div class="w3-bar-block app-nav-list">
+                    <a href="#" class="w3-bar-item w3-button w3-hide-large app-nav-link app-nav-close"
+                        onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i> Cerrar menú</a>
+
+                    <a href="{{ url_for('dashboard') }}" class="w3-bar-item w3-button app-nav-link">
+                        <i class="fa fa-tachometer fa-fw"></i><span>Resumen</span>
+                    </a>
+                    <a href="{{ url_for('documents_view') }}"
+                        class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('documents_view').path %}w3-blue{% endif %}">
+                        <i class="fa fa-files-o"></i><span>Documentos</span>
+                    </a>
+                    <a href="{{ url_for('suggestions_view') }}"
+                        class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('suggestions_view').path %}w3-blue{% endif %}">
+                        <i class="fa fa-lightbulb-o"></i><span>Sugerencias</span>
+                    </a>
+                    <a href="{% if user.role == 'admin' %}{{ url_for('get_users') }}{% else %}{{ url_for('get_user_edit_view', user_id=user.id) }}{% endif %}"
+                        class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('get_users').path %}w3-blue{% endif %}">
+                        <i class="fa fa-users fa-fw"></i><span>Usuarios</span>
+                    </a>
+                    {% if user.role == 'admin' %}
+                    <a href="{{ url_for('view_security_logs') }}"
+                        class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('view_security_logs').path %}w3-blue{% endif %}">
+                        <i class="fa fa-shield fa-fw"></i><span>Logs de seguridad</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="app-sidebar-section app-sidebar-note">
+                <span class="app-nav-caption">Contexto</span>
+                <p>Entorno documental para consulta, cumplimiento y trazabilidad operativa del SGSI.</p>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer"
+        title="close side menu" id="myOverlay"></div>
+
+    <div class="w3-main app-main">
+
+        <header class="w3-container app-page-header">
+            <div>
+                <div class="app-page-kicker">Panel institucional</div>
+                <h1><i class="fa fa-dashboard"></i> {{ title|default('Panel de Control') }}</h1>
+                <p>Consulta rápida del estado del sistema, accesos principales y actividades prioritarias.</p>
+            </div>
+            <div class="app-page-badge">
+                <span>Actualizado en tiempo real</span>
+            </div>
+        </header>
+
+        <div class="w3-row-padding w3-margin-bottom app-stats-grid">
+            <div class="w3-quarter">
+                <div class="w3-container w3-round-xlarge w3-padding-16 app-stat-card app-stat-blue">
+                    <div class="app-stat-top">
+                        <span class="app-stat-icon"><i class="fa fa-users"></i></span>
+                        <span class="app-stat-label">Usuarios</span>
+                    </div>
+                    <div class="app-stat-value">{{ data.total_users }}</div>
+                    <a class="w3-button w3-round-large app-stat-link" href="{% if user.role == 'admin' %}{{ url_for('get_users') }}{% else %}{{ url_for('get_user_edit_view', user_id=user.id) }}{% endif %}">
+                        Ver gestión
+                    </a>
+                </div>
+            </div>
+            <div class="w3-quarter">
+                <div class="w3-container w3-round-xlarge w3-padding-16 app-stat-card app-stat-slate">
+                    <div class="app-stat-top">
+                        <span class="app-stat-icon"><i class="fa fa-files-o"></i></span>
+                        <span class="app-stat-label">Documentos</span>
+                    </div>
+                    <div class="app-stat-value">{{ data.total_documents }}</div>
+                    <a class="w3-button w3-round-large app-stat-link" href="{{ url_for('documents_view') }}">
+                        Abrir repositorio
+                    </a>
+                </div>
+            </div>
+            <div class="w3-quarter">
+                <div class="w3-container w3-round-xlarge w3-padding-16 app-stat-card app-stat-ice">
+                    <div class="app-stat-top">
+                        <span class="app-stat-icon"><i class="fa fa-file-text"></i></span>
+                        <span class="app-stat-label">Políticas</span>
+                    </div>
+                    <div class="app-stat-value">{{ data.total_pending }}</div>
+                    <a class="w3-button w3-round-large app-stat-link" href="{{ url_for('documents_view') }}">
+                        Pendientes por atender
+                    </a>
+                </div>
+            </div>
+            <div class="w3-quarter">
+                <div class="w3-container w3-round-xlarge w3-padding-16 app-stat-card app-stat-alert">
+                    <div class="app-stat-top">
+                        <span class="app-stat-icon"><i class="fa fa-exclamation-triangle"></i></span>
+                        <span class="app-stat-label">Errores</span>
+                    </div>
+                    <div class="app-stat-value">{{ data.total_errors }}</div>
+                    <a class="w3-button w3-round-large app-stat-link" href="{% if user.role == 'admin' %}{{ url_for('view_security_logs') }}{% else %}#{% endif %}">
+                        Incidentes registrados
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="w3-container app-content-shell">
+            {% if flash_message %}
+            <div class="w3-panel app-inline-alert w3-display-container w3-round-large w3-card-2">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-button w3-large w3-display-topright">&times;</span>
+                <p>{{ flash_message }}</p>
+            </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+
+        <br>
+        <footer class="w3-container w3-padding-16 app-footer-wrap">
+            <div class="w3-container w3-padding-32 w3-round-xlarge app-footer-card">
+                <div class="w3-row">
+                    <div class="w3-col m8 s12">
+                        <h4>SGSI Documentación</h4>
+                        <p>Interfaz institucional para acceso, lectura y seguimiento documental del sistema de gestión.</p>
+                    </div>
+                    <div class="w3-col m4 s12 app-footer-meta">
+                        <p>Desarrollado por <a href="https://github.com/d2mpyk/sgsi" target="_blank">D2MP</a></p>
+                        <p>Estilos base con <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">W3.css</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="{{ url_for('static', path='js/theme.js') }}"></script>
+    <script src="{{ url_for('static', path='js/dashboard.js') }}"></script>
+
+    {% block scripts %}{% endblock %}
+
+</body>
+
+</html>

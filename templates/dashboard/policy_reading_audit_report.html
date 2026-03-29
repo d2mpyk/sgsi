@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Global de Lectura de Políticas SGSI</title>
+    <style>
+        :root {
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --ink: #0f172a;
+            --muted: #475569;
+            --line: #dbe4f0;
+            --brand: #1d4ed8;
+            --brand-soft: #dbeafe;
+            --ok: #2f855a;
+            --warn: #d69e2e;
+            --bad: #c53030;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.45;
+        }
+        .page {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 32px 24px 64px;
+        }
+        .cover, .section, .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+        }
+        .cover {
+            padding: 32px;
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 58%, #f8fafc 100%);
+        }
+        .eyebrow {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: var(--brand-soft);
+            color: var(--brand);
+        }
+        h1, h2, h3 {
+            margin: 0 0 12px;
+            color: var(--ink);
+        }
+        h1 { font-size: 34px; }
+        h2 { font-size: 24px; }
+        h3 { font-size: 18px; }
+        p { margin: 0 0 12px; color: var(--muted); }
+        .cover-grid, .summary-grid, .two-col, .chart-grid {
+            display: grid;
+            gap: 18px;
+        }
+        .cover-grid { grid-template-columns: 2fr 1fr; margin-top: 24px; }
+        .summary-grid {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            margin-top: 20px;
+        }
+        .metric {
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: #f8fafc;
+        }
+        .metric span {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .metric strong {
+            font-size: 28px;
+            color: var(--ink);
+        }
+        .section {
+            padding: 28px;
+            margin-top: 22px;
+        }
+        .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .chart-card, .table-wrap, .note-box {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 18px;
+            background: #fff;
+        }
+        .table-wrap { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top;
+            text-align: left;
+        }
+        th {
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .badge.green { background: rgba(47, 133, 90, 0.14); color: var(--ok); }
+        .badge.yellow { background: rgba(214, 158, 46, 0.15); color: #9a6700; }
+        .badge.red { background: rgba(197, 48, 48, 0.14); color: var(--bad); }
+        .progress-shell {
+            width: 100%;
+            min-width: 140px;
+            height: 10px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+        }
+        ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+        }
+        .footer {
+            margin-top: 26px;
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }
+        @media print {
+            body { background: white; }
+            .page { max-width: none; padding: 0; }
+            .cover, .section { box-shadow: none; }
+        }
+        @media (max-width: 860px) {
+            .cover-grid, .two-col, .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="cover">
+            <span class="eyebrow">Evidencia de Auditoría SGSI</span>
+            <h1>Informe Global de Confirmación de Lectura de Políticas</h1>
+            <p>Documento estructurado para auditorías internas y externas del SGSI, con trazabilidad de cumplimiento, niveles de avance e identificación de desviaciones.</p>
+
+            <div class="cover-grid">
+                <div class="note-box">
+                    <h3>Portada</h3>
+                    <p><strong>Organización:</strong> {{ company_name }}</p>
+                    <p><strong>Proyecto:</strong> {{ project_name }}</p>
+                    <p><strong>Fecha de emisión:</strong> {{ summary.generated_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</p>
+                    <p><strong>Versión del informe:</strong> {{ summary.report_version }}</p>
+                    <p><strong>Responsable:</strong> {{ summary.responsible }}</p>
+                </div>
+                <div class="note-box">
+                    <h3>Resumen Ejecutivo</h3>
+                    <p>El cumplimiento global actual del programa de lectura es de <strong>{{ summary.global_compliance_percentage }}%</strong>.</p>
+                    <p>El {{ summary.collaborators_confirmed_percentage }}% de los colaboradores activos ha confirmado al menos una lectura en el periodo controlado.</p>
+                    <p>Se registran <strong>{{ summary.pending_reads }}</strong> lecturas pendientes y <strong>{{ summary.overdue_reads }}</strong> fuera de plazo.</p>
+                </div>
+            </div>
+
+            <div class="summary-grid">
+                <div class="metric">
+                    <span>Cumplimiento Global</span>
+                    <strong>{{ summary.global_compliance_percentage }}%</strong>
+                </div>
+                <div class="metric">
+                    <span>Colaboradores Activos</span>
+                    <strong>{{ summary.total_active_users }}</strong>
+                </div>
+                <div class="metric">
+                    <span>Políticas Activas</span>
+                    <strong>{{ summary.total_active_policies }}</strong>
+                </div>
+                <div class="metric">
+                    <span>Confirmaciones</span>
+                    <strong>{{ summary.completed_assignments }}/{{ summary.total_assignments }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="two-col">
+                <div class="note-box">
+                    <h2>Alcance del Informe</h2>
+                    <p>{{ scope_text }}</p>
+                </div>
+                <div class="note-box">
+                    <h2>Metodología de Medición</h2>
+                    <p>{{ methodology_text }}</p>
+                    <p>La clasificación usa semáforos: verde desde 90%, amarillo entre 70% y 89.9%, y rojo por debajo de 70%.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Métricas Clave</h2>
+            <div class="summary-grid">
+                <div class="metric">
+                    <span>% colaboradores que han confirmado lectura</span>
+                    <strong>{{ summary.collaborators_confirmed_percentage }}%</strong>
+                </div>
+                <div class="metric">
+                    <span>Lecturas Pendientes</span>
+                    <strong>{{ summary.pending_reads }}</strong>
+                </div>
+                <div class="metric">
+                    <span>Lecturas Fuera de Plazo</span>
+                    <strong>{{ summary.overdue_reads }}</strong>
+                </div>
+                <div class="metric">
+                    <span>Regla de Vencimiento</span>
+                    <strong>{{ report_due_days }} días</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Tablas de Cumplimiento</h2>
+            <div class="table-wrap">
+                <h3>Detalle por Política</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Política</th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Total colaboradores asignados</th>
+                            <th>Confirmaciones realizadas</th>
+                            <th>% cumplimiento</th>
+                            <th>Semáforo</th>
+                            <th>Fuera de plazo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in policy_rows %}
+                        <tr>
+                            <td>{{ row.policy_id }}</td>
+                            <td>{{ row.code }}</td>
+                            <td>{{ row.title }}</td>
+                            <td>{{ row.total_collaborators }}</td>
+                            <td>{{ row.confirmations }}</td>
+                            <td>
+                                <div class="progress-shell">
+                                    <div class="progress-bar" style="width: {{ row.compliance_percentage }}%"></div>
+                                </div>
+                                {{ row.compliance_percentage }}%
+                            </td>
+                            <td><span class="badge {{ row.semaphore }}">{{ row.semaphore|upper }}</span></td>
+                            <td>{{ row.overdue_reads }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-wrap" style="margin-top: 18px;">
+                <h3>Detalle por Área / Departamento</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Área</th>
+                            <th>Total colaboradores</th>
+                            <th>Total asignaciones</th>
+                            <th>Confirmaciones</th>
+                            <th>% cumplimiento</th>
+                            <th>Pendientes</th>
+                            <th>Fuera de plazo</th>
+                            <th>Semáforo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in department_rows %}
+                        <tr>
+                            <td>{{ row.department_name }}</td>
+                            <td>{{ row.total_collaborators }}</td>
+                            <td>{{ row.total_assignments }}</td>
+                            <td>{{ row.confirmations }}</td>
+                            <td>{{ row.compliance_percentage }}%</td>
+                            <td>{{ row.pending_reads }}</td>
+                            <td>{{ row.overdue_reads }}</td>
+                            <td><span class="badge {{ row.semaphore }}">{{ row.semaphore|upper }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Gráficos Requeridos</h2>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Gráfico de Barras: Cumplimiento por Área</h3>
+                    {{ department_bar_chart }}
+                </div>
+                <div class="chart-card">
+                    <h3>Gráfico de Pastel: Estado Global</h3>
+                    {{ global_pie_chart }}
+                </div>
+            </div>
+            <div class="chart-card" style="margin-top: 18px;">
+                <h3>Gráfico de Tendencia: Evolución del Cumplimiento</h3>
+                {{ trend_chart }}
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="two-col">
+                <div class="note-box">
+                    <h2>Evidencia de Auditoría</h2>
+                    <p><strong>Método de confirmación:</strong> Confirmación explícita de lectura registrada en el sistema SGSI.</p>
+                    <p><strong>Trazabilidad:</strong> Usuario, departamento, política, fecha de descarga y fecha de confirmación.</p>
+                    <p><strong>Fuente:</strong> {{ evidence_text }}</p>
+                </div>
+                <div class="note-box">
+                    <h2>Control y Cumplimiento</h2>
+                    <p><strong>Incumplimientos identificados:</strong></p>
+                    <ul>
+                        {% for risk in risks %}
+                        <li>{{ risk }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p style="margin-top: 12px;"><strong>Recomendaciones:</strong></p>
+                    <ul>
+                        {% for recommendation in recommendations %}
+                        <li>{{ recommendation }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Trazabilidad Detallada</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Departamento</th>
+                            <th>Política</th>
+                            <th>Estado</th>
+                            <th>Fecha Política</th>
+                            <th>Descarga</th>
+                            <th>Confirmación</th>
+                            <th>Vencida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in traceability_rows %}
+                        <tr>
+                            <td>{{ row.username }} ({{ row.user_id }})</td>
+                            <td>{{ row.department_name }}</td>
+                            <td>{{ row.policy_code }} - {{ row.policy_title }}</td>
+                            <td>{{ row.status }}</td>
+                            <td>{{ row.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ row.download_at.strftime('%Y-%m-%d %H:%M') if row.download_at else 'N/A' }}</td>
+                            <td>{{ row.read_at.strftime('%Y-%m-%d %H:%M') if row.read_at else 'N/A' }}</td>
+                            <td>{{ 'Sí' if row.overdue else 'No' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="footer">
+            Informe emitido automáticamente por el SGSI. Preparado para impresión o guardado en PDF como evidencia de auditoría.
+        </div>
+    </main>
+</body>
+</html>

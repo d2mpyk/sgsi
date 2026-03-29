@@ -1,0 +1,70 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<div class="w3-container">
+    <div class="w3-row logs-header-row">
+        <div class="w3-col m8">
+            <span class="dashboard-section-kicker">Auditoría</span>
+            <h3><i class="fa fa-shield"></i> Log de auditoría y seguridad</h3>
+            <p class="w3-small w3-text-grey">Visualizando las últimas entradas del sistema.</p>
+        </div>
+        <div class="w3-col m4 w3-right-align w3-padding-16">
+            <a href="{{ url_for('view_security_logs') }}" class="w3-button w3-round-large documents-secondary-btn">
+                <i class="fa fa-refresh"></i> Actualizar
+            </a>
+        </div>
+    </div>
+
+    <div class="w3-card w3-padding w3-margin-bottom w3-round-xlarge admin-panel-card">
+        <form method="GET" action="{{ url_for('view_security_logs') }}">
+            <div class="w3-row-padding">
+                <div class="w3-col m6">
+                    <input class="w3-input w3-border w3-round-large documents-input" type="text" name="q"
+                        placeholder="Filtrar por usuario, IP o evento..." value="{{ query }}">
+                </div>
+                <div class="w3-col m2">
+                    <input class="w3-input w3-border w3-round-large documents-input" type="number" name="limit" value="{{ limit }}" min="10"
+                        max="1000" title="Líneas">
+                </div>
+                <div class="w3-col m2">
+                    <button type="submit" class="w3-button w3-block w3-round-large documents-primary-btn"><i class="fa fa-search"></i>
+                        Filtrar</button>
+                </div>
+                <div class="w3-col m2">
+                    <a href="{{ url_for('export_security_logs') }}?q={{ query }}&limit={{ limit }}"
+                        class="w3-button w3-block w3-round-large documents-tertiary-btn">
+                        <i class="fa fa-file-excel-o"></i> CSV
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="w3-card-4 w3-round-xlarge logs-console">
+        <table class="w3-table w3-small" style="width: 100%;">
+            {% for line in logs %}
+            {% set row_color = '' %}
+            {% set icon = 'fa-info-circle' %}
+            {% if 'ERROR' in line %}
+            {% set row_color = 'logs-error' %}
+            {% set icon = 'fa-times-circle' %}
+            {% elif 'WARNING' in line %}
+            {% set row_color = 'logs-warning' %}
+            {% set icon = 'fa-exclamation-triangle' %}
+            {% elif 'INFO' in line %}
+            {% set row_color = 'logs-info' %}
+            {% endif %}
+
+            <tr class="log-entry">
+                <td class="{{ row_color }} logs-icon-cell"><i class="fa {{ icon }}"></i></td>
+                <td class="logs-line-cell">{{ line }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td class="w3-padding">No se encontraron registros.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}
