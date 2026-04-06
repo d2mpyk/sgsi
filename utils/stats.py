@@ -1,6 +1,8 @@
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
+
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
+
 from models.documents import Document, DocumentRead
 from models.users import User
 
@@ -34,7 +36,7 @@ class DashboardStatsCache:
 
         stats = self.data.copy()
 
-        if current_user is not None:
+        if isinstance(current_user, User):
             total_active_policies = (
                 db.execute(
                     select(func.count(Document.id)).where(

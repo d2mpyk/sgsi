@@ -8,6 +8,7 @@ from fastapi import (
 )
 
 from fastapi.responses import HTMLResponse
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -40,7 +41,7 @@ def dashboard(
     current_user: CurrentUser,
     db: Annotated[Session, Depends(get_db)],
 ):
-    if isinstance(current_user, HTMLResponse):
+    if isinstance(current_user, RedirectResponse):
         return current_user
 
     data = get_dashboard_stats(db, current_user=current_user)

@@ -1,8 +1,12 @@
 from datetime import UTC, datetime
+from unittest.mock import MagicMock
+
+from fastapi.responses import RedirectResponse
 
 from models.departments import Department
 from models.documents import Document, DocumentRead
 from models.users import User
+from routers.dashboard import dashboard as dashboard_view
 from utils.auth import hash_password
 
 
@@ -134,3 +138,16 @@ def test_dashboard_lists_only_pending_active_policies(client, db_session):
     assert "Politica Pendiente" in response.text
     assert "Politica Leida" not in response.text
     assert "Politica Inactiva" not in response.text
+
+
+def test_dashboard_returns_redirect_response_when_dependency_returns_redirect(db_session):
+    redirect = RedirectResponse(url="/api/v1/auth/login", status_code=303)
+    request = MagicMock()
+
+    response = dashboard_view(
+        request=request,
+        current_user=redirect,
+        db=db_session,
+    )
+
+    assert response is redirect
