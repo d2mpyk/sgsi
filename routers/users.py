@@ -63,6 +63,7 @@ router = APIRouter()
 settings = get_settings()
 # Configurar motor de plantillas
 templates = Jinja2Templates(directory="templates")
+VALID_ROLES = {"admin", "auditor", "user"}
 
 
 # ----------------------------------------------------------------------
@@ -571,7 +572,20 @@ async def post_user_edit_view(
         if username:
             user_to_update.username = username
         if role:
-            user_to_update.role = role
+            normalized_role = role.strip().lower()
+            if normalized_role not in VALID_ROLES:
+                response = RedirectResponse(
+                    url=request.url_for("get_user_edit_view", user_id=user_id),
+                    status_code=status.HTTP_303_SEE_OTHER,
+                )
+                response.set_cookie(
+                    key="flash_message",
+                    value="Rol inválido. Use admin, auditor o user.",
+                    httponly=True,
+                )
+                response.set_cookie(key="flash_type", value="red", httponly=True)
+                return response
+            user_to_update.role = normalized_role
 
         # Validar cambio de estado (is_active)
         new_active_status = True if is_active == "on" else False

@@ -267,6 +267,31 @@ CurrentAdmin = Annotated[User, Depends(get_current_admin)]
 
 
 # ----------------------------------------------------------------------
+# Verifica si el usuario es admin o auditor
+def get_current_auditor_or_admin(
+    request: Request, current_user_or_redirect: CurrentUser
+) -> User | RedirectResponse:
+    """Verifica que el usuario actual tenga rol de administrador o auditor."""
+    if isinstance(current_user_or_redirect, RedirectResponse):
+        return current_user_or_redirect
+
+    if current_user_or_redirect.role not in {"admin", "auditor"}:
+        security_logger.warning(
+            f"Acceso de auditoría DENEGADO para usuario '{current_user_or_redirect.username}' a la ruta {request.url.path} desde IP {request.client.host}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Acceso denegado",
+        )
+    return current_user_or_redirect
+
+
+# ----------------------------------------------------------------------
+# Alias de Modelo
+CurrentAuditorOrAdmin = Annotated[User, Depends(get_current_auditor_or_admin)]
+
+
+# ----------------------------------------------------------------------
 # Autenticar usuario
 def authenticate_user(
     username: str,

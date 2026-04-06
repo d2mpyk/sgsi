@@ -13,10 +13,11 @@ from utils.limiter import limiter
 from utils.config import get_settings
 
 # Imports Locales
-from routers import auth, dashboard, documents, media, suggestions, users
+from routers import audit, auth, dashboard, documents, media, suggestions, users
 from utils.database import Base, engine
 from utils.init_db import (
     ensure_document_reads_download_at_column,
+    ensure_iso_control_mappings_table,
     ensure_suggestions_table,
     ensure_users_department_column,
     get_init_config,
@@ -33,6 +34,7 @@ Base.metadata.create_all(bind=engine)
 ensure_document_reads_download_at_column()
 ensure_suggestions_table()
 ensure_users_department_column()
+ensure_iso_control_mappings_table()
 # Verificación inicial de base de datos
 init_approved_users()
 
@@ -74,6 +76,7 @@ async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(dashboard.router, prefix="/api/v1/dashboard", tags=["Dashboard"])
 app.include_router(documents.router, prefix="/api/v1/documents", tags=["Documents"])
+app.include_router(audit.router, prefix="/api/v1/audit", tags=["Audit"])
 app.include_router(suggestions.router, prefix="/api/v1/suggestions", tags=["Suggestions"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["Users"])
 app.include_router(media.router, prefix="/api/v1/media", tags=["Media"])

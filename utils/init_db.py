@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 import sys
 
 from models.departments import Department
+from models.iso_control_mappings import ISOControlMapping
 from models.users import ApprovedUsers, User
 from utils.auth import hash_password
 from utils.config import get_settings
@@ -243,3 +244,14 @@ def ensure_users_department_column():
         )
         sys.exit(1)
 
+
+def ensure_iso_control_mappings_table():
+    """Crea la tabla iso_control_mappings si aún no existe."""
+    try:
+        ISOControlMapping.__table__.create(bind=engine, checkfirst=True)
+    except Exception as e:
+        print(
+            f"Error: No se pudo verificar/crear la tabla iso_control_mappings: {e}",
+            file=sys.stderr,
+        )
+        sys.exit(1)

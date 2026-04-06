@@ -56,7 +56,7 @@ class UserUpdate(BaseModel):
 
 # Actualización del Rol del usuario
 class UserRoleUpdate(BaseModel):
-    role: Literal["admin", "user"]
+    role: Literal["admin", "auditor", "user"]
 
 
 # Actualización del Password

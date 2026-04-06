@@ -1,0 +1,220 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Auditoría SGSI{% endblock %}
+
+{% block content %}
+<section class="w3-card w3-round-xlarge audit-hero">
+    <div class="w3-row-padding">
+        <div class="w3-col l8 m12">
+            <span class="dashboard-section-kicker">Auditoría institucional</span>
+            <h2><i class="fa fa-balance-scale"></i> SGSI Master Index</h2>
+            <p>Vista de control para auditores y administradores: inventario documental, políticas vigentes y trazabilidad de confirmaciones de lectura.</p>
+        </div>
+        <div class="w3-col l4 m12">
+            <div class="audit-hero-metrics">
+                <div class="audit-hero-metric">
+                    <span>Documentos</span>
+                    <strong>{{ documents|length }}</strong>
+                </div>
+                <div class="audit-hero-metric">
+                    <span>Políticas vigentes</span>
+                    <strong>{{ active_policy_documents|length }}</strong>
+                </div>
+                <div class="audit-hero-metric">
+                    <span>Confirmaciones</span>
+                    <strong>{{ confirmation_rows|length }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="w3-card w3-round-xlarge audit-panel">
+    <header class="audit-panel-head">
+        <div>
+            <h3>ISO 27001 Control Mapping</h3>
+            <p>Matriz maestra para evidenciar relación entre controles, documentación SGSI y estado operativo.</p>
+        </div>
+    </header>
+    {% if user.role == 'admin' %}
+    <div class="w3-container w3-padding-large">
+        <form action="{{ url_for('create_iso_control_mapping') }}" method="post" class="audit-form-grid">
+            <div>
+                <label><b>Control ISO</b></label>
+                <input class="w3-input w3-border w3-round-large documents-input" type="text" name="control_iso"
+                    placeholder="Ej: A.5.15" required>
+            </div>
+            <div>
+                <label><b>Documento SGSI</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="document_id" required>
+                    <option value="" selected disabled>Seleccione una política</option>
+                    {% for doc in policy_documents %}
+                    <option value="{{ doc.id }}">{{ doc.code or ('POL-' ~ doc.id) }} - {{ doc.title }} (v{{ doc.version }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label><b>Responsable</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="responsible_user_id">
+                    <option value="">Sin asignar</option>
+                    {% for u in users %}
+                    <option value="{{ u.id }}">{{ u.username }} ({{ u.role }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label><b>Estado</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="status">
+                    {% for status_item in mapping_allowed_status %}
+                    <option value="{{ status_item }}">{{ status_item }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="audit-form-span">
+                <label><b>Evidencia</b></label>
+                <textarea class="w3-input w3-border w3-round-large documents-input" name="evidence" rows="2"
+                    placeholder="Ej: Registro de capacitación, acta, evidencia técnica, ticket, etc."></textarea>
+            </div>
+            <div class="audit-form-actions">
+                <button type="submit" class="w3-button w3-round-large documents-primary-btn">
+                    <i class="fa fa-plus"></i> Guardar Mapeo
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+    <div class="audit-table-shell">
+        <table class="w3-table w3-striped w3-bordered w3-border audit-table">
+            <thead>
+                <tr>
+                    <th>Control ISO</th>
+                    <th>Documento SGSI</th>
+                    <th>Evidencia</th>
+                    <th>Responsable</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in mapped_rows %}
+                <tr>
+                    <td>{{ row.control_iso }}</td>
+                    <td>{{ row.document_name }}</td>
+                    <td>{{ row.evidence }}</td>
+                    <td>{{ row.responsible }}</td>
+                    <td>
+                        <span class="w3-tag w3-round
+                            {% if row.status == 'Implementado' %}audit-status-ok
+                            {% elif row.status == 'Parcial' %}audit-status-warn
+                            {% elif row.status == 'Pendiente' %}audit-status-muted
+                            {% else %}audit-status-muted{% endif %}">
+                            {{ row.status }}
+                        </span>
+                        {% if user.role == 'admin' %}
+                        <form action="{{ url_for('delete_iso_control_mapping', mapping_id=row.id) }}" method="post" class="audit-inline-delete">
+                            <button type="submit" class="w3-button w3-tiny w3-round documents-secondary-btn">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No hay mapeos ISO registrados en base de datos.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="w3-card w3-round-xlarge audit-panel">
+    <header class="audit-panel-head">
+        <div>
+            <h3>Documentos SGSI</h3>
+            <p>Inventario completo con clasificación y vigencia documental.</p>
+        </div>
+    </header>
+    <div class="audit-table-shell">
+        <table class="w3-table w3-striped w3-bordered w3-border audit-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Versión</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in documents %}
+                <tr>
+                    <td>{{ doc.code or 'N/A' }}</td>
+                    <td>{{ doc.title }}</td>
+                    <td>{{ doc.doc_type|upper }}</td>
+                    <td>{{ doc.version }}</td>
+                    <td>
+                        <span class="w3-tag w3-round {{ 'audit-status-ok' if doc.is_active else 'audit-status-warn' }}">
+                            {{ 'Vigente' if doc.is_active else 'Obsoleto' }}
+                        </span>
+                    </td>
+                    <td>{{ doc.created_at.strftime('%Y-%m-%d') if doc.created_at else 'N/A' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">No hay documentos cargados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="w3-card w3-round-xlarge audit-panel">
+    <header class="audit-panel-head">
+        <div>
+            <h3>Confirmaciones de lectura</h3>
+            <p>Seguimiento por usuario y política, con evidencia de descarga y confirmación.</p>
+        </div>
+    </header>
+    <div class="audit-table-shell">
+        <table class="w3-table w3-striped w3-bordered w3-border audit-table">
+            <thead>
+                <tr>
+                    <th>Política</th>
+                    <th>Usuario</th>
+                    <th>Área</th>
+                    <th>Descarga</th>
+                    <th>Confirmación</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in confirmation_rows %}
+                <tr>
+                    <td>{{ row.policy_code }} - {{ row.policy_title }}</td>
+                    <td>{{ row.username }}</td>
+                    <td>{{ row.department_name }}</td>
+                    <td>{{ row.download_at.strftime('%Y-%m-%d %H:%M') if row.download_at else 'N/A' }}</td>
+                    <td>{{ row.read_at.strftime('%Y-%m-%d %H:%M') if row.read_at else 'N/A' }}</td>
+                    <td>
+                        {% if row.status == 'Confirmado' %}
+                        <span class="w3-tag w3-round audit-status-ok">{{ row.status }}</span>
+                        {% elif row.status == 'Descargado - pendiente' %}
+                        <span class="w3-tag w3-round audit-status-warn">{{ row.status }}</span>
+                        {% else %}
+                        <span class="w3-tag w3-round audit-status-muted">{{ row.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">No hay confirmaciones registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

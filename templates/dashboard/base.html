@@ -89,6 +89,12 @@
                         class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('suggestions_view').path %}w3-blue{% endif %}">
                         <i class="fa fa-lightbulb-o"></i><span>Sugerencias</span>
                     </a>
+                    {% if user.role in ['admin', 'auditor'] %}
+                    <a href="{{ url_for('audit_view') }}"
+                        class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('audit_view').path %}w3-blue{% endif %}">
+                        <i class="fa fa-balance-scale"></i><span>Auditoría</span>
+                    </a>
+                    {% endif %}
                     <a href="{% if user.role == 'admin' %}{{ url_for('get_users') }}{% else %}{{ url_for('get_user_edit_view', user_id=user.id) }}{% endif %}"
                         class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('get_users').path %}w3-blue{% endif %}">
                         <i class="fa fa-users fa-fw"></i><span>Usuarios</span>
