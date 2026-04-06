@@ -1,139 +1,71 @@
 # SGSI FastAPI
 
-Aplicación web desarrollada con FastAPI para gestionar documentación de un SGSI, controlar el acceso de usuarios y auditar la lectura de políticas internas.
+Aplicación web para gestionar el ciclo documental de un SGSI: publicación de políticas, control de versiones, evidencia de lectura por colaborador y reportes de cumplimiento para auditoría.
 
-La solución combina backend API, vistas HTML renderizadas en servidor con Jinja2, almacenamiento de archivos en disco y persistencia en MariaDB/MySQL. Su foco principal es la operación documental del SGSI: publicación de políticas, control de versiones, confirmación de lectura, generación de evidencia PDF y reportes de cumplimiento para auditoría.
+## Resumen funcional
 
-## Qué hace la aplicación
+Esta app combina API + vistas HTML server-side (Jinja2) para operar un portal interno de cumplimiento documental.
 
-La app resuelve estos flujos principales:
+Flujos principales:
+- autenticación por formulario (`/api/v1/auth/token`) con JWT en cookie `HttpOnly`
+- dashboard HTML con pendientes de lectura por usuario
+- administración de usuarios, activación por correo y recuperación de contraseña
+- catálogo de departamentos y asignación de usuarios
+- carga documental unitaria y por lotes
+- control de versiones por `code` (desactiva versiones activas previas)
+- descarga y confirmación de lectura de políticas
+- generación y almacenamiento físico de certificados PDF de lectura
+- reporte global de auditoría de lectura por política/área/usuario
+- buzón interno de sugerencias con visibilidad por rol
 
-- autenticación por formulario con JWT almacenado en cookie `HttpOnly`
-- dashboard HTML protegido para usuarios autenticados
-- gestión de usuarios, activación por correo y recuperación de contraseña
-- catálogo base de departamentos y asignación de usuarios a un área
-- carga individual y masiva de documentos
-- control de versiones por código documental
-- publicación de políticas activas para lectura obligatoria
-- registro de descarga y confirmación de lectura por usuario
-- generación y almacenamiento de certificados PDF de lectura
-- métricas de cumplimiento y reporte global de auditoría
-- buzón interno de sugerencias
-- exportación y consulta de logs de seguridad
+## Arquitectura
 
-## Arquitectura general
+Punto de entrada: `app/main.py`.
 
-El punto de entrada es `app/main.py`. Al importarse no solo crea la instancia de FastAPI: también valida la configuración sensible, crea tablas, ejecuta ajustes incrementales de esquema y siembra datos iniciales como el admin principal y el catálogo de departamentos.
+Al importarse, **no es pasivo**: ejecuta validaciones y tareas de arranque.
 
-### Componentes principales
+### Side effects de arranque
+- valida configuración sensible con `get_init_config()`
+- crea tablas con `Base.metadata.create_all(bind=engine)`
+- ejecuta ajustes incrementales:
+  - `ensure_document_reads_download_at_column()`
+  - `ensure_suggestions_table()`
+  - `ensure_users_department_column()`
+- inicializa usuarios aprobados/admin con `init_approved_users()`
 
-- `app/main.py`: inicialización de la app, montaje de `static/` y `media/`, middleware y registro de routers.
-- `routers/auth.py`: login, logout y emisión de token.
-- `routers/dashboard.py`: dashboard principal con pendientes de lectura.
-- `routers/documents.py`: gestión documental, descargas, confirmación de lectura, estadísticas y reportes.
-- `routers/users.py`: perfil, administración, activación por correo, reenvío de verificación y recuperación de contraseña.
-- `routers/suggestions.py`: creación y consulta de sugerencias.
+### Módulos clave
+- `routers/auth.py`: login/logout y emisión de token.
+- `routers/dashboard.py`: dashboard principal.
+- `routers/documents.py`: núcleo de negocio documental (carga, lectura, certificados, cumplimiento, auditoría).
+- `routers/users.py`: ciclo de vida de cuentas y administración.
+- `routers/suggestions.py`: sugerencias internas.
 - `routers/media.py`: entrega segura de imágenes de perfil.
-- `models/`: entidades SQLAlchemy para usuarios, departamentos, documentos, lecturas y sugerencias.
-- `schemas/`: contratos Pydantic para usuarios, documentos y departamentos.
-- `utils/auth.py`: hash de contraseñas, JWT, envío de correo, logging de seguridad y resolución del usuario actual.
-- `utils/init_db.py`: validaciones de arranque, bootstrap de datos base y pequeñas migraciones.
-- `utils/middleware.py`: protección de vistas HTML mediante cookie de autenticación.
-- `templates/`: vistas HTML y correos.
-- `static/`: CSS, JavaScript e imágenes de la interfaz.
-- `media/`: fotos de perfil, documentos subidos y certificados generados.
+- `utils/auth.py`: hash, JWT, usuario actual, tokens de correo y logs de seguridad.
+- `utils/middleware.py`: protección de vistas HTML del dashboard por cookie.
+- `utils/init_db.py`: bootstrap y ajustes de esquema.
+- `models/`: entidades SQLAlchemy 2.x (`users`, `approved`, `departments`, `documents`, `document_reads`, `suggestions`).
 
-## Flujos funcionales
+## Reglas de negocio importantes
 
-### 1. Inicio de sesión y sesión web
+- Usuarios `user` solo ven políticas activas; `admin` ve todo el inventario.
+- Confirmar lectura de política requiere descarga previa (`download_at`).
+- El registro `document_reads` conserva dos hitos: `download_at` y `read_at`.
+- Cuando se confirma lectura, se genera certificado PDF y se guarda en:
+  - `media/documents/certificates/<departamento>/...pdf`
+- En documentos con `code`, una nueva versión activa desactiva las anteriores activas del mismo código.
 
-El login acepta usuario o correo. Si la autenticación es correcta, genera un JWT y lo guarda en la cookie `access_token`. La navegación HTML protegida usa esa cookie para redirigir al login cuando no existe o es inválida.
-
-### 2. Gestión de usuarios
-
-Los administradores pueden crear usuarios, asignar departamento, administrar rol y activar o desactivar cuentas. El alta deja al usuario inicialmente inactivo y envía un correo de verificación. También existen flujos para:
-
-- editar el propio perfil
-- cambiar contraseña
-- reenviar verificación de correo
-- solicitar recuperación de contraseña
-- restablecer contraseña con token temporal
-- exportar y consultar logs de seguridad
-
-### 3. Gestión documental
-
-Los administradores pueden subir documentos unitarios o por lotes. Cada documento puede ser:
-
-- `policy`: política con lectura obligatoria
-- `record`: documento o evidencia interna
-
-Cuando se sube un documento con `code`, la app desactiva versiones activas anteriores con ese mismo código, manteniendo el historial por obsolescencia en lugar de borrado.
-
-Los usuarios normales solo ven políticas activas. Los administradores ven todo el inventario documental.
-
-### 4. Confirmación de lectura y evidencia
-
-Para confirmar una política, primero debe existir una descarga previa. Ese flujo genera o actualiza un registro en `document_reads`:
-
-- `download_at`: evidencia de descarga
-- `read_at`: evidencia de confirmación de lectura
-
-Cuando el usuario confirma lectura, la app genera un certificado PDF con datos del usuario, política, timestamps, hash y trazabilidad, y además guarda una copia en `media/documents/certificates/`.
-
-### 5. Cumplimiento y auditoría
-
-La app expone métricas de cumplimiento por política y genera un informe global HTML de auditoría con:
-
-- resumen ejecutivo
-- cumplimiento global
-- cumplimiento por área
-- trazabilidad detallada por usuario y política
-- tendencia histórica
-- visualizaciones SVG
-
-También existe vista previa en línea del informe para administradores.
-
-### 6. Sugerencias internas
-
-Los usuarios pueden registrar sugerencias de mejora. Un usuario normal ve solo las suyas; un administrador puede consultar las de todos.
-
-## Base de datos y arranque
-
-El proyecto usa SQLAlchemy 2.x y una base MariaDB/MySQL en runtime. Al importar `app.main` se ejecutan tareas con efectos laterales:
-
-- validación de secretos y variables sensibles
-- `Base.metadata.create_all(bind=engine)`
-- creación del usuario admin por defecto si aún no existe
-- siembra del catálogo de departamentos
-- creación de la tabla `suggestions` si falta
-- agregado de la columna `download_at` en `document_reads` si falta
-- agregado e inicialización de `department_id` en `users` si falta
-
-Esto significa que cambios en arranque, configuración o modelos pueden impactar desarrollo local, pruebas y despliegue desde el momento del import.
-
-## Estructura del proyecto
+## Estructura del repositorio
 
 ```text
 app/
-  main.py
 models/
-  users.py
-  departments.py
-  documents.py
-  suggestions.py
 routers/
-  auth.py
-  dashboard.py
-  documents.py
-  media.py
-  suggestions.py
-  users.py
 schemas/
+static/
 templates/
   auth/
   dashboard/
   email/
-static/
 media/
 tests/
 utils/
@@ -141,102 +73,74 @@ utils/
 
 ## Requisitos
 
-- Python 3.12 o compatible con las dependencias del proyecto
-- MariaDB/MySQL accesible desde la app
-- servidor SMTP SSL para notificaciones por correo
-
-Dependencias relevantes:
-
-- `fastapi`
-- `sqlalchemy`
-- `pydantic-settings`
-- `PyMySQL`
-- `PyJWT`
-- `pwdlib`
-- `slowapi`
-- `reportlab`
-- `pytest`
+- Python 3.12+
+- MariaDB/MySQL (runtime real)
+- SMTP SSL para correos de verificación y recuperación
 
 ## Configuración
 
-Usa `.env_example` como base para crear `.env`.
+La configuración se carga desde `.env` con `pydantic-settings` (`utils/config.py`).
 
-Variables principales:
+Usa `.env_example` como plantilla y define, al menos:
+- DB: `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `DB_NAME`
+- JWT: `SECRET_KEY`, `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`
+- verificación/reset: `SECRET_KEY_CHECK_MAIL`, `SECURITY_PASSWD_SALT`
+- bootstrap admin: `ADMIN`, `NAME`
+- SMTP: `EMAIL_SERVER`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASSWD`
+- branding/URLs: `COMPANY_NAME`, `PROJECT_NAME`, `DOMINIO`
 
-- `ADMIN`, `NAME`: bootstrap del administrador inicial
-- `COMPANY_NAME`, `PROJECT_NAME`: textos institucionales
-- `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `DB_NAME`: conexión a base de datos
-- `SECRET_KEY`, `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`: autenticación JWT
-- `SECRET_KEY_CHECK_MAIL`, `SECURITY_PASSWD_SALT`: tokens de verificación y reseteo
-- `DOMINIO`: base usada en correos y enlaces
-- `EMAIL_SERVER`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASSWD`: SMTP
-
-La app lee además `ROOT_PATH` desde el entorno y usa `/sgsi` por defecto.
+`ROOT_PATH` se lee del entorno y por defecto es `/sgsi`.
 
 ## Ejecución local
-
-### 1. Crear entorno e instalar dependencias
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\pip install -r requirements.txt
-```
-
-### 2. Configurar variables
-
-Crear `.env` a partir de `.env_example` y completar credenciales reales.
-
-### 3. Levantar el servidor
-
-```powershell
 .\.venv\Scripts\uvicorn app.main:app --reload
 ```
 
-Con la configuración actual, la app queda bajo el `root_path` `/sgsi`, por lo que en desarrollo o detrás de proxy las URLs deben respetar ese prefijo.
-
 ## Pruebas
 
-La suite usa `pytest` y `TestClient`. Las pruebas reemplazan la base real por SQLite en memoria y desactivan el rate limiter.
+La suite usa `pytest` + `TestClient`.
 
-Ejecutar toda la suite:
+En pruebas, `tests/conftest.py`:
+- reemplaza la DB por SQLite en memoria (`StaticPool`)
+- sobreescribe `get_db`
+- desactiva temporalmente el rate limiter
+
+Ejecutar todo:
 
 ```powershell
 .\.venv\Scripts\pytest tests -q
 ```
 
-Ejecutar un archivo puntual:
+Ejecutar archivo puntual:
 
 ```powershell
 .\.venv\Scripts\pytest tests\test_document_read_certificate.py -q
 ```
 
-Coberturas actuales observables en `tests/`:
+## Seguridad y operación
 
-- autenticación y dashboard
-- activación de cuenta y recuperación de contraseña
-- roles y permisos
-- gestión de usuarios y perfiles
-- carga documental individual y por lotes
-- descargas y confirmación de lectura
-- certificados PDF y reportes de cumplimiento
-- sugerencias y utilidades auxiliares
+- El login deja `secure=False` en cookie (válido para local); en producción HTTPS debe endurecerse.
+- Hay dos capas de acceso:
+  - middleware HTML (`utils/middleware.py`)
+  - dependencias por router (`get_current_user` / `get_current_admin`)
+- Logs:
+  - `security.log`
+  - `email_logs.log`
+- Archivos persistidos y evidencia en `media/`.
 
-## Seguridad y consideraciones operativas
+## Riesgos al modificar
 
-- El login usa JWT en cookie `HttpOnly`; en producción conviene endurecer `secure=True` bajo HTTPS.
-- `utils/middleware.py` protege navegación HTML por cookie, mientras dependencias de `utils/auth.py` controlan acceso por usuario y rol.
-- Los logs de seguridad se escriben en `security.log` y los de correo en `email_logs.log`.
-- Los documentos y certificados se guardan en disco bajo `media/`.
-- `routers/media.py` incluye validación básica contra path traversal para fotos de perfil.
+Revisa con cuidado cambios en:
+- `app/main.py`
+- `utils/config.py`, `utils/database.py`, `utils/init_db.py`
+- `utils/auth.py`, `utils/middleware.py`
+- `routers/documents.py`
+- `routers/users.py`
 
-## Riesgos y puntos sensibles al cambiar código
+## Estado actual
 
-- `app/main.py`: cualquier cambio puede alterar arranque y side effects.
-- `utils/config.py`, `utils/database.py`, `utils/init_db.py`: afectan boot, conexión y siembra inicial.
-- `utils/auth.py`, `utils/middleware.py`: impactan autenticación, cookies y autorización.
-- `routers/documents.py`: concentra gran parte de la lógica crítica del negocio.
-- `routers/users.py`: concentra el ciclo de vida de cuentas.
-
-## Resumen rápido
-
-Este proyecto es un portal SGSI orientado a control documental y evidencia de lectura. Su valor principal no está solo en listar documentos, sino en mantener trazabilidad: quién descargó una política, quién la confirmó, qué porcentaje de cumplimiento existe y qué evidencia puede presentarse en auditoría.
+- versión de app declarada en FastAPI: `5.3.1`
+- orientación: portal SGSI enfocado en trazabilidad de lectura y evidencia auditable
