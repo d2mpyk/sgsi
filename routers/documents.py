@@ -4,11 +4,26 @@ import csv, io, os, shutil, uuid, hashlib, re, math
 from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 from typing import Annotated, List, Optional
+from xml.sax.saxutils import escape
 
 from markupsafe import Markup
+from reportlab.lib import colors
 from reportlab.lib.colors import blue, black
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle,
+)
+from reportlab.graphics.shapes import Drawing, String
+from reportlab.graphics.charts.piecharts import Pie
+from reportlab.graphics.charts.barcharts import HorizontalBarChart
+from reportlab.graphics.charts.linecharts import HorizontalLineChart
+from reportlab.graphics.widgets.markers import makeMarker
 
 from fastapi import (
     APIRouter,
@@ -67,6 +82,8 @@ DOCUMENT_SORT_ORDER = (
     Document.title,
 )
 READ_DUE_DAYS = 30
+AUDIT_REPORT_DOC_CODE = "REP-AUD-LECT-POL"
+AUDIT_REPORT_DOC_TITLE = "Informe Global de Confirmación de Lectura de Políticas"
 
 
 def extract_document_metadata_from_filename(
@@ -211,18 +228,19 @@ def svg_pie_chart(read_percentage: float, pending_percentage: float) -> Markup:
     pending_dash = max(circumference - read_dash, 0)
 
     svg = f"""
-    <svg width="100%" viewBox="0 0 260 220" role="img" aria-label="Estado global de lectura">
-        <circle cx="110" cy="110" r="{radius}" fill="none" stroke="#e2e8f0" stroke-width="22"></circle>
-        <circle cx="110" cy="110" r="{radius}" fill="none" stroke="#2b6cb0" stroke-width="22"
+    <svg width="100%" viewBox="0 0 260 280" role="img" aria-label="Estado global de lectura">
+        <circle cx="130" cy="102" r="{radius}" fill="none" stroke="#e2e8f0" stroke-width="22"></circle>
+        <circle cx="130" cy="102" r="{radius}" fill="none" stroke="#2b6cb0" stroke-width="22"
             stroke-dasharray="{read_dash} {pending_dash}" stroke-linecap="round"
-            transform="rotate(-90 110 110)"></circle>
-        <circle cx="110" cy="110" r="42" fill="#ffffff"></circle>
-        <text x="110" y="105" text-anchor="middle" font-size="24" fill="#0f172a" font-weight="700">{read_percentage:.1f}%</text>
-        <text x="110" y="125" text-anchor="middle" font-size="12" fill="#64748b">Leído</text>
-        <rect x="190" y="72" width="14" height="14" rx="3" fill="#2b6cb0"></rect>
-        <text x="212" y="83" font-size="12" fill="#334155">Leído {read_percentage:.1f}%</text>
-        <rect x="190" y="102" width="14" height="14" rx="3" fill="#e2e8f0"></rect>
-        <text x="212" y="113" font-size="12" fill="#334155">Pendiente {pending_percentage:.1f}%</text>
+            transform="rotate(-90 130 102)"></circle>
+        <circle cx="130" cy="102" r="42" fill="#ffffff"></circle>
+        <text x="130" y="97" text-anchor="middle" font-size="24" fill="#0f172a" font-weight="700">{read_percentage:.1f}%</text>
+        <text x="130" y="117" text-anchor="middle" font-size="12" fill="#64748b">Leído</text>
+
+        <rect x="70" y="210" width="14" height="14" rx="3" fill="#2b6cb0"></rect>
+        <text x="92" y="221" font-size="12" fill="#334155">Leído {read_percentage:.1f}%</text>
+        <rect x="70" y="236" width="14" height="14" rx="3" fill="#e2e8f0"></rect>
+        <text x="92" y="247" font-size="12" fill="#334155">Pendiente {pending_percentage:.1f}%</text>
     </svg>
     """
     return Markup(svg)
@@ -545,6 +563,608 @@ def render_policy_reading_audit_report_html(
     )
 
 
+def generate_policy_reading_audit_report_pdf(report_context: dict) -> io.BytesIO:
+    """Genera el informe PDF con estética cercana al HTML y tablas sin solapamientos."""
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=letter,
+        leftMargin=30,
+        rightMargin=30,
+        topMargin=30,
+        bottomMargin=30,
+        title=AUDIT_REPORT_DOC_TITLE,
+    )
+    content_width = doc.width
+
+    styles = getSampleStyleSheet()
+    kicker_style = ParagraphStyle(
+        "AuditKicker",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=9,
+        leading=11,
+        textColor=colors.HexColor("#1d4ed8"),
+    )
+    title_style = ParagraphStyle(
+        "AuditTitle",
+        parent=styles["Heading1"],
+        fontName="Helvetica-Bold",
+        fontSize=18,
+        leading=22,
+        textColor=colors.HexColor("#0f172a"),
+        spaceAfter=8,
+    )
+    section_style = ParagraphStyle(
+        "AuditSection",
+        parent=styles["Heading2"],
+        fontName="Helvetica-Bold",
+        fontSize=13,
+        leading=16,
+        textColor=colors.HexColor("#0f172a"),
+        spaceBefore=12,
+        spaceAfter=6,
+    )
+    body_style = ParagraphStyle(
+        "AuditBody",
+        parent=styles["BodyText"],
+        fontName="Helvetica",
+        fontSize=9,
+        leading=12,
+        textColor=colors.HexColor("#334155"),
+    )
+    table_head_style = ParagraphStyle(
+        "AuditTableHead",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=8,
+        leading=10,
+        textColor=colors.HexColor("#1e3a8a"),
+    )
+    table_cell_style = ParagraphStyle(
+        "AuditTableCell",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=7.8,
+        leading=9.2,
+        textColor=colors.HexColor("#1f2937"),
+        wordWrap="CJK",
+    )
+    small_style = ParagraphStyle(
+        "AuditSmall",
+        parent=styles["BodyText"],
+        fontName="Helvetica",
+        fontSize=8,
+        leading=10,
+        textColor=colors.HexColor("#475569"),
+    )
+
+    def p(value: str | int | float | None, style: ParagraphStyle = table_cell_style) -> Paragraph:
+        return Paragraph(escape("" if value is None else str(value)), style)
+
+    def pct_widths(weights: list[float]) -> list[float]:
+        total = sum(weights)
+        return [content_width * (w / total) for w in weights]
+
+    def apply_table_style(table: Table, zebra: bool = True) -> None:
+        style_cmds = [
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#eff6ff")),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#1e3a8a")),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#dbe4f0")),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 5),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+            ("TOPPADDING", (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ]
+        if zebra:
+            style_cmds.append(("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f8fafc")]))
+        table.setStyle(TableStyle(style_cmds))
+
+    def build_global_donut(summary_obj: PolicyAuditSummary) -> Drawing:
+        read_pct = max(0.0, min(float(summary_obj.global_compliance_percentage), 100.0))
+        pending_pct = max(0.0, 100.0 - read_pct)
+
+        drawing = Drawing(content_width * 0.46, 196)
+        pie = Pie()
+        pie.x = 38
+        pie.y = 46
+        pie.width = 120
+        pie.height = 120
+        pie.data = [read_pct, pending_pct]
+        pie.labels = ["", ""]
+        pie.sideLabels = False
+        pie.simpleLabels = True
+        pie.innerRadiusFraction = 0.56
+        pie.slices.strokeWidth = 0.4
+        pie.slices[0].fillColor = colors.HexColor("#2b6cb0")
+        pie.slices[1].fillColor = colors.HexColor("#e2e8f0")
+        drawing.add(pie)
+        drawing.add(
+            String(
+                89,
+                111,
+                f"{read_pct:.1f}%",
+                fontName="Helvetica-Bold",
+                fontSize=13,
+                fillColor=colors.HexColor("#0f172a"),
+                textAnchor="middle",
+            )
+        )
+        drawing.add(
+            String(
+                89,
+                97,
+                "Cumplimiento",
+                fontName="Helvetica",
+                fontSize=7.5,
+                fillColor=colors.HexColor("#64748b"),
+                textAnchor="middle",
+            )
+        )
+        legend_y = 20
+        drawing.add(
+            String(
+                44,
+                legend_y,
+                "■",
+                fontName="Helvetica-Bold",
+                fontSize=11,
+                fillColor=colors.HexColor("#2b6cb0"),
+            )
+        )
+        drawing.add(
+            String(
+                57,
+                legend_y + 1,
+                f"Leído {read_pct:.1f}%",
+                fontName="Helvetica",
+                fontSize=7.2,
+                fillColor=colors.HexColor("#334155"),
+            )
+        )
+        drawing.add(
+            String(
+                117,
+                legend_y,
+                "■",
+                fontName="Helvetica-Bold",
+                fontSize=11,
+                fillColor=colors.HexColor("#cbd5e1"),
+            )
+        )
+        drawing.add(
+            String(
+                129,
+                legend_y + 1,
+                f"Pendiente {pending_pct:.1f}%",
+                fontName="Helvetica",
+                fontSize=7.2,
+                fillColor=colors.HexColor("#334155"),
+            )
+        )
+        return drawing
+
+    def build_department_bars(rows: list[PolicyAuditByDepartment]) -> Drawing:
+        sorted_rows = sorted(rows, key=lambda r: r.compliance_percentage, reverse=True)[:8]
+        labels = [r.department_name[:18] for r in sorted_rows] or ["Sin datos"]
+        values = [float(r.compliance_percentage) for r in sorted_rows] or [0.0]
+        chart_height = max(106, len(labels) * 15)
+
+        drawing = Drawing(content_width * 0.46, chart_height + 46)
+        bars = HorizontalBarChart()
+        bars.x = 66
+        bars.y = 16
+        bars.width = (content_width * 0.46) - 84
+        bars.height = chart_height
+        bars.data = [values]
+        bars.categoryAxis.categoryNames = labels
+        bars.categoryAxis.labels.fontSize = 7
+        bars.categoryAxis.labels.fillColor = colors.HexColor("#334155")
+        bars.valueAxis.valueMin = 0
+        bars.valueAxis.valueMax = 100
+        bars.valueAxis.valueStep = 20
+        bars.valueAxis.labels.fontSize = 7
+        bars.valueAxis.labels.fillColor = colors.HexColor("#64748b")
+        bars.valueAxis.strokeColor = colors.HexColor("#cbd5e1")
+        bars.bars[0].fillColor = colors.HexColor("#2563eb")
+        bars.bars[0].strokeColor = colors.HexColor("#1d4ed8")
+        drawing.add(bars)
+        drawing.add(
+            String(
+                0,
+                chart_height + 28,
+                "Cumplimiento por área (%)",
+                fontName="Helvetica-Bold",
+                fontSize=8,
+                fillColor=colors.HexColor("#1e3a8a"),
+            )
+        )
+        return drawing
+
+    def build_trend_line(points: list[PolicyAuditTrendPoint]) -> Drawing:
+        selected_points = points[-6:] if len(points) > 6 else points
+        if not selected_points:
+            selected_points = [PolicyAuditTrendPoint(period_label="N/A", compliance_percentage=0.0)]
+
+        labels = [point.period_label for point in selected_points]
+        values = [float(point.compliance_percentage) for point in selected_points]
+
+        drawing = Drawing(content_width, 210)
+        line = HorizontalLineChart()
+        line.x = 48
+        line.y = 40
+        line.width = content_width - 82
+        line.height = 132
+        line.data = [values]
+        line.categoryAxis.categoryNames = labels
+        line.categoryAxis.labels.fontSize = 7
+        line.categoryAxis.labels.fillColor = colors.HexColor("#64748b")
+        line.valueAxis.valueMin = 0
+        line.valueAxis.valueMax = 100
+        line.valueAxis.valueStep = 20
+        line.valueAxis.labels.fontSize = 7
+        line.valueAxis.labels.fillColor = colors.HexColor("#64748b")
+        line.lines[0].strokeColor = colors.HexColor("#1d4ed8")
+        line.lines[0].strokeWidth = 2
+        line.lines[0].symbol = makeMarker("FilledCircle")
+        line.lines[0].symbol.size = 4
+        line.lines[0].symbol.fillColor = colors.HexColor("#1d4ed8")
+        drawing.add(line)
+        drawing.add(
+            String(
+                0,
+                188,
+                "Tendencia de cumplimiento (%)",
+                fontName="Helvetica-Bold",
+                fontSize=8,
+                fillColor=colors.HexColor("#1e3a8a"),
+            )
+        )
+        return drawing
+
+    summary = report_context["summary"]
+    story: list = []
+
+    cover_band = Table(
+        [[p("EVIDENCIA DE AUDITORÍA SGSI", kicker_style)]],
+        colWidths=[content_width],
+    )
+    cover_band.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (0, 0), colors.HexColor("#dbeafe")),
+                ("BOX", (0, 0), (0, 0), 0.6, colors.HexColor("#bfdbfe")),
+                ("LEFTPADDING", (0, 0), (0, 0), 10),
+                ("RIGHTPADDING", (0, 0), (0, 0), 10),
+                ("TOPPADDING", (0, 0), (0, 0), 6),
+                ("BOTTOMPADDING", (0, 0), (0, 0), 6),
+            ]
+        )
+    )
+    story.extend(
+        [
+            cover_band,
+            Spacer(1, 8),
+            Paragraph(AUDIT_REPORT_DOC_TITLE, title_style),
+            Paragraph(
+                "Documento estructurado para auditorías internas y externas del SGSI, con trazabilidad de cumplimiento, niveles de avance e identificación de desviaciones.",
+                body_style,
+            ),
+            Spacer(1, 8),
+        ]
+    )
+
+    cover_rows = [
+        [p("Organización", table_head_style), p(report_context["company_name"])],
+        [p("Proyecto", table_head_style), p(report_context["project_name"])],
+        [p("Fecha de emisión", table_head_style), p(summary.generated_at.strftime("%Y-%m-%d %H:%M:%S UTC"))],
+        [p("Versión del informe", table_head_style), p(summary.report_version)],
+        [p("Responsable", table_head_style), p(summary.responsible)],
+    ]
+    cover_table = Table(cover_rows, colWidths=pct_widths([28, 72]))
+    cover_table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#dbe4f0")),
+                ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                ("TOPPADDING", (0, 0), (-1, -1), 5),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+            ]
+        )
+    )
+    story.extend([cover_table, Spacer(1, 10), Paragraph("Resumen Ejecutivo", section_style)])
+
+    metric_rows = [
+        [p("Cumplimiento Global", table_head_style), p(f"{summary.global_compliance_percentage}%", table_head_style)],
+        [p("Colaboradores Activos"), p(summary.total_active_users)],
+        [p("Políticas Activas"), p(summary.total_active_policies)],
+        [p("Confirmaciones"), p(f"{summary.completed_assignments}/{summary.total_assignments}")],
+        [p("Lecturas Pendientes"), p(summary.pending_reads)],
+        [p("Lecturas Fuera de Plazo"), p(summary.overdue_reads)],
+    ]
+    metric_table = Table(metric_rows, colWidths=pct_widths([70, 30]))
+    metric_table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#eff6ff")),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#bfdbfe")),
+                ("ALIGN", (1, 0), (1, -1), "RIGHT"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 7),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
+                ("TOPPADDING", (0, 0), (-1, -1), 5),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+            ]
+        )
+    )
+    story.extend(
+        [
+            Paragraph(report_context["scope_text"], body_style),
+            Paragraph(report_context["methodology_text"], body_style),
+            Spacer(1, 6),
+            metric_table,
+            Spacer(1, 10),
+            Paragraph("Detalle por Política", section_style),
+        ]
+    )
+
+    policy_rows = [
+        [
+            p("ID Política", table_head_style),
+            p("Código", table_head_style),
+            p("Nombre", table_head_style),
+            p("Colaboradores", table_head_style),
+            p("Confirmaciones", table_head_style),
+            p("% Cumplimiento", table_head_style),
+            p("Semáforo", table_head_style),
+            p("Fuera de plazo", table_head_style),
+        ]
+    ]
+    for row in report_context["policy_rows"]:
+        policy_rows.append(
+            [
+                p(row.policy_id),
+                p(row.code),
+                p(row.title),
+                p(row.total_collaborators),
+                p(row.confirmations),
+                p(f"{row.compliance_percentage}%"),
+                p(row.semaphore.upper()),
+                p(row.overdue_reads),
+            ]
+        )
+    policy_table = Table(
+        policy_rows,
+        repeatRows=1,
+        colWidths=pct_widths([9, 10, 28, 12, 12, 12, 9, 8]),
+    )
+    apply_table_style(policy_table)
+    story.extend([policy_table, Spacer(1, 10), Paragraph("Detalle por Área / Departamento", section_style)])
+
+    dep_rows = [
+        [
+            p("Área", table_head_style),
+            p("Colaboradores", table_head_style),
+            p("Asignaciones", table_head_style),
+            p("Confirmaciones", table_head_style),
+            p("% Cumplimiento", table_head_style),
+            p("Pendientes", table_head_style),
+            p("Fuera de plazo", table_head_style),
+            p("Semáforo", table_head_style),
+        ]
+    ]
+    for row in report_context["department_rows"]:
+        dep_rows.append(
+            [
+                p(row.department_name),
+                p(row.total_collaborators),
+                p(row.total_assignments),
+                p(row.confirmations),
+                p(f"{row.compliance_percentage}%"),
+                p(row.pending_reads),
+                p(row.overdue_reads),
+                p(row.semaphore.upper()),
+            ]
+        )
+    dep_table = Table(
+        dep_rows,
+        repeatRows=1,
+        colWidths=pct_widths([25, 10, 11, 12, 12, 10, 11, 9]),
+    )
+    apply_table_style(dep_table)
+    story.extend(
+        [
+            dep_table,
+            Spacer(1, 10),
+            Paragraph("Gráficos Requeridos", section_style),
+            Paragraph("Visualización gráfica embebida para replicar la sección visual del informe HTML.", small_style),
+            Spacer(1, 6),
+        ]
+    )
+    charts_row = Table(
+        [[build_global_donut(summary), build_department_bars(report_context["department_rows"])]],
+        colWidths=pct_widths([50, 50]),
+    )
+    charts_row.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
+                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#dbe4f0")),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 8),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+                ("TOPPADDING", (0, 0), (-1, -1), 8),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+            ]
+        )
+    )
+    story.extend(
+        [
+            charts_row,
+            Spacer(1, 8),
+        ]
+    )
+    trend_card = Table(
+        [[build_trend_line(report_context["trend_points"])]],
+        colWidths=[content_width],
+    )
+    trend_card.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
+                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#dbe4f0")),
+                ("LEFTPADDING", (0, 0), (-1, -1), 8),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+                ("TOPPADDING", (0, 0), (-1, -1), 8),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+            ]
+        )
+    )
+    story.extend(
+        [
+            trend_card,
+            Spacer(1, 10),
+            Paragraph("Evidencia de Auditoría", section_style),
+            Paragraph(report_context["evidence_text"], body_style),
+            Spacer(1, 4),
+            Paragraph("<b>Riesgos</b>", body_style),
+        ]
+    )
+    for risk in report_context["risks"]:
+        story.append(Paragraph(f"• {escape(risk)}", body_style))
+    story.extend([Spacer(1, 3), Paragraph("<b>Recomendaciones</b>", body_style)])
+    for recommendation in report_context["recommendations"]:
+        story.append(Paragraph(f"• {escape(recommendation)}", body_style))
+
+    story.extend([Spacer(1, 10), Paragraph("Trazabilidad Detallada", section_style)])
+    trace_rows = [
+        [
+            p("Usuario", table_head_style),
+            p("Área", table_head_style),
+            p("Política", table_head_style),
+            p("Estado", table_head_style),
+            p("Fecha Política", table_head_style),
+            p("Descarga", table_head_style),
+            p("Confirmación", table_head_style),
+            p("Vencida", table_head_style),
+        ]
+    ]
+    for row in report_context["traceability_rows"]:
+        trace_rows.append(
+            [
+                p(f"{row.username} ({row.user_id})"),
+                p(row.department_name),
+                p(f"{row.policy_code} - {row.policy_title}"),
+                p(row.status),
+                p(row.created_at.strftime("%Y-%m-%d")),
+                p(row.download_at.strftime("%Y-%m-%d %H:%M") if row.download_at else "N/A"),
+                p(row.read_at.strftime("%Y-%m-%d %H:%M") if row.read_at else "N/A"),
+                p("Sí" if row.overdue else "No"),
+            ]
+        )
+    trace_table = Table(
+        trace_rows,
+        repeatRows=1,
+        colWidths=pct_widths([15, 12, 25, 10, 10, 10, 11, 7]),
+    )
+    apply_table_style(trace_table, zebra=False)
+    story.extend(
+        [
+            trace_table,
+            Spacer(1, 12),
+            Paragraph(
+                "Informe emitido automáticamente por el SGSI. Preparado para impresión y evidencia de auditoría formal.",
+                small_style,
+            ),
+        ]
+    )
+
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+
+def calculate_next_report_version(db: Session, report_code: str) -> str:
+    """Calcula la siguiente versión secuencial del reporte (1.0, 2.0, ...)."""
+    previous_docs = (
+        db.execute(
+            select(Document)
+            .where(Document.code == report_code)
+            .order_by(Document.created_at.desc(), Document.id.desc())
+        )
+        .scalars()
+        .all()
+    )
+    if not previous_docs:
+        return "1.0"
+
+    max_version = 0
+    for existing in previous_docs:
+        match = re.match(r"^(\d+)(?:\.(\d+))?$", existing.version or "")
+        if not match:
+            continue
+        major = int(match.group(1))
+        max_version = max(max_version, major)
+
+    if max_version == 0:
+        return f"{len(previous_docs) + 1}.0"
+    return f"{max_version + 1}.0"
+
+
+def persist_audit_report_as_document(
+    db: Session,
+    admin_user: User,
+    pdf_bytes: bytes,
+    report_version: str,
+) -> Document:
+    """Guarda el PDF generado como Documento SGSI versionado."""
+    upload_dir = "media/documents"
+    os.makedirs(upload_dir, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    safe_title = "Informe_Global_Lectura_Politicas"
+    stored_filename = f"{uuid.uuid4()}.pdf"
+    stored_path = os.path.join(upload_dir, stored_filename)
+
+    with open(stored_path, "wb") as report_file:
+        report_file.write(pdf_bytes)
+
+    active_docs = (
+        db.execute(
+            select(Document).where(
+                Document.code == AUDIT_REPORT_DOC_CODE,
+                Document.is_active == True,
+            )
+        )
+        .scalars()
+        .all()
+    )
+    for doc in active_docs:
+        doc.is_active = False
+
+    new_doc = Document(
+        title=AUDIT_REPORT_DOC_TITLE,
+        description=(
+            "Informe global de auditoría generado automáticamente desde Administración y Métricas.\n"
+            f"{safe_title}_{timestamp}.pdf"
+        ),
+        version=report_version,
+        code=AUDIT_REPORT_DOC_CODE,
+        doc_type="record",
+        filename=stored_filename,
+        content_type="application/pdf",
+        uploaded_by_id=admin_user.id,
+        is_active=True,
+    )
+    db.add(new_doc)
+    db.commit()
+    db.refresh(new_doc)
+    return new_doc
+
+
 @router.get(
     "/reports/policies-reading-preview",
     response_class=HTMLResponse,
@@ -655,7 +1275,7 @@ def documents_view(
 # Reporte CSV global de lectura de políticas (Admin)
 @router.get(
     "/reports/policies-reading-status",
-    response_class=HTMLResponse,
+    response_class=StreamingResponse,
     status_code=status.HTTP_200_OK,
     include_in_schema=False,
     name="export_policy_reading_report",
@@ -664,21 +1284,35 @@ def export_policy_reading_report(
     db: Annotated[Session, Depends(get_db)],
     admin_user: Annotated[User, Depends(get_current_admin)],
 ):
-    """Genera un informe global de auditoría sobre lectura de políticas del SGSI."""
+    """Genera el informe global en PDF, lo descarga y lo registra como documento SGSI versionado."""
     if isinstance(admin_user, RedirectResponse):
         return admin_user
 
-    html_content = render_policy_reading_audit_report_html(
+    report_context = build_policy_reading_audit_report(
         db=db,
         responsible_username=admin_user.username,
     )
-    filename = f"Informe_Global_Lectura_Politicas_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
-    return HTMLResponse(
-        content=html_content,
+    report_context["company_name"] = settings.COMPANY_NAME.get_secret_value()
+    report_context["project_name"] = settings.PROJECT_NAME.get_secret_value()
+
+    pdf_buffer = generate_policy_reading_audit_report_pdf(report_context=report_context)
+    pdf_bytes = pdf_buffer.getvalue()
+
+    report_version = calculate_next_report_version(db=db, report_code=AUDIT_REPORT_DOC_CODE)
+    persist_audit_report_as_document(
+        db=db,
+        admin_user=admin_user,
+        pdf_bytes=pdf_bytes,
+        report_version=report_version,
+    )
+
+    filename = f"Informe_Global_Lectura_Politicas_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+    return StreamingResponse(
+        io.BytesIO(pdf_bytes),
         headers={
             "Content-Disposition": f'attachment; filename="{filename}"'
         },
-        media_type="text/html",
+        media_type="application/pdf",
     )
 
 

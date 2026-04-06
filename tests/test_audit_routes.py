@@ -1,9 +1,11 @@
 from datetime import UTC, datetime
 
 from models.documents import Document, DocumentRead
+from models.iso_controls import ISOControl
 from models.iso_control_mappings import ISOControlMapping
 from models.users import User
 from utils.auth import hash_password
+from routers import audit
 
 
 def test_audit_view_allows_admin_and_renders_master_index(client, db_session):
@@ -502,3 +504,349 @@ def test_audit_view_supports_documents_and_confirmations_pagination(client, db_s
     assert response.status_code == 200
     assert "Mostrando 11-15 de 15 documentos." in response.text
     assert "Mostrando 11-12 de 12 confirmaciones." in response.text
+
+
+def test_audit_helper_normalizers_cover_invalid_values():
+    assert audit._normalize_status("estado-desconocido") == "Pendiente"
+    assert audit._parse_optional_int(None) is None
+    assert audit._parse_optional_int("") is None
+    assert audit._parse_optional_int("abc") is None
+    assert audit._parse_optional_int("42") == 42
+    assert audit._normalize_sort_field("invalid-field") == "control_iso"
+    assert audit._normalize_sort_dir("DESC") == "desc"
+    assert audit._normalize_sort_dir("otro") == "asc"
+    assert audit._normalize_page_size(999) == audit.DEFAULT_PAGE_SIZE
+
+
+def test_create_iso_mapping_rejects_non_policy_document(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="mapping.invalid.doc.admin",
+        email="mapping.invalid.doc.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+    )
+    db_session.add(admin)
+    db_session.commit()
+
+    record = Document(
+        title="Registro no policy",
+        version="1.0",
+        code="REC-01",
+        doc_type="record",
+        filename="record.pdf",
+        content_type="application/pdf",
+        uploaded_by_id=admin.id,
+        is_active=True,
+    )
+    db_session.add(record)
+    db_session.commit()
+
+    login = client.post(
+        "/api/v1/auth/token",
+        data={"username": admin.username, "password": admin_pass},
+    )
+    assert login.status_code == 200
+
+    response = client.post(
+        "/api/v1/audit/mappings/create",
+        data={
+            "control_iso": "A.5.1",
+            "document_id": str(record.id),
+            "status": "Implementado",
+        },
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+    assert db_session.query(ISOControlMapping).count() == 0
+
+
+def test_create_iso_mapping_rejects_unknown_responsible_user(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="mapping.invalid.owner.admin",
+        email="mapping.invalid.owner.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+    )
+    db_session.add(admin)
+    db_session.commit()
+
+    policy = Document(
+        title="Policy owner check",
+        version="1.0",
+        code="POL-OWN",
+        doc_type="policy",
+        filename="policy.pdf",
+        content_type="application/pdf",
+        uploaded_by_id=admin.id,
+        is_active=True,
+    )
+    db_session.add(policy)
+    db_session.commit()
+
+    login = client.post(
+        "/api/v1/auth/token",
+        data={"username": admin.username, "password": admin_pass},
+    )
+    assert login.status_code == 200
+
+    response = client.post(
+        "/api/v1/audit/mappings/create",
+        data={
+            "control_iso": "A.5.1",
+            "document_id": str(policy.id),
+            "responsible_user_id": "999999",
+            "status": "Implementado",
+        },
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+    assert db_session.query(ISOControlMapping).count() == 0
+
+
+def test_create_iso_mapping_updates_existing_and_normalizes_status(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="mapping.update-existing.admin",
+        email="mapping.update-existing.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+    )
+    owner = User(
+        username="mapping.update-existing.owner",
+        email="mapping.update-existing.owner@example.com",
+        password_hash=hash_password("OwnerPass123!"),
+        role="auditor",
+        is_active=True,
+    )
+    db_session.add_all([admin, owner])
+    db_session.commit()
+
+    policy = Document(
+        title="Policy existing",
+        version="1.0",
+        code="POL-EX",
+        doc_type="policy",
+        filename="policy_existing.pdf",
+        content_type="application/pdf",
+        uploaded_by_id=admin.id,
+        is_active=True,
+    )
+    db_session.add(policy)
+    db_session.commit()
+
+    mapping = ISOControlMapping(
+        control_iso="A.5.1",
+        document_id=policy.id,
+        evidence="Evidencia inicial",
+        responsible_user_id=owner.id,
+        status="Implementado",
+    )
+    db_session.add(mapping)
+    db_session.commit()
+
+    login = client.post(
+        "/api/v1/auth/token",
+        data={"username": admin.username, "password": admin_pass},
+    )
+    assert login.status_code == 200
+
+    response = client.post(
+        "/api/v1/audit/mappings/create",
+        data={
+            "control_iso": "a.5.1",
+            "document_id": str(policy.id),
+            "evidence": "",
+            "status": "estado-invalido",
+        },
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+
+    db_session.refresh(mapping)
+    assert mapping.evidence == "Evidencia inicial"
+    assert mapping.status == "Pendiente"
+    assert mapping.control_iso == "A.5.1"
+
+
+def test_update_iso_mapping_handles_not_found_duplicate_and_invalid_responsible(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="mapping.edge.admin",
+        email="mapping.edge.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+    )
+    owner = User(
+        username="mapping.edge.owner",
+        email="mapping.edge.owner@example.com",
+        password_hash=hash_password("OwnerPass123!"),
+        role="auditor",
+        is_active=True,
+    )
+    db_session.add_all([admin, owner])
+    db_session.commit()
+
+    policy = Document(
+        title="Policy edge",
+        version="1.0",
+        code="POL-EDGE",
+        doc_type="policy",
+        filename="policy_edge.pdf",
+        content_type="application/pdf",
+        uploaded_by_id=admin.id,
+        is_active=True,
+    )
+    db_session.add(policy)
+    db_session.commit()
+
+    first = ISOControlMapping(
+        control_iso="A.5.1",
+        document_id=policy.id,
+        status="Pendiente",
+    )
+    second = ISOControlMapping(
+        control_iso="A.5.2",
+        document_id=policy.id,
+        status="Pendiente",
+    )
+    db_session.add_all([first, second])
+    db_session.commit()
+
+    login = client.post(
+        "/api/v1/auth/token",
+        data={"username": admin.username, "password": admin_pass},
+    )
+    assert login.status_code == 200
+
+    not_found = client.post(
+        "/api/v1/audit/mappings/999999/update",
+        data={"control_iso": "A.5.10", "status": "Implementado"},
+        follow_redirects=False,
+    )
+    assert not_found.status_code == 303
+
+    duplicate = client.post(
+        f"/api/v1/audit/mappings/{first.id}/update",
+        data={"control_iso": "A.5.2", "status": "Implementado"},
+        follow_redirects=False,
+    )
+    assert duplicate.status_code == 303
+
+    invalid_owner = client.post(
+        f"/api/v1/audit/mappings/{first.id}/update",
+        data={"control_iso": "A.5.10", "responsible_user_id": "999999", "status": "Implementado"},
+        follow_redirects=False,
+    )
+    assert invalid_owner.status_code == 303
+
+
+def test_delete_iso_mapping_handles_missing_mapping_and_redirects(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="mapping.delete.missing.admin",
+        email="mapping.delete.missing.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+    )
+    db_session.add(admin)
+    db_session.commit()
+
+    login = client.post(
+        "/api/v1/auth/token",
+        data={"username": admin.username, "password": admin_pass},
+    )
+    assert login.status_code == 200
+
+    response = client.post(
+        "/api/v1/audit/mappings/777777/delete",
+        data={},
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+
+
+def test_audit_view_handles_orphan_read_rows_and_no_evidence_status(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="audit.orphan.admin",
+        email="audit.orphan.admin@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+    )
+    reader = User(
+        username="audit.orphan.reader",
+        email="audit.orphan.reader@example.com",
+        password_hash=hash_password("ReaderPass123!"),
+        role="user",
+        is_active=True,
+    )
+    db_session.add_all([admin, reader])
+    db_session.commit()
+
+    policy = Document(
+        title="Policy orphan",
+        version="1.0",
+        code="POL-ORPHAN",
+        doc_type="policy",
+        filename="policy_orphan.pdf",
+        content_type="application/pdf",
+        uploaded_by_id=admin.id,
+        is_active=True,
+    )
+    record = Document(
+        title="Record should skip",
+        version="1.0",
+        code="REC-SKIP",
+        doc_type="record",
+        filename="record_skip.pdf",
+        content_type="application/pdf",
+        uploaded_by_id=admin.id,
+        is_active=True,
+    )
+    db_session.add_all([policy, record])
+    db_session.commit()
+
+    db_session.add_all(
+        [
+            DocumentRead(
+                user_id=reader.id,
+                document_id=policy.id,
+                download_at=None,
+                read_at=None,
+            ),
+            DocumentRead(
+                user_id=reader.id,
+                document_id=record.id,
+                download_at=datetime.now(UTC),
+                read_at=None,
+            ),
+        ]
+    )
+    db_session.commit()
+
+    db_session.add(
+        ISOControl(
+            tema="Organizacionales",
+            control="A.5.1",
+            nombre="Políticas de seguridad",
+        )
+    )
+    db_session.commit()
+
+    login = client.post(
+        "/api/v1/auth/token",
+        data={"username": admin.username, "password": admin_pass},
+    )
+    assert login.status_code == 200
+
+    response = client.get("/api/v1/audit/view?sort_by=invalid-sort&sort_dir=invalid-dir&page_size=999")
+    assert response.status_code == 200
+    assert "Sin evidencia" in response.text

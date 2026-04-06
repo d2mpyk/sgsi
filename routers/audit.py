@@ -12,6 +12,7 @@ from sqlalchemy import asc, desc, func, select
 from sqlalchemy.orm import Session
 
 from models.documents import Document, DocumentRead
+from models.iso_controls import ISOControl
 from models.iso_control_mappings import ISOControlMapping
 from models.users import User
 from utils.auth import (
@@ -506,6 +507,21 @@ def audit_view(
 
     users = db.execute(select(User).order_by(User.id.asc())).scalars().all()
     users_by_id = {user.id: user for user in users}
+    iso_controls = db.execute(
+        select(ISOControl).order_by(ISOControl.control.asc())
+    ).scalars().all()
+
+    controls_by_theme: dict[str, list[ISOControl]] = {}
+    for control in iso_controls:
+        controls_by_theme.setdefault(control.tema, []).append(control)
+    iso_control_options = [
+        {
+            "tema": control.tema,
+            "control": control.control,
+            "nombre": control.nombre,
+        }
+        for control in iso_controls
+    ]
 
     reads = db.execute(select(DocumentRead).order_by(DocumentRead.id.desc())).scalars().all()
     confirmation_rows_all: list[AuditConfirmationRow] = []
@@ -746,6 +762,8 @@ def audit_view(
             "confirm_pagination": confirm_pagination,
             "sort_fields": sort_fields,
             "sort_directions": sort_directions,
+            "controls_by_theme": controls_by_theme,
+            "iso_control_options": iso_control_options,
         },
     )
     if flash_message:

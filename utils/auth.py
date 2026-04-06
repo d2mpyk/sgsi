@@ -383,7 +383,9 @@ def send_email_confirmation(context: dict):
     DOMINIO = settings.DOMINIO.get_secret_value()
 
     # Intentar obtener el nombre del proyecto de settings, fallback a un string fijo
-    project_name = getattr(settings, "PROJECT_NAME", "WISE Management")
+    project_name = settings.PROJECT_NAME.get_secret_value()
+    if not project_name:
+        project_name = getattr(settings, "PROJECT_NAME", "WISE Management")
 
     # 1. Obtener y Renderizar la Plantilla
     template = templates.get_template("email/email_confirmation.html")

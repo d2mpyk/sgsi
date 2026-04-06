@@ -17,6 +17,7 @@ from routers import audit, auth, dashboard, documents, media, suggestions, users
 from utils.database import Base, engine
 from utils.init_db import (
     get_init_config,
+    init_iso_controls,
     init_approved_users,
 )
 from utils.middleware import HTMLAuthMiddleware
@@ -28,6 +29,7 @@ settings = get_settings()
 Base.metadata.create_all(bind=engine)
 # Verificación inicial de base de datos
 init_approved_users()
+init_iso_controls()
 
 # Instancia la aplicación de FastAPI
 app = FastAPI(

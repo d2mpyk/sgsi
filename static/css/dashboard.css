@@ -1107,7 +1107,14 @@ a {
 .audit-panel {
   border-radius: var(--app-radius-xl);
   margin-bottom: 18px;
+}
+
+.audit-hero {
   overflow: hidden;
+}
+
+.audit-panel {
+  overflow: visible;
 }
 
 .audit-hero {
@@ -1217,10 +1224,94 @@ a {
   gap: 10px;
 }
 
+.audit-mapping-forms {
+  margin-bottom: 8px;
+}
+
+.audit-mapping-form-col {
+  padding-bottom: 6px;
+}
+
+.audit-mapping-form-divider {
+  border-left: 1px solid var(--theme-border);
+}
+
 .audit-create-wrap {
   margin-bottom: 12px;
   border-top: 1px solid var(--theme-border);
   padding-top: 16px;
+}
+
+.audit-create-wrap-inline {
+  border-top: none;
+  padding-top: 0;
+  margin-bottom: 0;
+}
+
+.audit-typeahead {
+  position: relative;
+  z-index: 40;
+}
+
+.audit-typeahead-input {
+  padding-right: 38px;
+}
+
+.audit-typeahead-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 35;
+  display: none;
+  max-height: 290px;
+  overflow-y: auto;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-panel-strong);
+  box-shadow: 0 18px 38px rgba(10, 18, 28, 0.16);
+  overscroll-behavior: contain;
+}
+
+.audit-typeahead-option {
+  width: 100% !important;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  display: grid !important;
+  grid-template-columns: 92px 1fr;
+  grid-template-areas:
+    "code name"
+    "theme name";
+  gap: 2px 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.audit-typeahead-option:hover,
+.audit-typeahead-option.active {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.audit-typeahead-code {
+  grid-area: code;
+  color: var(--theme-heading);
+  font-weight: 700;
+}
+
+.audit-typeahead-name {
+  grid-area: name;
+  color: var(--theme-text);
+}
+
+.audit-typeahead-theme {
+  grid-area: theme;
+  color: var(--theme-muted);
+  font-size: 12px;
+}
+
+.audit-typeahead-empty {
+  padding: 10px 12px;
+  color: var(--theme-muted);
 }
 
 .audit-table-shell {
@@ -1591,6 +1682,16 @@ a {
   color: #d9e5f2;
 }
 
+[data-theme="dark"] .audit-typeahead-menu {
+  border-color: rgba(123, 149, 175, 0.34);
+  box-shadow: 0 18px 38px rgba(2, 8, 14, 0.62);
+}
+
+[data-theme="dark"] .audit-typeahead-option:hover,
+[data-theme="dark"] .audit-typeahead-option.active {
+  background: rgba(76, 147, 214, 0.18);
+}
+
 [data-theme="dark"] .documents-row-note {
   color: #9ab1c8 !important;
 }
@@ -1667,6 +1768,13 @@ a {
 
   .audit-subfilter-grid {
     grid-template-columns: 1fr;
+  }
+
+  .audit-mapping-form-divider {
+    border-left: none;
+    border-top: 1px solid var(--theme-border);
+    margin-top: 14px;
+    padding-top: 14px;
   }
 
   .audit-confirm-form-row {
