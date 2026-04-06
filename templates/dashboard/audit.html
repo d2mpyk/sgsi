@@ -8,13 +8,14 @@
         <div class="w3-col l8 m12">
             <span class="dashboard-section-kicker">Auditoría institucional</span>
             <h2><i class="fa fa-balance-scale"></i> SGSI Master Index</h2>
-            <p>Vista de control para auditores y administradores: inventario documental, políticas vigentes y trazabilidad de confirmaciones de lectura.</p>
+            <p>Vista de control para auditores y administradores: inventario documental, políticas vigentes y
+                trazabilidad de confirmaciones de lectura.</p>
         </div>
         <div class="w3-col l4 m12">
             <div class="audit-hero-metrics">
                 <div class="audit-hero-metric">
                     <span>Documentos</span>
-                    <strong>{{ documents|length }}</strong>
+                    <strong>{{ documents_total }}</strong>
                 </div>
                 <div class="audit-hero-metric">
                     <span>Políticas vigentes</span>
@@ -22,7 +23,7 @@
                 </div>
                 <div class="audit-hero-metric">
                     <span>Confirmaciones</span>
-                    <strong>{{ confirmation_rows|length }}</strong>
+                    <strong>{{ confirmation_total }}</strong>
                 </div>
             </div>
         </div>
@@ -30,191 +31,477 @@
 </section>
 
 <section class="w3-card w3-round-xlarge audit-panel">
-    <header class="audit-panel-head">
+    <header class="audit-panel-head w3-container">
         <div>
             <h3>ISO 27001 Control Mapping</h3>
             <p>Matriz maestra para evidenciar relación entre controles, documentación SGSI y estado operativo.</p>
         </div>
     </header>
-    {% if user.role == 'admin' %}
-    <div class="w3-container w3-padding-large">
-        <form action="{{ url_for('create_iso_control_mapping') }}" method="post" class="audit-form-grid">
+    <div class="w3-container w3-padding-32 audit-section-body">
+        <form action="{{ url_for('audit_view') }}" method="get" class="audit-filter-grid">
+            <input type="hidden" name="page" value="1">
             <div>
-                <label><b>Control ISO</b></label>
-                <input class="w3-input w3-border w3-round-large documents-input" type="text" name="control_iso"
-                    placeholder="Ej: A.5.15" required>
+                <label><b>Filtrar por Control ISO</b></label>
+                <input class="w3-input w3-border w3-round-large documents-input" type="text" name="control_q"
+                    value="{{ filters.control_q }}" placeholder="Ej: A.5.15">
             </div>
             <div>
-                <label><b>Documento SGSI</b></label>
-                <select class="w3-select w3-border w3-round-large documents-input" name="document_id" required>
-                    <option value="" selected disabled>Seleccione una política</option>
-                    {% for doc in policy_documents %}
-                    <option value="{{ doc.id }}">{{ doc.code or ('POL-' ~ doc.id) }} - {{ doc.title }} (v{{ doc.version }})</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label><b>Responsable</b></label>
-                <select class="w3-select w3-border w3-round-large documents-input" name="responsible_user_id">
-                    <option value="">Sin asignar</option>
-                    {% for u in users %}
-                    <option value="{{ u.id }}">{{ u.username }} ({{ u.role }})</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label><b>Estado</b></label>
-                <select class="w3-select w3-border w3-round-large documents-input" name="status">
+                <label><b>Filtrar por Estado</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="status_filter">
+                    <option value="">Todos</option>
                     {% for status_item in mapping_allowed_status %}
-                    <option value="{{ status_item }}">{{ status_item }}</option>
+                    <option value="{{ status_item }}" {{ 'selected' if filters.status_filter==status_item else '' }}>{{
+                        status_item }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="audit-form-span">
-                <label><b>Evidencia</b></label>
-                <textarea class="w3-input w3-border w3-round-large documents-input" name="evidence" rows="2"
-                    placeholder="Ej: Registro de capacitación, acta, evidencia técnica, ticket, etc."></textarea>
+            <div>
+                <label><b>Filtrar por Responsable</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="responsible_filter">
+                    <option value="">Todos</option>
+                    {% for u in users %}
+                    <option value="{{ u.id }}" {{ 'selected' if filters.responsible_filter==u.id else '' }}>
+                        {{ u.username }} ({{ u.role }})
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="audit-form-actions">
+            <div>
+                <label><b>Ordenar por</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="sort_by">
+                    {% for field in sort_fields %}
+                    <option value="{{ field.value }}" {{ 'selected' if filters.sort_by==field.value else '' }}>
+                        {{ field.label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label><b>Dirección</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="sort_dir">
+                    {% for item in sort_directions %}
+                    <option value="{{ item.value }}" {{ 'selected' if filters.sort_dir==item.value else '' }}>
+                        {{ item.label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label><b>Registros por página</b></label>
+                <select class="w3-select w3-border w3-round-large documents-input" name="page_size">
+                    {% for size in page_size_options %}
+                    <option value="{{ size }}" {{ 'selected' if filters.page_size==size else '' }}>{{ size }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div class="audit-filter-actions">
                 <button type="submit" class="w3-button w3-round-large documents-primary-btn">
-                    <i class="fa fa-plus"></i> Guardar Mapeo
+                    <i class="fa fa-filter"></i> Aplicar Filtros
                 </button>
+                <a href="{{ url_for('audit_view') }}" class="w3-button w3-round-large documents-secondary-btn">
+                    Limpiar
+                </a>
             </div>
         </form>
-    </div>
-    {% endif %}
-    <div class="audit-table-shell">
-        <table class="w3-table w3-striped w3-bordered w3-border audit-table">
-            <thead>
-                <tr>
-                    <th>Control ISO</th>
-                    <th>Documento SGSI</th>
-                    <th>Evidencia</th>
-                    <th>Responsable</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in mapped_rows %}
-                <tr>
-                    <td>{{ row.control_iso }}</td>
-                    <td>{{ row.document_name }}</td>
-                    <td>{{ row.evidence }}</td>
-                    <td>{{ row.responsible }}</td>
-                    <td>
-                        <span class="w3-tag w3-round
+        <br>
+        {% if user.role == 'admin' %}
+        <div class="audit-create-wrap">
+            <form action="{{ url_for('create_iso_control_mapping') }}" method="post" class="audit-form-grid">
+                <input type="hidden" name="control_q" value="{{ filters.control_q }}">
+                <input type="hidden" name="status_filter" value="{{ filters.status_filter }}">
+                <input type="hidden" name="responsible_filter" value="{{ filters.responsible_filter or '' }}">
+                <input type="hidden" name="sort_by" value="{{ filters.sort_by }}">
+                <input type="hidden" name="sort_dir" value="{{ filters.sort_dir }}">
+                <input type="hidden" name="page_size" value="{{ filters.page_size }}">
+                <input type="hidden" name="page" value="{{ pagination.page }}">
+                <input type="hidden" name="doc_page_size" value="{{ filters.doc_page_size }}">
+                <input type="hidden" name="doc_page" value="{{ filters.doc_page }}">
+                <input type="hidden" name="confirm_page_size" value="{{ filters.confirm_page_size }}">
+                <input type="hidden" name="confirm_page" value="{{ filters.confirm_page }}">
+                <div>
+                    <label><b>Control ISO</b></label>
+                    <input class="w3-input w3-border w3-round-large documents-input" type="text" name="control_iso"
+                        placeholder="Ej: A.5.15" required>
+                </div>
+                <div>
+                    <label><b>Documento SGSI</b></label>
+                    <select class="w3-select w3-border w3-round-large documents-input" name="document_id" required>
+                        <option value="" selected disabled>Seleccione una política</option>
+                        {% for doc in policy_documents %}
+                        <option value="{{ doc.id }}">{{ doc.code or ('POL-' ~ doc.id) }} - {{ doc.title }} (v{{
+                            doc.version }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label><b>Responsable</b></label>
+                    <select class="w3-select w3-border w3-round-large documents-input" name="responsible_user_id">
+                        <option value="">Sin asignar</option>
+                        {% for u in users %}
+                        <option value="{{ u.id }}">{{ u.username }} ({{ u.role }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label><b>Estado</b></label>
+                    <select class="w3-select w3-border w3-round-large documents-input" name="status">
+                        {% for status_item in mapping_allowed_status %}
+                        <option value="{{ status_item }}">{{ status_item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="audit-form-span">
+                    <label><b>Evidencia</b></label>
+                    <textarea class="w3-input w3-border w3-round-large documents-input" name="evidence" rows="2"
+                        placeholder="Ej: Registro de capacitación, acta, evidencia técnica, ticket, etc."></textarea>
+                </div>
+                <br>
+                <div class="audit-form-actions">
+                    <button type="submit" class="w3-button w3-round-large documents-primary-btn">
+                        <i class="fa fa-plus"></i> Guardar Mapeo
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+        <br>
+        <div class="audit-table-shell">
+            <table class="w3-table w3-striped w3-bordered w3-border audit-table">
+                <thead>
+                    <tr>
+                        <th>Control ISO</th>
+                        <th>Documento SGSI</th>
+                        <th>Evidencia</th>
+                        <th>Responsable</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in mapped_rows %}
+                    <tr>
+                        <td>
+                            {% if user.role == 'admin' %}
+                            <input form="mapping-edit-{{ row.id }}"
+                                class="w3-input w3-border w3-round documents-input audit-inline-input" type="text"
+                                name="control_iso" value="{{ row.control_iso }}" required>
+                            {% else %}
+                            {{ row.control_iso }}
+                            {% endif %}
+                        </td>
+                        <td>{{ row.document_name }}</td>
+                        <td>
+                            {% if user.role == 'admin' %}
+                            <input form="mapping-edit-{{ row.id }}"
+                                class="w3-input w3-border w3-round documents-input audit-inline-input" type="text"
+                                name="evidence" value="{{ row.evidence }}">
+                            {% else %}
+                            {{ row.evidence }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.role == 'admin' %}
+                            <select form="mapping-edit-{{ row.id }}"
+                                class="w3-select w3-border w3-round documents-input audit-inline-input"
+                                name="responsible_user_id">
+                                <option value="">Sin asignar</option>
+                                {% for u in users %}
+                                <option value="{{ u.id }}" {{ 'selected' if row.responsible_user_id==u.id else '' }}>
+                                    {{ u.username }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            {{ row.responsible }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.role == 'admin' %}
+                            <select form="mapping-edit-{{ row.id }}"
+                                class="w3-select w3-border w3-round documents-input audit-inline-input" name="status">
+                                {% for status_item in mapping_allowed_status %}
+                                <option value="{{ status_item }}" {{ 'selected' if row.status==status_item else '' }}>{{
+                                    status_item }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="audit-inline-actions">
+                                <form id="mapping-edit-{{ row.id }}"
+                                    action="{{ url_for('update_iso_control_mapping', mapping_id=row.id) }}"
+                                    method="post"></form>
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="control_q"
+                                    value="{{ filters.control_q }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="status_filter"
+                                    value="{{ filters.status_filter }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="responsible_filter"
+                                    value="{{ filters.responsible_filter or '' }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="sort_by"
+                                    value="{{ filters.sort_by }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="sort_dir"
+                                    value="{{ filters.sort_dir }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="page_size"
+                                    value="{{ filters.page_size }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="page"
+                                    value="{{ pagination.page }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="doc_page_size"
+                                    value="{{ filters.doc_page_size }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="doc_page"
+                                    value="{{ filters.doc_page }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="confirm_page_size"
+                                    value="{{ filters.confirm_page_size }}">
+                                <input type="hidden" form="mapping-edit-{{ row.id }}" name="confirm_page"
+                                    value="{{ filters.confirm_page }}">
+                                <button type="submit" form="mapping-edit-{{ row.id }}"
+                                    class="w3-button w3-tiny w3-round documents-primary-btn">
+                                    Guardar
+                                </button>
+                                <form action="{{ url_for('delete_iso_control_mapping', mapping_id=row.id) }}"
+                                    method="post" class="audit-inline-delete">
+                                    <input type="hidden" name="control_q" value="{{ filters.control_q }}">
+                                    <input type="hidden" name="status_filter" value="{{ filters.status_filter }}">
+                                    <input type="hidden" name="responsible_filter"
+                                        value="{{ filters.responsible_filter or '' }}">
+                                    <input type="hidden" name="sort_by" value="{{ filters.sort_by }}">
+                                    <input type="hidden" name="sort_dir" value="{{ filters.sort_dir }}">
+                                    <input type="hidden" name="page_size" value="{{ filters.page_size }}">
+                                    <input type="hidden" name="page" value="{{ pagination.page }}">
+                                    <input type="hidden" name="doc_page_size" value="{{ filters.doc_page_size }}">
+                                    <input type="hidden" name="doc_page" value="{{ filters.doc_page }}">
+                                    <input type="hidden" name="confirm_page_size"
+                                        value="{{ filters.confirm_page_size }}">
+                                    <input type="hidden" name="confirm_page" value="{{ filters.confirm_page }}">
+                                    <button type="submit" class="w3-button w3-tiny w3-round documents-secondary-btn">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            {% else %}
+                            <span class="w3-tag w3-round
                             {% if row.status == 'Implementado' %}audit-status-ok
                             {% elif row.status == 'Parcial' %}audit-status-warn
                             {% elif row.status == 'Pendiente' %}audit-status-muted
                             {% else %}audit-status-muted{% endif %}">
-                            {{ row.status }}
-                        </span>
-                        {% if user.role == 'admin' %}
-                        <form action="{{ url_for('delete_iso_control_mapping', mapping_id=row.id) }}" method="post" class="audit-inline-delete">
-                            <button type="submit" class="w3-button w3-tiny w3-round documents-secondary-btn">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </form>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="5">No hay mapeos ISO registrados en base de datos.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                                {{ row.status }}
+                            </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">No hay mapeos ISO registrados en base de datos.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="audit-pagination-bar">
+            <div class="audit-pagination-meta">
+                Mostrando {{ pagination.window_start }}-{{ pagination.window_end }} de {{ pagination.total_items }}
+                mapeos.
+            </div>
+            <div class="audit-pagination-actions w3-bar">
+                <a href="{{ pagination.first_url }}"
+                    class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not pagination.has_prev else '' }}">Primera</a>
+                <a href="{{ pagination.prev_url if pagination.has_prev else '#' }}"
+                    class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not pagination.has_prev else '' }}">Anterior</a>
+                <span class="w3-bar-item audit-page-indicator">Página {{ pagination.page }} / {{ pagination.total_pages }}</span>
+                <a href="{{ pagination.next_url if pagination.has_next else '#' }}"
+                    class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not pagination.has_next else '' }}">Siguiente</a>
+                <a href="{{ pagination.last_url }}"
+                    class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not pagination.has_next else '' }}">Última</a>
+            </div>
+        </div>
     </div>
 </section>
-
+<br>
 <section class="w3-card w3-round-xlarge audit-panel">
-    <header class="audit-panel-head">
+    <header class="audit-panel-head w3-container">
         <div>
             <h3>Documentos SGSI</h3>
             <p>Inventario completo con clasificación y vigencia documental.</p>
         </div>
     </header>
-    <div class="audit-table-shell">
-        <table class="w3-table w3-striped w3-bordered w3-border audit-table">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Título</th>
-                    <th>Tipo</th>
-                    <th>Versión</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for doc in documents %}
-                <tr>
-                    <td>{{ doc.code or 'N/A' }}</td>
-                    <td>{{ doc.title }}</td>
-                    <td>{{ doc.doc_type|upper }}</td>
-                    <td>{{ doc.version }}</td>
-                    <td>
-                        <span class="w3-tag w3-round {{ 'audit-status-ok' if doc.is_active else 'audit-status-warn' }}">
-                            {{ 'Vigente' if doc.is_active else 'Obsoleto' }}
-                        </span>
-                    </td>
-                    <td>{{ doc.created_at.strftime('%Y-%m-%d') if doc.created_at else 'N/A' }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6">No hay documentos cargados.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="w3-container w3-padding-32 audit-section-body">
+        <div class="audit-table-shell">
+            <table class="w3-table w3-striped w3-bordered w3-border audit-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Título</th>
+                        <th>Tipo</th>
+                        <th>Versión</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in documents %}
+                    <tr>
+                        <td>{{ doc.code or 'N/A' }}</td>
+                        <td>{{ doc.title }}</td>
+                        <td>{{ doc.doc_type|upper }}</td>
+                        <td>{{ doc.version }}</td>
+                        <td>
+                            <span
+                                class="w3-tag w3-round {{ 'audit-status-ok' if doc.is_active else 'audit-status-warn' }}">
+                                {{ 'Vigente' if doc.is_active else 'Obsoleto' }}
+                            </span>
+                        </td>
+                        <td>{{ doc.created_at.strftime('%Y-%m-%d') if doc.created_at else 'N/A' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">No hay documentos cargados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="audit-pagination-bar audit-pagination-bar-confirm w3-cell-row">
+            <div class="w3-cell w3-mobile audit-confirm-left">
+                <div class="audit-pagination-meta">
+                    Mostrando {{ docs_pagination.window_start }}-{{ docs_pagination.window_end }} de {{
+                    docs_pagination.total_items }} documentos.
+                </div>
+                <div class="audit-pagination-actions w3-bar">
+                    <a href="{{ docs_pagination.first_url }}"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not docs_pagination.has_prev else '' }}">Primera</a>
+                    <a href="{{ docs_pagination.prev_url if docs_pagination.has_prev else '#' }}"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not docs_pagination.has_prev else '' }}">Anterior</a>
+                    <span class="w3-bar-item audit-page-indicator">Página {{ docs_pagination.page }} / {{
+                        docs_pagination.total_pages }}</span>
+                    <a href="{{ docs_pagination.next_url if docs_pagination.has_next else '#' }}"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not docs_pagination.has_next else '' }}">Siguiente</a>
+                    <a href="{{ docs_pagination.last_url }}"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not docs_pagination.has_next else '' }}">Última</a>
+                </div>
+            </div>
+            <div class="w3-cell w3-mobile audit-confirm-controls">
+                <form action="{{ url_for('audit_view') }}" method="get" class="audit-confirm-form">
+                    <input type="hidden" name="control_q" value="{{ filters.control_q }}">
+                    <input type="hidden" name="status_filter" value="{{ filters.status_filter }}">
+                    <input type="hidden" name="responsible_filter" value="{{ filters.responsible_filter or '' }}">
+                    <input type="hidden" name="sort_by" value="{{ filters.sort_by }}">
+                    <input type="hidden" name="sort_dir" value="{{ filters.sort_dir }}">
+                    <input type="hidden" name="page_size" value="{{ filters.page_size }}">
+                    <input type="hidden" name="page" value="{{ pagination.page }}">
+                    <input type="hidden" name="confirm_page_size" value="{{ filters.confirm_page_size }}">
+                    <input type="hidden" name="confirm_page" value="{{ filters.confirm_page }}">
+                    <input type="hidden" name="doc_page" value="1">
+                    <label><b>Registros por página</b></label>
+                    <div class="audit-confirm-form-row w3-bar">
+                        <select
+                            class="w3-bar-item w3-select w3-border w3-round-large documents-input audit-confirm-select"
+                            name="doc_page_size">
+                            {% for size in page_size_options %}
+                            <option value="{{ size }}" {{ 'selected' if filters.doc_page_size==size else '' }}>{{ size }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit"
+                            class="w3-bar-item w3-button w3-round-large documents-secondary-btn">Aplicar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </section>
-
+<br>
 <section class="w3-card w3-round-xlarge audit-panel">
-    <header class="audit-panel-head">
+    <header class="audit-panel-head w3-container">
         <div>
             <h3>Confirmaciones de lectura</h3>
             <p>Seguimiento por usuario y política, con evidencia de descarga y confirmación.</p>
         </div>
     </header>
-    <div class="audit-table-shell">
-        <table class="w3-table w3-striped w3-bordered w3-border audit-table">
-            <thead>
-                <tr>
-                    <th>Política</th>
-                    <th>Usuario</th>
-                    <th>Área</th>
-                    <th>Descarga</th>
-                    <th>Confirmación</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in confirmation_rows %}
-                <tr>
-                    <td>{{ row.policy_code }} - {{ row.policy_title }}</td>
-                    <td>{{ row.username }}</td>
-                    <td>{{ row.department_name }}</td>
-                    <td>{{ row.download_at.strftime('%Y-%m-%d %H:%M') if row.download_at else 'N/A' }}</td>
-                    <td>{{ row.read_at.strftime('%Y-%m-%d %H:%M') if row.read_at else 'N/A' }}</td>
-                    <td>
-                        {% if row.status == 'Confirmado' %}
-                        <span class="w3-tag w3-round audit-status-ok">{{ row.status }}</span>
-                        {% elif row.status == 'Descargado - pendiente' %}
-                        <span class="w3-tag w3-round audit-status-warn">{{ row.status }}</span>
-                        {% else %}
-                        <span class="w3-tag w3-round audit-status-muted">{{ row.status }}</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6">No hay confirmaciones registradas.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="w3-container w3-padding-32 audit-section-body">
+        <div class="audit-table-shell">
+            <table class="w3-table w3-striped w3-bordered w3-border audit-table">
+                <thead>
+                    <tr>
+                        <th>Política</th>
+                        <th>Usuario</th>
+                        <th>Área</th>
+                        <th>Descarga</th>
+                        <th>Confirmación</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in confirmation_rows %}
+                    <tr>
+                        <td>{{ row.policy_code }} - {{ row.policy_title }}</td>
+                        <td>{{ row.username }}</td>
+                        <td>{{ row.department_name }}</td>
+                        <td>{{ row.download_at.strftime('%Y-%m-%d %H:%M') if row.download_at else 'N/A' }}</td>
+                        <td>{{ row.read_at.strftime('%Y-%m-%d %H:%M') if row.read_at else 'N/A' }}</td>
+                        <td>
+                            {% if row.status == 'Confirmado' %}
+                            <span class="w3-tag w3-round audit-status-ok">{{ row.status }}</span>
+                            {% elif row.status == 'Descargado - pendiente' %}
+                            <span class="w3-tag w3-round audit-status-warn">{{ row.status }}</span>
+                            {% else %}
+                            <span class="w3-tag w3-round audit-status-muted">{{ row.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">No hay confirmaciones registradas.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="audit-pagination-bar audit-pagination-bar-confirm w3-cell-row">
+            <div class="w3-cell w3-mobile audit-confirm-left">
+                <div class="audit-pagination-meta">
+                    Mostrando {{ confirm_pagination.window_start }}-{{ confirm_pagination.window_end }} de {{
+                    confirm_pagination.total_items }} confirmaciones.
+                </div>
+                <div class="audit-pagination-actions w3-bar">
+                    <a href="{{ confirm_pagination.first_url }}"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not confirm_pagination.has_prev else '' }}">Primera</a>
+                    <a href="{{ confirm_pagination.prev_url if confirm_pagination.has_prev else '#' }}"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not confirm_pagination.has_prev else '' }}">Anterior</a>
+                    <span class="w3-bar-item audit-page-indicator">Página {{ confirm_pagination.page }} / {{
+                        confirm_pagination.total_pages }}</span>
+                    <a href="{{ confirm_pagination.next_url if confirm_pagination.has_next else '#' }}"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not confirm_pagination.has_next else '' }}">Siguiente</a>
+                    <a href="{{ confirm_pagination.last_url }}"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not confirm_pagination.has_next else '' }}">Última</a>
+                </div>
+            </div>
+            <div class="w3-cell w3-mobile audit-confirm-controls">
+                <form action="{{ url_for('audit_view') }}" method="get" class="audit-confirm-form">
+                    <input type="hidden" name="control_q" value="{{ filters.control_q }}">
+                    <input type="hidden" name="status_filter" value="{{ filters.status_filter }}">
+                    <input type="hidden" name="responsible_filter" value="{{ filters.responsible_filter or '' }}">
+                    <input type="hidden" name="sort_by" value="{{ filters.sort_by }}">
+                    <input type="hidden" name="sort_dir" value="{{ filters.sort_dir }}">
+                    <input type="hidden" name="page_size" value="{{ filters.page_size }}">
+                    <input type="hidden" name="page" value="{{ pagination.page }}">
+                    <input type="hidden" name="doc_page_size" value="{{ filters.doc_page_size }}">
+                    <input type="hidden" name="doc_page" value="{{ filters.doc_page }}">
+                    <input type="hidden" name="confirm_page" value="1">
+                    <label><b>Registros por página</b></label>
+                    <div class="audit-confirm-form-row w3-bar">
+                        <select
+                            class="w3-bar-item w3-select w3-border w3-round-large documents-input audit-confirm-select"
+                            name="confirm_page_size">
+                            {% for size in page_size_options %}
+                            <option value="{{ size }}" {{ 'selected' if filters.confirm_page_size==size else '' }}>{{
+                                size }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit"
+                            class="w3-bar-item w3-button w3-round-large documents-secondary-btn">Aplicar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}

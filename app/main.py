@@ -16,10 +16,6 @@ from utils.config import get_settings
 from routers import audit, auth, dashboard, documents, media, suggestions, users
 from utils.database import Base, engine
 from utils.init_db import (
-    ensure_document_reads_download_at_column,
-    ensure_iso_control_mappings_table,
-    ensure_suggestions_table,
-    ensure_users_department_column,
     get_init_config,
     init_approved_users,
 )
@@ -30,11 +26,6 @@ get_init_config()
 settings = get_settings()
 # Instancia la ceación de la base y sus tablas sino existen
 Base.metadata.create_all(bind=engine)
-# Ajuste incremental de esquema para tablas existentes
-ensure_document_reads_download_at_column()
-ensure_suggestions_table()
-ensure_users_department_column()
-ensure_iso_control_mappings_table()
 # Verificación inicial de base de datos
 init_approved_users()
 

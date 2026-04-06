@@ -1,14 +1,12 @@
-from sqlalchemy import inspect, text
 from sqlalchemy.orm import Session
 import sys
 
 from models.departments import Department
-from models.iso_control_mappings import ISOControlMapping
 from models.users import ApprovedUsers, User
 from utils.auth import hash_password
 from utils.config import get_settings
 
-from .database import SessionLocal, engine
+from .database import SessionLocal
 
 # Obtener las variables de entorno
 settings = get_settings()
@@ -148,110 +146,3 @@ def seed_departments(db: Session) -> int:
         raise RuntimeError("No fue posible inicializar el catálogo de departamentos.")
 
     return ordered_departments[0].id
-
-
-def ensure_document_reads_download_at_column():
-    """Agrega la columna download_at a document_reads si aún no existe."""
-    inspector = inspect(engine)
-
-    try:
-        if "document_reads" not in inspector.get_table_names():
-            return
-
-        existing_columns = {
-            column["name"] for column in inspector.get_columns("document_reads")
-        }
-
-        if "download_at" not in existing_columns:
-            with engine.begin() as connection:
-                connection.execute(
-                    text("ALTER TABLE document_reads ADD COLUMN download_at DATETIME")
-                )
-    except Exception as e:
-        print(
-            f"Error: No se pudo verificar/agregar la columna download_at: {e}",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
-
-def ensure_suggestions_table():
-    """Crea la tabla suggestions si aún no existe en bases existentes."""
-    inspector = inspect(engine)
-
-    try:
-        if "suggestions" in inspector.get_table_names():
-            return
-
-        with engine.begin() as connection:
-            connection.execute(
-                text(
-                    """
-                    CREATE TABLE suggestions (
-                        id INTEGER NOT NULL AUTO_INCREMENT,
-                        id_user INTEGER NOT NULL,
-                        suggestion TEXT NOT NULL,
-                        created_at DATETIME NOT NULL,
-                        PRIMARY KEY (id),
-                        INDEX ix_suggestions_id (id),
-                        INDEX ix_suggestions_id_user (id_user),
-                        CONSTRAINT fk_suggestions_users
-                            FOREIGN KEY (id_user) REFERENCES users (id)
-                    )
-                    """
-                )
-            )
-    except Exception as e:
-        print(
-            f"Error: No se pudo verificar/crear la tabla suggestions: {e}",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
-
-def ensure_users_department_column():
-    """Agrega la columna department_id a users si aún no existe y la inicializa."""
-    inspector = inspect(engine)
-
-    try:
-        if "users" not in inspector.get_table_names():
-            return
-
-        existing_columns = {column["name"] for column in inspector.get_columns("users")}
-        default_department_id = None
-
-        with SessionLocal() as db:
-            default_department_id = seed_departments(db)
-
-        if "department_id" not in existing_columns:
-            with engine.begin() as connection:
-                connection.execute(
-                    text("ALTER TABLE users ADD COLUMN department_id INTEGER")
-                )
-
-        with engine.begin() as connection:
-            connection.execute(
-                text(
-                    "UPDATE users SET department_id = :department_id "
-                    "WHERE department_id IS NULL"
-                ),
-                {"department_id": default_department_id},
-            )
-    except Exception as e:
-        print(
-            f"Error: No se pudo verificar/agregar la columna department_id: {e}",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
-
-def ensure_iso_control_mappings_table():
-    """Crea la tabla iso_control_mappings si aún no existe."""
-    try:
-        ISOControlMapping.__table__.create(bind=engine, checkfirst=True)
-    except Exception as e:
-        print(
-            f"Error: No se pudo verificar/crear la tabla iso_control_mappings: {e}",
-            file=sys.stderr,
-        )
-        sys.exit(1)
