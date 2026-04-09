@@ -264,3 +264,4 @@ mejoras.md
 .playwright-cli/
 AGENTS.md
 skills-lock.json
+httpd.conf
