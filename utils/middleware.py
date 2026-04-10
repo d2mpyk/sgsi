@@ -2,6 +2,10 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi import Request
 from .auth import verify_access_token  # tu función JWT
+from .config import get_settings
+
+settings = get_settings()
+API_PREFIX = settings.API_PREFIX.rstrip("/")
 
 
 class HTMLAuthMiddleware(BaseHTTPMiddleware):
@@ -13,9 +17,9 @@ class HTMLAuthMiddleware(BaseHTTPMiddleware):
         # 🔓 Rutas públicas permitidas
         public_paths = [
             "/",
-            "/api/v1/auth/token",
-            "/api/v1/users/verify",
-            "/api/v1/users/resend-verification",
+            f"{API_PREFIX}/auth/token",
+            f"{API_PREFIX}/users/verify",
+            f"{API_PREFIX}/users/resend-verification",
         ]
 
         # Permitir rutas públicas
@@ -27,7 +31,7 @@ class HTMLAuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         # 🔐 SOLO proteger vistas HTML
-        if path.startswith("/api/v1/dashboard"):
+        if path.startswith(f"{API_PREFIX}/dashboard"):
 
             token = request.cookies.get("access_token")
 

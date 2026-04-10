@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     EMAIL_USER: SecretStr
     EMAIL_PASSWD: SecretStr
     UTC_SERVER: str = "America/Santiago"
+    API_PREFIX: str = "/api/v1"
     LOG_MAX_BYTES: int = 5242880  # 5 MB por defecto
     LOG_BACKUP_COUNT: int = 5
 

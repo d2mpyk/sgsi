@@ -56,6 +56,7 @@ templates = Jinja2Templates(directory="templates")
 app.state.limiter = limiter
 app.state.company_name = settings.COMPANY_NAME.get_secret_value()
 app.state.project_name = settings.PROJECT_NAME.get_secret_value()
+app.state.api_prefix = settings.API_PREFIX
 
 # Añade un manejador de excepciones para RateLimitExceeded
 @app.exception_handler(RateLimitExceeded)
@@ -66,13 +67,14 @@ async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
     )
 
 # Enrutadores
-app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
-app.include_router(dashboard.router, prefix="/api/v1/dashboard", tags=["Dashboard"])
-app.include_router(documents.router, prefix="/api/v1/documents", tags=["Documents"])
-app.include_router(audit.router, prefix="/api/v1/audit", tags=["Audit"])
-app.include_router(suggestions.router, prefix="/api/v1/suggestions", tags=["Suggestions"])
-app.include_router(users.router, prefix="/api/v1/users", tags=["Users"])
-app.include_router(media.router, prefix="/api/v1/media", tags=["Media"])
+api_prefix = settings.API_PREFIX.rstrip("/")
+app.include_router(auth.router, prefix=f"{api_prefix}/auth", tags=["Auth"])
+app.include_router(dashboard.router, prefix=f"{api_prefix}/dashboard", tags=["Dashboard"])
+app.include_router(documents.router, prefix=f"{api_prefix}/documents", tags=["Documents"])
+app.include_router(audit.router, prefix=f"{api_prefix}/audit", tags=["Audit"])
+app.include_router(suggestions.router, prefix=f"{api_prefix}/suggestions", tags=["Suggestions"])
+app.include_router(users.router, prefix=f"{api_prefix}/users", tags=["Users"])
+app.include_router(media.router, prefix=f"{api_prefix}/media", tags=["Media"])
 
 # Muestra la pagina principal del sitio
 @app.get(

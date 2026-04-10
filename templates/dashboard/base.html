@@ -13,7 +13,9 @@
     {% block head %}{% endblock %}
 </head>
 
-<body class="app-shell" data-root-path="{{ request.scope.get('root_path', '') }}">
+<body class="app-shell"
+    data-root-path="{{ request.scope.get('root_path', '') }}"
+    data-api-prefix="{{ request.app.state.api_prefix }}">
 
     <div class="app-topbar w3-top">
         <div class="w3-bar app-topbar-inner">

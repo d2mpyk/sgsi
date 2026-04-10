@@ -136,3 +136,21 @@ sudo journalctl -u sgsi -f
 sudo tail -f /var/log/httpd/192.168.1.20_error.log
 sudo tail -f /var/log/httpd/192.168.1.20_access.log
 ```
+
+Si algo Falla
+# 1) Etiquetar el venv como ejecutable de usuario, no como contenido web
+sudo semanage fcontext -a -t usr_t '/var/www/html/sgsi/.venv(/.*)?'
+sudo restorecon -Rv /var/www/html/sgsi/.venv
+
+# 2) Verifica contexto
+ls -lZ /var/www/html/sgsi/.venv/bin/python
+
+# 3) Reinicia servicio
+sudo systemctl daemon-reload
+sudo systemctl restart sgsi
+sudo systemctl status sgsi -l --no-pager
+
+Si semanage dice que ya existe una regla, usa:
+
+sudo semanage fcontext -m -t usr_t '/var/www/html/sgsi/.venv(/.*)?'
+sudo restorecon -Rv /var/www/html/sgsi/.venv

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Refactor: Leer configuración desde data-attribute del body
     const BASE_PATH = document.body.getAttribute("data-root-path") || "";
+    const API_PREFIX = document.body.getAttribute("data-api-prefix") || "/api/v1";
 
     // Función auxiliar para manejar expiración de sesión (401/403)
     function handleSessionExpiration(response) {
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 formData.append('username', username);
                 formData.append('password', password);
 
-                const tokenResponse = await fetch(`${BASE_PATH}/api/v1/auth/token`, {
+                const tokenResponse = await fetch(`${BASE_PATH}${API_PREFIX}/auth/token`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 await tokenResponse.json();
 
-                window.location.href = `${BASE_PATH}/api/v1/dashboard/`;
+                window.location.href = `${BASE_PATH}${API_PREFIX}/dashboard/`;
 
             } catch (error) {
                 alert("Error en autenticación: " + error.message);
@@ -84,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const restoreButton = setButtonLoading(submitBtn, "Enviando...");
 
             try {
-                const response = await fetch(`${BASE_PATH}/api/v1/users/forgot-password`, {
+                const response = await fetch(`${BASE_PATH}${API_PREFIX}/users/forgot-password`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -123,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const formData = new URLSearchParams();
                 formData.append('email', email);
 
-                const response = await fetch(`${BASE_PATH}/api/v1/users/resend-verification`, {
+                const response = await fetch(`${BASE_PATH}${API_PREFIX}/users/resend-verification`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
@@ -186,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const restoreButton = setButtonLoading(submitBtn, "Actualizando...");
 
             try {
-                const response = await fetch(`${BASE_PATH}/api/v1/users/reset-password/${token}`, {
+                const response = await fetch(`${BASE_PATH}${API_PREFIX}/users/reset-password/${token}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

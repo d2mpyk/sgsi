@@ -1,5 +1,6 @@
 // Obtener la ruta base por si la app corre en un subdirectorio (ej: /app)
 const BASE_PATH = document.body.getAttribute("data-root-path") || "";
+const API_PREFIX = document.body.getAttribute("data-api-prefix") || "/api/v1";
 
 // --- Lógica de Pestañas ---
 function openTab(evt, tabName) {
@@ -47,7 +48,7 @@ async function markAsRead(docId, btnElement) {
     btnElement.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Procesando';
 
     try {
-        const response = await fetch(`${BASE_PATH}/api/v1/documents/${docId}/read`, {
+        const response = await fetch(`${BASE_PATH}${API_PREFIX}/documents/${docId}/read`, {
             method: 'POST'
         });
 
@@ -97,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const ctx = document.getElementById('complianceChart');
     if (ctx) {
         try {
-            const response = await fetch(`${BASE_PATH}/api/v1/documents/stats`);
+            const response = await fetch(`${BASE_PATH}${API_PREFIX}/documents/stats`);
             const data = await response.json();
 
             const labels = data.map(item => item.code ? `${item.code} ${item.title}` : item.title);

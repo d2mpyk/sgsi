@@ -24,11 +24,14 @@ from models.users import User
 # Password Hasher
 ph = PasswordHash.recommended()
 
-# Esquema de FastAPI para extraer el token del header "Authorization: Bearer ..."
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token", auto_error=False)
-
 # Obtener las variables de entorno
 settings = get_settings()
+
+# Esquema de FastAPI para extraer el token del header "Authorization: Bearer ..."
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl=f"{settings.API_PREFIX.rstrip('/')}/auth/token",
+    auto_error=False,
+)
 
 # Configuración de templates
 templates = Jinja2Templates(directory="templates")

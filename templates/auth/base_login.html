@@ -13,7 +13,8 @@
 </head>
 
 <body class="auth-shell w3-display-container"
-    data-root-path="{{ request.scope.get('root_path', '') }}">
+    data-root-path="{{ request.scope.get('root_path', '') }}"
+    data-api-prefix="{{ request.app.state.api_prefix }}">
     <div class="auth-background-grid"></div>
     <div class="w3-content auth-stage">
         <div class="theme-switcher auth-theme-switcher">
