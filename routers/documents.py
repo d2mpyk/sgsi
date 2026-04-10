@@ -1211,7 +1211,11 @@ def documents_view(
 
     # -- Lógica de obtención de documentos (reutilizada del endpoint API) --
     if current_user.role == "admin":
-        stmt = select(Document).order_by(*DOCUMENT_SORT_ORDER)
+        stmt = (
+            select(Document)
+            .where(Document.is_active == True)
+            .order_by(*DOCUMENT_SORT_ORDER)
+        )
     else:
         stmt = (
             select(Document)
@@ -1662,6 +1666,62 @@ async def upload_documents_batch(
         response.set_cookie(key="flash_type", value="green", httponly=True)
 
     return response
+
+
+# ----------------------------------------------------------------------
+# Eliminar documentos por código (Solo Admin)
+@router.delete(
+    "/by-code/{code}",
+    status_code=status.HTTP_200_OK,
+)
+def delete_documents_by_code(
+    request: Request,
+    code: str,
+    db: Annotated[Session, Depends(get_db)],
+    admin_user: Annotated[User, Depends(get_current_admin)],
+):
+    """
+    Elimina lógicamente documentos por código documental.
+    Para conservar trazabilidad SGSI, se marca `is_active=False`.
+    """
+    if isinstance(admin_user, RedirectResponse):
+        return admin_user
+
+    normalized_code = code.strip().upper()
+    if not normalized_code:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El código documental es obligatorio.",
+        )
+
+    documents = (
+        db.execute(select(Document).where(Document.code == normalized_code))
+        .scalars()
+        .all()
+    )
+
+    if not documents:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No se encontraron documentos con código '{normalized_code}'.",
+        )
+
+    for doc in documents:
+        doc.is_active = False
+
+    db.commit()
+
+    client_ip = request.client.host if request.client else "Unknown"
+    security_logger.warning(
+        f"BAJA DOCUMENTAL POR CÓDIGO | Admin: {admin_user.username} (ID: {admin_user.id}) | "
+        f"Código: {normalized_code} | Registros afectados: {len(documents)} | IP: {client_ip}"
+    )
+
+    return {
+        "detail": f"Documentos con código '{normalized_code}' desactivados correctamente.",
+        "code": normalized_code,
+        "affected": len(documents),
+    }
 
 
 # ----------------------------------------------------------------------

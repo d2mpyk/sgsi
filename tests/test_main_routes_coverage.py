@@ -13,7 +13,7 @@ def test_main_root_and_public_views(client, monkeypatch):
 
     favicon_response = client.get("/favicon.ico")
     assert favicon_response.status_code == 200
-    assert favicon_response.headers["content-type"].startswith("image/png")
+    assert favicon_response.headers["content-type"].startswith("image/x-icon")
 
     forgot_response = client.get("/forgot-password")
     assert forgot_response.status_code == 200

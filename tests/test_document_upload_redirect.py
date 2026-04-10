@@ -274,3 +274,75 @@ def test_documents_view_lists_items_sorted_by_code(client, db_session):
 
     assert page.text.index("POL-100") < page.text.index("POL-200")
     assert page.text.index("REG-100") < page.text.index("REG-200")
+
+
+def test_documents_view_for_admin_only_shows_active_documents(client, db_session):
+    admin_pass = "AdminPass123!"
+    admin = User(
+        username="admin_active_only",
+        email="admin_active_only@example.com",
+        password_hash=hash_password(admin_pass),
+        role="admin",
+        is_active=True,
+    )
+    db_session.add(admin)
+    db_session.commit()
+
+    docs = [
+        Document(
+            title="Politica Activa",
+            version="1.0",
+            code="POL-300",
+            doc_type="policy",
+            filename="pol_300.pdf",
+            content_type="application/pdf",
+            uploaded_by_id=admin.id,
+            is_active=True,
+        ),
+        Document(
+            title="Politica Inactiva",
+            version="1.0",
+            code="POL-301",
+            doc_type="policy",
+            filename="pol_301.pdf",
+            content_type="application/pdf",
+            uploaded_by_id=admin.id,
+            is_active=False,
+        ),
+        Document(
+            title="Registro Activo",
+            version="1.0",
+            code="REG-300",
+            doc_type="record",
+            filename="reg_300.pdf",
+            content_type="application/pdf",
+            uploaded_by_id=admin.id,
+            is_active=True,
+        ),
+        Document(
+            title="Registro Inactivo",
+            version="1.0",
+            code="REG-301",
+            doc_type="record",
+            filename="reg_301.pdf",
+            content_type="application/pdf",
+            uploaded_by_id=admin.id,
+            is_active=False,
+        ),
+    ]
+    db_session.add_all(docs)
+    db_session.commit()
+
+    login_resp = client.post(
+        "/api/v1/auth/token",
+        data={"username": "admin_active_only", "password": admin_pass},
+    )
+    assert login_resp.status_code == 200
+
+    page = client.get("/api/v1/documents/view")
+    assert page.status_code == 200
+
+    assert "POL-300" in page.text
+    assert "REG-300" in page.text
+    assert "POL-301" not in page.text
+    assert "REG-301" not in page.text

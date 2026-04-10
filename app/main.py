@@ -57,6 +57,13 @@ app.state.limiter = limiter
 app.state.company_name = settings.COMPANY_NAME.get_secret_value()
 app.state.project_name = settings.PROJECT_NAME.get_secret_value()
 app.state.api_prefix = settings.API_PREFIX
+app.state.dashboard_w3css_url = settings.DASHBOARD_W3CSS_URL
+app.state.auth_w3css_url = settings.AUTH_W3CSS_URL
+app.state.google_fonts_url = settings.GOOGLE_FONTS_URL
+app.state.fontawesome_url = settings.FONTAWESOME_URL
+app.state.chart_js_url = settings.CHART_JS_URL
+app.state.project_repository_url = settings.PROJECT_REPOSITORY_URL
+app.state.w3css_docs_url = settings.W3CSS_DOCS_URL
 
 # Añade un manejador de excepciones para RateLimitExceeded
 @app.exception_handler(RateLimitExceeded)
@@ -88,15 +95,16 @@ def inicio(request: Request):
     return RedirectResponse(url=request.url_for("login"))
 
 
-@app.get(
+@app.api_route(
     "/favicon.ico",
+    methods=["GET", "HEAD"],
     include_in_schema=False,
 )
 def favicon():
     """Entrega el favicon del sitio."""
     return FileResponse(
         path=os.path.join("static", "favicon.ico"),
-        media_type="image/png",
+        media_type="image/x-icon",
     )
 
 

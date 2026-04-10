@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ title or 'Dashboard' }} - Document Management{% endblock %}</title>
     <script src="{{ url_for('static', path='js/theme-init.js') }}"></script>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Montserrat:wght@600;700;800&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ request.app.state.dashboard_w3css_url }}">
+    <link rel="stylesheet" href="{{ request.app.state.google_fonts_url }}">
+    <link rel="stylesheet" href="{{ request.app.state.fontawesome_url }}">
     <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
     {% block head %}{% endblock %}
 </head>
@@ -205,8 +205,8 @@
                         <p>Interfaz institucional para acceso, lectura y seguimiento documental del sistema de gestión.</p>
                     </div>
                     <div class="w3-col m4 s12 app-footer-meta">
-                        <p>Desarrollado por <a href="https://github.com/d2mpyk/sgsi" target="_blank">D2MP</a></p>
-                        <p>Estilos base con <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">W3.css</a></p>
+                        <p>Desarrollado por <a href="{{ request.app.state.project_repository_url }}" target="_blank">D2MP</a></p>
+                        <p>Estilos base con <a href="{{ request.app.state.w3css_docs_url }}" target="_blank">W3.css</a></p>
                     </div>
                 </div>
             </div>

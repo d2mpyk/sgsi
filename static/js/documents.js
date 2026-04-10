@@ -1,6 +1,6 @@
 // Obtener la ruta base por si la app corre en un subdirectorio (ej: /app)
 const BASE_PATH = document.body.getAttribute("data-root-path") || "";
-const API_PREFIX = document.body.getAttribute("data-api-prefix") || "/api/v1";
+const API_PREFIX = document.body.getAttribute("data-api-prefix") || "";
 
 // --- Lógica de Pestañas ---
 function openTab(evt, tabName) {
@@ -36,6 +36,20 @@ function loadAuditReportPreview() {
     iframe.style.display = "block";
     if (emptyState) {
         emptyState.style.display = "none";
+    }
+}
+
+function openDeleteDocumentsModal() {
+    const modal = document.getElementById("deleteDocumentsModal");
+    if (modal) {
+        modal.style.display = "block";
+    }
+}
+
+function closeDeleteDocumentsModal() {
+    const modal = document.getElementById("deleteDocumentsModal");
+    if (modal) {
+        modal.style.display = "none";
     }
 }
 
@@ -189,6 +203,55 @@ document.addEventListener("DOMContentLoaded", async function () {
             const iframe = document.getElementById("auditReportPreviewFrame");
             if (iframe) {
                 iframe.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        });
+    }
+
+    const deleteByCodeForm = document.getElementById("deleteByCodeForm");
+    if (deleteByCodeForm) {
+        deleteByCodeForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const codeInput = document.getElementById("document_code");
+            const submitBtn = document.getElementById("deleteByCodeSubmitBtn");
+            if (!codeInput || !submitBtn) return;
+
+            const code = codeInput.value.trim().toUpperCase();
+            if (!code) {
+                alert("Debes ingresar un código documental.");
+                return;
+            }
+
+            const confirmed = confirm(
+                `¿Confirma desactivar todos los documentos con código ${code}?`
+            );
+            if (!confirmed) return;
+
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Eliminando';
+
+            try {
+                const response = await fetch(
+                    `${BASE_PATH}${API_PREFIX}/documents/by-code/${encodeURIComponent(code)}`,
+                    { method: "DELETE" }
+                );
+
+                const payload = await response.json();
+                if (!response.ok) {
+                    alert(payload.detail || "No fue posible eliminar los documentos.");
+                    return;
+                }
+
+                alert(payload.detail || "Documentos desactivados correctamente.");
+                closeDeleteDocumentsModal();
+                window.location.reload();
+            } catch (error) {
+                console.error(error);
+                alert("Error de conexión al intentar eliminar documentos.");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
             }
         });
     }

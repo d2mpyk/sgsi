@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Refactor: Leer configuración desde data-attribute del body
     const BASE_PATH = document.body.getAttribute("data-root-path") || "";
-    const API_PREFIX = document.body.getAttribute("data-api-prefix") || "/api/v1";
+    const API_PREFIX = document.body.getAttribute("data-api-prefix") || "";
 
     // Función auxiliar para manejar expiración de sesión (401/403)
     function handleSessionExpiration(response) {

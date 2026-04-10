@@ -4,7 +4,7 @@
 
 {% block head %}
 <!-- Chart.js para estadísticas -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ request.app.state.chart_js_url }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -42,6 +42,9 @@
         </button>
         <button class="w3-bar-item w3-button tablink" onclick="openTab(event,'AdminPanel')">
             <i class="fa fa-cogs"></i> Administración y métricas
+        </button>
+        <button class="w3-bar-item w3-button tablink" type="button" onclick="openDeleteDocumentsModal()">
+            <i class="fa fa-trash"></i> Eliminar Documentos
         </button>
         {% endif %}
     </div>
@@ -253,6 +256,38 @@
                 <button type="submit"
                     class="w3-button w3-block w3-round-large documents-primary-btn w3-section w3-padding">Subir
                     Documento</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="deleteDocumentsModal" class="w3-modal" style="z-index:102">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-xlarge documents-modal" style="max-width:520px">
+        <header class="w3-container w3-round-top-large documents-modal-header">
+            <span onclick="closeDeleteDocumentsModal()"
+                class="w3-button w3-xlarge w3-display-topright w3-round-top-large">&times;</span>
+            <h3><i class="fa fa-trash"></i> Eliminar documentos por código</h3>
+        </header>
+
+        <div class="w3-container w3-padding-large">
+            <form id="deleteByCodeForm">
+                <label for="document_code"><b>Código documental</b></label>
+                <input
+                    id="document_code"
+                    name="document_code"
+                    class="w3-input w3-border w3-round-large documents-input w3-margin-bottom"
+                    type="text"
+                    placeholder="Ej: POL-01"
+                    required>
+
+                <p class="w3-small w3-text-grey">Esta acción desactiva todas las versiones asociadas a ese código.</p>
+
+                <button
+                    id="deleteByCodeSubmitBtn"
+                    type="submit"
+                    class="w3-button w3-block w3-round-large documents-primary-btn w3-section w3-padding">
+                    Eliminar documentos
+                </button>
             </form>
         </div>
     </div>
