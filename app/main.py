@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, status
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 # Para enviar respuestas HTML
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, FileResponse
@@ -11,6 +12,7 @@ import os
 from slowapi.errors import RateLimitExceeded
 from utils.limiter import limiter
 from utils.config import get_settings
+from utils.auth import verify_access_token
 
 # Imports Locales
 from routers import audit, auth, dashboard, documents, media, suggestions, users
@@ -71,6 +73,112 @@ async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
     return JSONResponse(
         status_code=429,
         content={"detail": f"Límite de peticiones excedido: {exc.detail}"},
+    )
+
+
+def _client_wants_html(request: Request) -> bool:
+    """Detecta si el cliente espera una respuesta HTML de navegador."""
+    accept_header = request.headers.get("accept", "").lower()
+    return request.method == "GET" and "text/html" in accept_header
+
+
+def _get_error_redirect_context(request: Request) -> tuple[str, str]:
+    """
+    Retorna URL y texto del botón para redirección:
+    - Dashboard si token es válido.
+    - Login si no hay token o no es válido.
+    """
+    redirect_url = str(request.url_for("login"))
+    button_text = "Ir a Inicio de Sesión"
+
+    token = request.cookies.get("access_token")
+    if token:
+        try:
+            verify_access_token(token)
+            redirect_url = str(request.url_for("dashboard"))
+            button_text = "Ir al Dashboard"
+        except Exception:
+            pass
+
+    return redirect_url, button_text
+
+
+def _render_error_page(
+    request: Request,
+    template_name: str,
+    status_code: int,
+    title: str,
+    heading: str,
+    description: str,
+):
+    redirect_url, button_text = _get_error_redirect_context(request)
+    return templates.TemplateResponse(
+        request=request,
+        name=template_name,
+        context={
+            "title": title,
+            "error_heading": heading,
+            "error_description": description,
+            "redirect_url": redirect_url,
+            "button_text": button_text,
+        },
+        status_code=status_code,
+    )
+
+
+@app.exception_handler(status.HTTP_404_NOT_FOUND)
+async def not_found_handler(request: Request, exc):
+    wants_html = _client_wants_html(request)
+
+    if not wants_html:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"detail": "Not Found"},
+        )
+
+    return _render_error_page(
+        request=request,
+        template_name="errors/404.html",
+        status_code=status.HTTP_404_NOT_FOUND,
+        title="Página no encontrada",
+        heading="Error 404",
+        description="El contenido que intentas abrir no existe o fue movido dentro del portal SGSI.",
+    )
+
+
+@app.exception_handler(status.HTTP_403_FORBIDDEN)
+async def forbidden_handler(request: Request, exc: StarletteHTTPException):
+    if not _client_wants_html(request):
+        return JSONResponse(
+            status_code=status.HTTP_403_FORBIDDEN,
+            content={"detail": exc.detail if exc.detail else "Forbidden"},
+        )
+
+    return _render_error_page(
+        request=request,
+        template_name="errors/403.html",
+        status_code=status.HTTP_403_FORBIDDEN,
+        title="Acceso denegado",
+        heading="Error 403",
+        description="No tienes permisos suficientes para acceder a este recurso del portal SGSI.",
+    )
+
+
+@app.exception_handler(Exception)
+async def internal_server_error_handler(request: Request, exc: Exception):
+    if not _client_wants_html(request):
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": "Internal Server Error"},
+        )
+
+    return _render_error_page(
+        request=request,
+        template_name="errors/500.html",
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        title="Error interno del servidor",
+        heading="Error 500",
+        description="Ocurrió un fallo inesperado en el servidor. Puedes volver al flujo principal desde el botón.",
     )
 
 # Enrutadores
