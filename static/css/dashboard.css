@@ -818,6 +818,11 @@ a {
   color: #2c6841;
 }
 
+.dashboard-notice-error {
+  background: #fdeceb;
+  color: #8b2d2d;
+}
+
 .dashboard-list {
   display: grid;
   gap: 14px;
@@ -1673,6 +1678,11 @@ a {
 [data-theme="dark"] .dashboard-notice-ok {
   background: rgba(18, 68, 42, 0.9);
   color: #b8f2c7;
+}
+
+[data-theme="dark"] .dashboard-notice-error {
+  background: rgba(90, 31, 31, 0.9);
+  color: #ffb3b3;
 }
 
 [data-theme="dark"] .documents-read-tag,

@@ -13,26 +13,53 @@
 <br>
 
 <section class="w3-card w3-round-xlarge lms-grid-wrap">
-    <div class="lms-grid">
-        {% for post in posts %}
-        <article class="lms-card">
-            <div class="lms-card-top">
-                <span class="lms-chip">{{ post.category }}</span>
-                <span class="lms-version">v{{ post.version }}</span>
-            </div>
-            <h3>{{ post.title }}</h3>
-            <p>Contenido pendiente de carga. Este tema ya está habilitado para la ruta formativa del semestre.</p>
-            <div class="lms-card-actions">
-                <a href="{{ url_for('lms_post_view', slug=post.slug) }}" class="w3-button w3-round-large lms-btn-primary">
-                    Abrir tema
-                </a>
-            </div>
-        </article>
-        {% else %}
-        <div class="w3-panel w3-pale-yellow w3-round-large">
-            No hay posts de capacitación configurados.
-        </div>
-        {% endfor %}
+    <div class="audit-table-shell">
+        <table class="w3-table w3-striped w3-bordered w3-border audit-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Versión</th>
+                    <th>Status</th>
+                    <th>Evaluación</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ post.id }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>v{{ post.version }}</td>
+                    <td>
+                        {% if post.status == 'published' %}
+                        <span class="w3-tag w3-round audit-status-ok">Publicado</span>
+                        {% elif post.status == 'draft' %}
+                        <span class="w3-tag w3-round audit-status-warn">Borrador</span>
+                        {% else %}
+                        <span class="w3-tag w3-round audit-status-muted">{{ post.status|capitalize }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% set eval_status = post_statuses.get(post.id, {'label': 'Sin datos', 'badge_class': 'audit-status-muted', 'detail': ''}) %}
+                        <span class="w3-tag w3-round {{ eval_status.badge_class }}">{{ eval_status.label }}</span>
+                        {% if eval_status.detail %}
+                        <div class="w3-small documents-row-note">{{ eval_status.detail }}</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('lms_post_view', slug=post.slug) }}" class="w3-button w3-round-large lms-btn-primary">
+                            Abrir tema
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">No hay posts de capacitación configurados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     {% if user.role == 'admin' %}
     <div class="lms-config-cta">

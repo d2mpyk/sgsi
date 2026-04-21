@@ -306,6 +306,26 @@ def _resolve_post_html_tokens(request: Request, html_content: str) -> str:
     return resolved
 
 
+def _next_quiz_version(current_version: str, existing_versions: set[str]) -> str:
+    """Calcula una versión incremental simple evitando colisiones."""
+    version = (current_version or "1.0").strip()
+    match = re.match(r"^(\d+)(?:\.(\d+))?$", version)
+    if not match:
+        base = version or "1.0"
+        candidate = f"{base}-rev2"
+        while candidate in existing_versions:
+            candidate = f"{candidate}-x"
+        return candidate
+
+    major = int(match.group(1))
+    minor = int(match.group(2) or 0)
+    candidate = f"{major}.{minor + 1}"
+    while candidate in existing_versions:
+        minor += 1
+        candidate = f"{major}.{minor + 1}"
+    return candidate
+
+
 @router.get("/posts", response_model=list[LMSPostResponse], include_in_schema=False)
 def get_posts(
     current_user: CurrentUser,
@@ -558,7 +578,45 @@ def lms_posts_view(
     if isinstance(current_user, RedirectResponse):
         return current_user
     repo = LMSRepository(db)
+    period = lms_service.get_active_period(db)
     posts = sorted(repo.list_published_posts(), key=lambda post: post.id)
+    post_statuses: dict[int, dict] = {}
+    for post in posts:
+        quiz = repo.get_active_quiz_for_post(post_id=post.id)
+        if quiz is None:
+            post_statuses[post.id] = {
+                "label": "Sin quiz",
+                "badge_class": "audit-status-muted",
+                "detail": "Aún no configurado",
+            }
+            continue
+
+        status_row = lms_service.refresh_user_post_status(
+            db=db, user_id=current_user.id, post=post, period=period
+        )
+        access = lms_service.can_user_answer_post(
+            db=db, user_id=current_user.id, post=post, period=period
+        )
+
+        if status_row.is_passed:
+            post_statuses[post.id] = {
+                "label": "Aprobado",
+                "badge_class": "audit-status-ok",
+                "detail": "Completado",
+            }
+        elif status_row.is_blocked:
+            post_statuses[post.id] = {
+                "label": "Bloqueado",
+                "badge_class": "audit-status-warn",
+                "detail": "Intentos agotados",
+            }
+        else:
+            post_statuses[post.id] = {
+                "label": "Pendiente",
+                "badge_class": "audit-status-muted",
+                "detail": f"{access.attempts_remaining} intentos disponibles",
+            }
+
     return templates.TemplateResponse(
         request=request,
         name="dashboard/lms_posts.html",
@@ -567,6 +625,7 @@ def lms_posts_view(
             "user": current_user,
             "data": get_dashboard_stats(db, current_user=current_user),
             "posts": posts,
+            "post_statuses": post_statuses,
         },
     )
 
@@ -656,7 +715,38 @@ def lms_config_view(
     repo = LMSRepository(db)
     periods = repo.list_periods()
     posts = sorted(repo.list_posts(), key=lambda post: post.id)
-    quizzes = repo.list_quizzes()
+    posts_by_id = {post.id: post for post in posts}
+    quizzes = sorted(repo.list_quizzes(), key=lambda quiz: (quiz.post_id, quiz.id))
+    quiz_rows = []
+    for quiz in quizzes:
+        post = posts_by_id.get(quiz.post_id)
+        quiz_rows.append(
+            {
+                "id": quiz.id,
+                "post_id": quiz.post_id,
+                "post_title": post.title if post else f"Post #{quiz.post_id}",
+                "version": quiz.version,
+                "is_active": quiz.is_active,
+                "title": quiz.title,
+                "instructions": quiz.instructions or "",
+                "questions_payload": [
+                    {
+                        "question_order": question.question_order,
+                        "statement": question.statement,
+                        "weight": float(question.weight),
+                        "options": [
+                            {
+                                "option_order": option.option_order,
+                                "option_text": option.option_text,
+                                "is_correct": bool(option.is_correct),
+                            }
+                            for option in sorted(question.options, key=lambda row: row.option_order)
+                        ],
+                    }
+                    for question in sorted(quiz.questions, key=lambda row: row.question_order)
+                ],
+            }
+        )
     return templates.TemplateResponse(
         request=request,
         name="dashboard/lms_config.html",
@@ -666,7 +756,7 @@ def lms_config_view(
             "data": get_dashboard_stats(db, current_user=admin),
             "periods": periods,
             "posts": posts,
-            "quizzes": quizzes,
+            "quizzes": quiz_rows,
         },
     )
 
@@ -809,6 +899,60 @@ def lms_config_create_quiz(
         title=title,
         instructions=instructions,
         version=version,
+        is_active=True,
+        questions=questions,
+    )
+    return RedirectResponse(url=request.url_for("lms_config_view"), status_code=303)
+
+
+@router.post(
+    "/view/config/quizzes/edit/{quiz_id}",
+    include_in_schema=False,
+    name="lms_config_edit_quiz",
+)
+def lms_config_edit_quiz(
+    request: Request,
+    quiz_id: int,
+    admin: CurrentAdmin,
+    title: str = Form(...),
+    instructions: str = Form(""),
+    version: str = Form(""),
+    questions_json: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    if isinstance(admin, RedirectResponse):
+        return admin
+
+    repo = LMSRepository(db)
+    quiz = repo.get_quiz_by_id(quiz_id)
+    if quiz is None:
+        raise HTTPException(status_code=404, detail="Quiz no encontrado")
+
+    try:
+        questions = json.loads(questions_json)
+        if not isinstance(questions, list) or not questions:
+            raise ValueError("Formato inválido")
+    except Exception:
+        raise HTTPException(
+            status_code=400,
+            detail="questions_json debe ser un arreglo JSON con preguntas y opciones",
+        )
+
+    existing_versions = {
+        row.version
+        for row in repo.list_quizzes()
+        if row.post_id == quiz.post_id and row.id != quiz.id
+    }
+    requested_version = (version or quiz.version).strip()
+    if not requested_version or requested_version == quiz.version or requested_version in existing_versions:
+        requested_version = _next_quiz_version(quiz.version, existing_versions)
+
+    lms_service.upsert_quiz(
+        db=db,
+        post_id=quiz.post_id,
+        title=title.strip() or quiz.title,
+        instructions=instructions,
+        version=requested_version,
         is_active=True,
         questions=questions,
     )

@@ -18,11 +18,11 @@ from utils.auth import verify_access_token
 from routers import audit, auth, dashboard, documents, lms, media, suggestions, users
 from utils.database import Base, engine
 from utils.init_db import (
+    ensure_lms_bootstrap_data,
     get_init_config,
     init_approved_users,
 )
 from utils.lms_period_rollover import ensure_lms_period_rollover
-from utils.lms_seed import seed_lms_catalog
 from utils.middleware import HTMLAuthMiddleware
 
 # Verificación de configuraciones iniciales
@@ -32,7 +32,7 @@ settings = get_settings()
 Base.metadata.create_all(bind=engine)
 # Verificación inicial de base de datos
 init_approved_users()
-seed_lms_catalog()
+ensure_lms_bootstrap_data()
 ensure_lms_period_rollover()
 
 # Instancia la aplicación de FastAPI

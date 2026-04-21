@@ -1,0 +1,1618 @@
+{
+  "themes": [
+    {
+      "name": "FUNDAMENTOS DEL SGSI",
+      "slug": "fundamentos-del-sgsi",
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "name": "ALCANCE Y CONTEXTO DEL SGSI",
+      "slug": "alcance-y-contexto-del-sgsi",
+      "display_order": 2,
+      "is_active": true
+    },
+    {
+      "name": "MARCO LEGAL Y CUMPLIMIENTO",
+      "slug": "marco-legal-y-cumplimiento",
+      "display_order": 3,
+      "is_active": true
+    },
+    {
+      "name": "CONCIENTIZACIÓN EN SEGURIDAD (A.6.3)",
+      "slug": "concientizacion-en-seguridad-a63",
+      "display_order": 4,
+      "is_active": true
+    },
+    {
+      "name": "ROLES Y RESPONSABILIDADES",
+      "slug": "roles-y-responsabilidades",
+      "display_order": 5,
+      "is_active": true
+    },
+    {
+      "name": "PROCESO SGSI (PDCA)",
+      "slug": "proceso-sgsi-pdca",
+      "display_order": 6,
+      "is_active": true
+    },
+    {
+      "name": "RIESGOS DE SEGURIDAD",
+      "slug": "riesgos-de-seguridad",
+      "display_order": 7,
+      "is_active": true
+    },
+    {
+      "name": "CONTROLES DE SEGURIDAD (SoA)",
+      "slug": "controles-de-seguridad-soa",
+      "display_order": 8,
+      "is_active": true
+    },
+    {
+      "name": "USO DE PLATAFORMAS SGSI",
+      "slug": "uso-de-plataformas-sgsi",
+      "display_order": 9,
+      "is_active": true
+    },
+    {
+      "name": "CUMPLIMIENTO Y AUDITORÍA",
+      "slug": "cumplimiento-y-auditoria",
+      "display_order": 10,
+      "is_active": true
+    }
+  ],
+  "posts": [
+    {
+      "title": "FUNDAMENTOS DEL SGSI",
+      "slug": "fundamentos-del-sgsi",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-blue w3-round-large w3-padding\">SGSI · Formación LMS</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Fundamentos del SGSI</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Bases esenciales para comprender la seguridad de la información y su aplicación en la organización.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> conocer los conceptos fundamentales del Sistema de Gestión de Seguridad de la\r\n          Información (SGSI),\r\n          su importancia, responsabilidades y principios clave.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>¿Qué es el SGSI y por qué es obligatorio?</b></h2>\r\n      <p>\r\n        El Sistema de Gestión de Seguridad de la Información (SGSI) es un conjunto de políticas, procesos y controles\r\n        que permiten proteger la información de forma estructurada y en mejora continua.\r\n      </p>\r\n      <p>\r\n        Su objetivo es proteger la información de forma <b>planificada, medible y en mejora continua</b>,\r\n        integrando personas, procesos y tecnología.\r\n      </p>\r\n      <p>\r\n        Su implementación responde a la necesidad de gestionar riesgos, proteger activos de información\r\n        y cumplir con requisitos organizacionales, legales y contractuales.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Importante:</b> el SGSI no es opcional dentro de la organización; es un marco obligatorio que guía\r\n          cómo se protege la información en todas las actividades.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Importancia de la seguridad de la información en el negocio</b></h2>\r\n      <p>\r\n        Con frecuencia se piensa que la seguridad de la información es una responsabilidad exclusiva del área\r\n        tecnológica.\r\n        Sin embargo, dentro de un Sistema de Gestión de Seguridad de la Información (SGSI), la seguridad es una\r\n        responsabilidad compartida\r\n        que impacta directamente la operación, la reputación y la capacidad de crecimiento de la organización.\r\n      </p>\r\n      <p>\r\n        La información es uno de los activos más valiosos de cualquier empresa. Protegerla adecuadamente permite\r\n        trabajar con mayor orden,\r\n        reducir riesgos y fortalecer la confianza de clientes, aliados y demás partes interesadas.\r\n      </p>\r\n      <p>\r\n        La implementación del SGSI permite a la organización gestionar los riesgos de seguridad de la\r\n        información de forma estructurada y confiable.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Protege la información crítica del negocio.</li>\r\n        <li>Reduce riesgos operativos y de seguridad.</li>\r\n        <li>Fortalece la confianza de clientes y partes interesadas.</li>\r\n        <li>Apoya el cumplimiento de requisitos legales y contractuales.</li>\r\n        <li>Promueve una cultura organizacional basada en la seguridad.</li>\r\n      </ul>\r\n\r\n      <!-- ¿Qué protege? -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey w3-margin-top\"><b>¿Qué protege el SGSI?</b></h2>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <ul>\r\n          <li>Información de clientes y partes interesadas.</li>\r\n          <li>Información interna de la organización.</li>\r\n          <li>Activos tecnológicos y sistemas de información.</li>\r\n          <li>Procesos críticos del negocio.</li>\r\n          <li>La reputación y continuidad operativa.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top\">\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-blue w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Confianza y relaciones sostenibles</b></h3>\r\n            <p>\r\n              La seguridad de la información ayuda a demostrar compromiso, responsabilidad y control sobre la\r\n              información que la organización gestiona.\r\n              Esto fortalece la confianza y contribuye a mantener relaciones más sólidas con clientes, proveedores y\r\n              otras partes interesadas.\r\n            </p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-green w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Cumplimiento y buena gestión</b></h3>\r\n            <p>\r\n              Un SGSI alineado con ISO/IEC 27001:2022 permite establecer controles, responsabilidades y buenas prácticas\r\n              que apoyan el cumplimiento de requisitos legales, contractuales y organizacionales.\r\n            </p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> la seguridad de la información no busca frenar el trabajo, sino permitir que la\r\n          organización opere con mayor confianza,\r\n          estabilidad y capacidad de respuesta.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Responsabilidades del colaborador dentro del SGSI</b></h2>\r\n      <p>\r\n        Cada colaborador tiene un rol activo en la protección de la información.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Usar la información de forma adecuada.</li>\r\n        <li>Proteger credenciales y accesos.</li>\r\n        <li>Seguir políticas y procedimientos.</li>\r\n        <li>Reportar incidentes o situaciones sospechosas.</li>\r\n        <li>Participar en actividades de formación.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top w3-margin-bottom\">\r\n        <div class=\"w3-third w3-center w3-padding\">\r\n          <div class=\"w3-container w3-card w3-padding-24 w3-round-large\">\r\n            <span class=\"w3-tag w3-blue w3-round-large\">Proteger</span>\r\n            <p class=\"w3-margin-top\">Cuidar credenciales, equipos, documentos e información de trabajo.</p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-third w3-center w3-padding\">\r\n          <div class=\"w3-container w3-card w3-padding-24 w3-round-large\">\r\n            <span class=\"w3-tag w3-blue w3-round-large\">Cumplir</span>\r\n            <p class=\"w3-margin-top\">Aplicar políticas, procedimientos y buenas prácticas definidas por el SGSI.</p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-third w3-center w3-padding\">\r\n          <div class=\"w3-container w3-card w3-padding-24 w3-round-large\">\r\n            <span class=\"w3-tag w3-blue w3-round-large\">Reportar</span>\r\n            <p class=\"w3-margin-top\">Comunicar incidentes, errores o comportamientos sospechosos de forma oportuna.</p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <!-- Sección 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Consecuencias de incumplimiento</b></h2>\r\n      <p>\r\n        El incumplimiento de las prácticas de seguridad puede generar impactos importantes:\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Exposición de información.</li>\r\n        <li>Interrupción de servicios.</li>\r\n        <li>Pérdida de confianza.</li>\r\n        <li>Impactos operativos o legales.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red w3-round\">\r\n        <p>\r\n          <b>Importante:</b> muchas situaciones de riesgo pueden prevenirse aplicando correctamente\r\n          las políticas y buenas prácticas.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Introducción a ISO/IEC 27001:2022</b></h2>\r\n      <p>\r\n        ISO/IEC 27001:2022 es una norma internacional que establece los requisitos para implementar\r\n        y mejorar un SGSI.\r\n      </p>\r\n      <p>\r\n        Proporciona un enfoque basado en riesgos, controles de seguridad y mejora continua.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Define cómo gestionar la seguridad de la información.</li>\r\n        <li>Establece controles organizacionales y técnicos.</li>\r\n        <li>Promueve la mejora continua.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 6 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Conceptos de Confidencialidad, Integridad y Disponibilidad (CIA)</b>\r\n      </h2>\r\n      <p>\r\n        La seguridad de la información se basa en tres principios fundamentales, <b>CIA</b> (Confidentiality, Integrity,\r\n        and Availability):\r\n      </p>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top\">\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue\"><b>Confidencialidad</b></h3>\r\n            <p>La información solo es accesible para personas autorizadas.</p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-green\"><b>Integridad</b></h3>\r\n            <p>La información se mantiene completa y sin alteraciones no autorizadas.</p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-orange\"><b>Disponibilidad</b></h3>\r\n            <p>La información está disponible cuando se necesita.</p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <!-- Mensaje -->\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"La seguridad de la información es la base que permite operar con confianza y responsabilidad.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>El SGSI es obligatorio y guía la protección de la información.</li>\r\n          <li>La seguridad es responsabilidad de todos.</li>\r\n          <li>ISO 27001 establece el marco de referencia.</li>\r\n          <li>La triada CIA es la base de la seguridad.</li>\r\n          <li>El cumplimiento reduce riesgos y fortalece la operación.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        Comprender los fundamentos del SGSI permite aplicar buenas prácticas de forma consciente\r\n        y contribuir a una organización más segura.\r\n      </p>\r\n      <p>\r\n        La seguridad de la información es un proceso continuo que depende del compromiso de todos.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "ALCANCE Y CONTEXTO DEL SGSI",
+      "slug": "alcance-y-contexto-del-sgsi",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-blue w3-round-large w3-padding\">SGSI · Formación LMS</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Alcance y contexto del SGSI</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Comprender el entorno en el que opera el SGSI, sus límites, activos relevantes y riesgos asociados.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> identificar el alcance del SGSI, el contexto operativo y tecnológico\r\n          en el que se aplica, y reconocer los principales factores que influyen en la protección de la información.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. Alcance del SGSI</b></h2>\r\n      <p>\r\n        El alcance del Sistema de Gestión de Seguridad de la Información (SGSI) define los límites y la aplicabilidad\r\n        del sistema dentro de la organización. Esto incluye los <b>procesos, servicios, activos, personas, ubicaciones y\r\n          tecnologías</b>\r\n        que forman parte del entorno protegido.\r\n      </p>\r\n      <p>\r\n        En un contexto organizacional con operación en Chile y soporte de servicios digitales en una arquitectura\r\n        multi-cloud, el alcance del SGSI debe considerar tanto los procesos de negocio como las plataformas y recursos\r\n        tecnológicos que intervienen en la prestación de los servicios.\r\n      </p>\r\n\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>¿Por qué es importante conocer el alcance?</b></h2>\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Permite saber qué información y procesos deben protegerse.</li>\r\n        <li>Ayuda a aplicar correctamente las políticas y controles.</li>\r\n        <li>Facilita la gestión de riesgos.</li>\r\n        <li>Evita confusiones sobre responsabilidades.</li>\r\n        <li>Apoya auditorías y procesos de certificación.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Importante:</b> conocer el alcance del SGSI permite saber qué está cubierto por las políticas,\r\n          controles y responsabilidades del sistema.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. Trabajo remoto y su impacto en la seguridad</b></h2>\r\n      <p>\r\n        El trabajo remoto forma parte del contexto operativo moderno y aporta flexibilidad en la ejecución\r\n        de las actividades. Sin embargo, también introduce riesgos adicionales que deben gestionarse.\r\n      </p>\r\n      <p>\r\n        Trabajar fuera de entornos controlados puede exponer la información a redes no seguras, dispositivos\r\n        no protegidos, accesos inadecuados o entornos compartidos. Por ello, las mismas políticas del SGSI\r\n        deben cumplirse tanto dentro como fuera de la oficina.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Uso de redes y accesos seguros.</li>\r\n        <li>Protección física y lógica de los equipos.</li>\r\n        <li>Manejo adecuado de la información en espacios compartidos.</li>\r\n        <li>Reporte oportuno de incidentes o anomalías.</li>\r\n      </ul>\r\n\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey w3-margin-top\"><b>Buenas prácticas para trabajo remoto</b></h2>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top\">\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-blue w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Acceso seguro</b></h3>\r\n            <ul class=\"w3-ul\">\r\n              <li>Utilizar únicamente redes confiables.</li>\r\n              <li>Acceder a sistemas mediante mecanismos seguros definidos.</li>\r\n              <li>Evitar el uso de redes públicas sin protección adecuada.</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-green w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Protección del equipo</b></h3>\r\n            <ul class=\"w3-ul\">\r\n              <li>Mantener el equipo actualizado.</li>\r\n              <li>Bloquear la pantalla cuando no se esté utilizando.</li>\r\n              <li>No compartir dispositivos de trabajo.</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"w3-row-padding\">\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-yellow w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Manejo de la información</b></h3>\r\n            <ul class=\"w3-ul\">\r\n              <li>Evitar dejar información visible en entornos compartidos.</li>\r\n              <li>Utilizar canales autorizados para compartir información.</li>\r\n              <li>Respetar la clasificación de la información.</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-red w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Concienciación y prevención</b></h3>\r\n            <ul class=\"w3-ul\">\r\n              <li>Estar alerta ante correos o enlaces sospechosos.</li>\r\n              <li>Reportar incidentes o situaciones inusuales.</li>\r\n              <li>Seguir las políticas y procedimientos del SGSI.</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <!-- Sección 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. Activos de información críticos</b></h2>\r\n      <p>\r\n        Los activos de información críticos son aquellos cuya pérdida, alteración o indisponibilidad puede generar\r\n        un impacto significativo en la operación, la continuidad del negocio o la confianza de las partes interesadas.\r\n      </p>\r\n      <p>\r\n        Estos activos pueden incluir información, sistemas, servicios, infraestructura, documentación y recursos\r\n        tecnológicos esenciales para el funcionamiento de la organización.\r\n      </p>\r\n\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>¿Qué hace que un activo sea crítico?</b></h2>\r\n      <p>\r\n        Un activo se considera <b>crítico</b> cuando su pérdida, alteración o indisponibilidad puede generar\r\n        un impacto significativo en la organización.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Interrupción de procesos clave.</li>\r\n        <li>Pérdida de información relevante.</li>\r\n        <li>Afectación a la operación o continuidad del negocio.</li>\r\n        <li>Impacto en la confianza de clientes o partes interesadas.</li>\r\n        <li>Consecuencias legales o contractuales.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Importante:</b> no todos los activos tienen el mismo nivel de criticidad.\r\n          La clasificación permite aplicar controles proporcionales al riesgo.\r\n        </p>\r\n      </div>\r\n\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Tipos de activos de información</b></h2>\r\n      <p>\r\n        Los activos pueden clasificarse en diferentes categorías dentro del SGSI:\r\n      </p>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top\">\r\n\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-blue w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Información</b></h3>\r\n            <p>Datos, documentos, registros y contenidos gestionados por la organización.</p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-green w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Sistemas</b></h3>\r\n            <p>Aplicaciones, plataformas y servicios que procesan o almacenan información.</p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-yellow w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Infraestructura</b></h3>\r\n            <p>Equipos, redes y recursos tecnológicos que soportan la disponibilidad y continuidad operativa.</p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"w3-row-padding\">\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-red w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Personas</b></h3>\r\n            <p>Colaboradores y terceros que interactúan con la información y los sistemas.</p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-teal w3-padding-24 w3-round-large\">\r\n            <h3 class=\"w3-text-blue-grey\"><b>Servicios</b></h3>\r\n            <p>Procesos y servicios que dependen del uso de información para su funcionamiento.</p>\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <!-- Sección 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. Uso de plataformas tecnológicas</b></h2>\r\n      <p>\r\n        El contexto del SGSI incluye el uso de plataformas tecnológicas que soportan la operación y la entrega\r\n        de servicios. En entornos multi-cloud, distintas plataformas pueden participar en el almacenamiento,\r\n        procesamiento, conectividad y gestión de la información.\r\n      </p>\r\n      <p>\r\n        El uso seguro de estas plataformas requiere controles consistentes sobre accesos, configuraciones,\r\n        monitoreo, almacenamiento y tratamiento de la información.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Uso de servicios y recursos autorizados.</li>\r\n        <li>Configuración segura de plataformas.</li>\r\n        <li>Gestión adecuada de identidades y accesos.</li>\r\n        <li>Protección de la información en todos los entornos utilizados.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. Responsabilidad compartida en entornos cloud</b></h2>\r\n      <p>\r\n        En los entornos cloud, la seguridad se gestiona bajo un modelo de responsabilidad compartida.\r\n        Esto significa que el proveedor del servicio y la organización tienen responsabilidades diferentes,\r\n        pero complementarias.\r\n      </p>\r\n      <p>\r\n        El proveedor es responsable de proteger la infraestructura base del servicio, mientras que la organización\r\n        es responsable de la configuración segura, la gestión de accesos y la protección de la información\r\n        que almacena o procesa.\r\n      </p>\r\n\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Responsabilidades del proveedor cloud</b></h2>\r\n      <p>\r\n        Los proveedores de servicios cloud son responsables de la seguridad de la infraestructura que ofrecen.\r\n        Esto incluye:\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Infraestructura física (centros de datos, hardware).</li>\r\n        <li>Redes y conectividad base.</li>\r\n        <li>Disponibilidad de los servicios ofrecidos.</li>\r\n        <li>Seguridad del entorno físico y del hardware.</li>\r\n      </ul>\r\n\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey w3-margin-top\"><b>Responsabilidades de la organización</b></h2>\r\n      <p>\r\n        La organización es responsable de cómo utiliza los servicios cloud y de la protección de la información\r\n        que almacena, procesa o transmite.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Gestión de identidades y accesos.</li>\r\n        <li>Configuración segura de los servicios.</li>\r\n        <li>Protección de los datos.</li>\r\n        <li>Monitoreo de actividades y registros.</li>\r\n        <li>Cumplimiento de políticas y procedimientos.</li>\r\n      </ul>\r\n\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>¿Qué puede ocurrir si no se entiende este modelo?</b></h2>\r\n      <p>\r\n        La falta de claridad sobre las responsabilidades puede generar vulnerabilidades y riesgos importantes.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Configuraciones inseguras en servicios cloud.</li>\r\n        <li>Accesos no controlados a la información.</li>\r\n        <li>Falta de monitoreo de actividades.</li>\r\n        <li>Exposición de datos sensibles.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> utilizar servicios cloud no transfiere completamente la responsabilidad de seguridad.\r\n          La organización sigue siendo responsable de la información y de cómo usa esos servicios.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 6 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>6. Riesgos asociados al modelo SaaS</b></h2>\r\n      <p>\r\n        El modelo SaaS (Software as a Service) permite utilizar aplicaciones a través de internet, facilitando\r\n        la operación y el acceso a herramientas de negocio. Sin embargo, también introduce riesgos que deben\r\n        ser gestionados dentro del SGSI.\r\n      </p>\r\n      <p>\r\n        Entre estos riesgos se encuentran la dependencia del proveedor, la exposición de información por\r\n        configuraciones inadecuadas, la gestión incorrecta de accesos y el uso de servicios no autorizados.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li><b>Pérdida de control directo:</b> la infraestructura y la aplicación son gestionadas por terceros.</li>\r\n        <li><b>Gestión de accesos inadecuada:</b> permisos mal configurados pueden permitir accesos no autorizados.</li>\r\n        <li><b>Exposición de datos:</b> compartir información sin control puede generar filtraciones.</li>\r\n        <li><b>Dependencia del proveedor:</b> disponibilidad y continuidad dependen del servicio externo.</li>\r\n        <li><b>Uso de herramientas no autorizadas:</b> puede generar riesgos de seguridad y cumplimiento.</li>\r\n        <li><b>Falta de visibilidad:</b> dificultad para monitorear completamente el uso y las actividades.</li>\r\n      </ul>\r\n\r\n      <!-- Relación general -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Relación con la seguridad de la información</b></h2>\r\n      <p>\r\n        Todos los elementos del alcance y contexto del SGSI impactan directamente la protección de la información.\r\n        Su adecuada comprensión permite gestionar mejor los riesgos y aplicar controles alineados con las necesidades\r\n        de la organización.\r\n      </p>\r\n      <p>\r\n        Esto incluye proteger la <b>confidencialidad</b>, la <b>integridad</b> y la <b>disponibilidad</b> de la\r\n        información,\r\n        tanto en procesos presenciales como remotos, y en entornos locales o cloud.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"Comprender el alcance y el contexto del SGSI permite proteger mejor la información en cada proceso,\r\n            plataforma y entorno de trabajo.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>El alcance del SGSI define qué procesos, activos y tecnologías están cubiertos.</li>\r\n          <li>El trabajo remoto introduce riesgos que deben gestionarse con los mismos controles del SGSI.</li>\r\n          <li>Los activos críticos requieren protección proporcional a su nivel de riesgo.</li>\r\n          <li>El uso de plataformas cloud exige control de accesos, configuraciones seguras y monitoreo.</li>\r\n          <li>En cloud, la seguridad es una responsabilidad compartida entre proveedor y organización.</li>\r\n          <li>El modelo SaaS aporta beneficios, pero también riesgos que deben controlarse.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        Comprender el alcance y el contexto del SGSI ayuda a identificar mejor los riesgos, aplicar controles\r\n        adecuados y fortalecer la protección de la información en toda la organización.\r\n      </p>\r\n      <p>\r\n        Una visión clara del entorno operativo, tecnológico y organizacional permite que el SGSI funcione de forma\r\n        consistente, medible y alineada con la mejora continua.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "MARCO LEGAL Y CUMPLIMIENTO",
+      "slug": "marco-legal-y-cumplimiento",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-blue w3-round-large w3-padding\">SGSI · Formación LMS</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Marco legal y cumplimiento</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Comprender las obligaciones legales y el rol del SGSI en el cumplimiento normativo.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> conocer el marco legal aplicable, las responsabilidades asociadas\r\n          al tratamiento de la información y la importancia del cumplimiento dentro del SGSI.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. Ley 21.663 de Ciberseguridad (Chile)</b></h2>\r\n      <p>\r\n        La Ley 21.663 establece un marco para fortalecer la ciberseguridad en Chile, promoviendo la protección\r\n        de sistemas, redes e información frente a amenazas digitales.\r\n      </p>\r\n      <p>\r\n        Esta normativa impulsa la prevención, detección y respuesta ante incidentes, así como la coordinación\r\n        entre organizaciones para mejorar la resiliencia frente a riesgos tecnológicos.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Importante:</b> el cumplimiento de esta ley contribuye a una mejor gestión de riesgos\r\n          y a la protección de la operación organizacional.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. Ley 19.628 de Protección de Datos Personales</b></h2>\r\n      <p>\r\n        La Ley 19.628 regula el tratamiento de datos personales en Chile, estableciendo principios\r\n        para su uso adecuado y la protección de la privacidad de las personas.\r\n      </p>\r\n      <p>\r\n        Esta ley define cómo deben recolectarse, utilizarse, almacenarse y compartirse los datos,\r\n        asegurando que se respeten los derechos de los titulares.\r\n      </p>\r\n\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>¿Qué son los datos personales?</b></h2>\r\n      <p>\r\n        Son cualquier información relacionada con una persona natural identificada o identificable.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Nombre, identificación o datos de contacto.</li>\r\n        <li>Información laboral o contractual.</li>\r\n        <li>Datos financieros o comerciales.</li>\r\n        <li>Cualquier otro dato que permita identificar a una persona.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Importante:</b> el tratamiento de datos personales debe realizarse con responsabilidad,\r\n          respetando los principios definidos por la ley y las políticas de la organización.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. Obligaciones del colaborador en protección de datos</b></h2>\r\n      <p>\r\n        Cada colaborador que interactúa con datos personales tiene responsabilidades específicas\r\n        dentro del SGSI:\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Utilizar los datos únicamente para fines autorizados.</li>\r\n        <li>Proteger credenciales y accesos.</li>\r\n        <li>Respetar la clasificación de la información.</li>\r\n        <li>Evitar compartir información sin control.</li>\r\n        <li>Seguir políticas y procedimientos establecidos.</li>\r\n        <li>Reportar incidentes de seguridad.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. Manejo adecuado de datos personales</b></h2>\r\n      <p>\r\n        El tratamiento de datos personales debe realizarse de forma responsable, aplicando principios\r\n        de seguridad y confidencialidad.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Acceder solo a la información necesaria.</li>\r\n        <li>Utilizar sistemas autorizados.</li>\r\n        <li>Evitar almacenar datos en ubicaciones no seguras.</li>\r\n        <li>Compartir información únicamente con personas autorizadas.</li>\r\n        <li>Respetar la finalidad del uso de los datos.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red w3-round\">\r\n        <p>\r\n          <b>Importante:</b> el manejo inadecuado de datos personales puede generar riesgos\r\n          para la organización y afectar la privacidad de las personas.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. Notificación de incidentes de seguridad</b></h2>\r\n      <p>\r\n        La detección y notificación de incidentes es un elemento clave dentro del SGSI.\r\n      </p>\r\n      <p>\r\n        Reportar incidentes de forma oportuna permite reducir impactos, mejorar la respuesta\r\n        y fortalecer la gestión de la seguridad.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Identificar comportamientos inusuales o accesos indebidos.</li>\r\n        <li>Informar incidentes mediante los canales definidos.</li>\r\n        <li>Actuar de forma inmediata y responsable.</li>\r\n        <li>Seguir los procedimientos de gestión de incidentes.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 6 (Mejorada) -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>6. Importancia de la certificación ISO 27001</b></h2>\r\n\r\n      <p>\r\n        La certificación ISO/IEC 27001:2022 no es solo un reconocimiento formal, sino un mecanismo que impulsa\r\n        mejoras estructurales en toda la organización. Representa la validación de que el SGSI ha sido implementado,\r\n        mantenido y auditado bajo estándares internacionales.\r\n      </p>\r\n\r\n      <p>\r\n        Más allá del cumplimiento, la certificación permite alinear la seguridad de la información con los objetivos\r\n        estratégicos del negocio, integrándose de forma transversal en todas las áreas.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> la certificación ISO 27001 no es solo un objetivo del área de seguridad,\r\n          es un habilitador organizacional que mejora procesos, cultura y toma de decisiones.\r\n        </p>\r\n      </div>\r\n\r\n      <h3 class=\"w3-large w3-text-blue-grey\"><b>Impacto transversal en la organización</b></h3>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top\">\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-blue w3-padding-24 w3-round-large\">\r\n            <h4><b>🔐 Gestión de riesgos</b></h4>\r\n            <p>\r\n              Permite identificar, evaluar y tratar riesgos de manera sistemática, mejorando la toma de decisiones\r\n              en todos los niveles de la organización.\r\n            </p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-green w3-padding-24 w3-round-large\">\r\n            <h4><b>⚙️ Estandarización de procesos</b></h4>\r\n            <p>\r\n              Promueve la documentación y estandarización de procesos, reduciendo errores y aumentando\r\n              la eficiencia operativa.\r\n            </p>\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <div class=\"w3-row-padding\">\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-yellow w3-padding-24 w3-round-large\">\r\n            <h4><b>📊 Mejora continua</b></h4>\r\n            <p>\r\n              Introduce ciclos constantes de evaluación, auditoría y mejora, lo que permite evolucionar\r\n              la organización frente a nuevos riesgos y cambios tecnológicos.\r\n            </p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-red w3-padding-24 w3-round-large\">\r\n            <h4><b>🤝 Confianza y reputación</b></h4>\r\n            <p>\r\n              Refuerza la confianza de clientes, socios y partes interesadas al demostrar un compromiso\r\n              real con la protección de la información.\r\n            </p>\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <h3 class=\"w3-large w3-text-blue-grey\"><b>Beneficios organizacionales clave</b></h3>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li><b>Alineación estratégica:</b> la seguridad se integra con los objetivos del negocio.</li>\r\n        <li><b>Reducción de riesgos:</b> se gestionan de forma proactiva en toda la organización.</li>\r\n        <li><b>Mejor toma de decisiones:</b> basada en información y análisis estructurado.</li>\r\n        <li><b>Mayor eficiencia operativa:</b> procesos definidos y controlados.</li>\r\n        <li><b>Cumplimiento normativo:</b> facilita la alineación con leyes y regulaciones.</li>\r\n      </ul>\r\n\r\n      <h3 class=\"w3-large w3-text-blue-grey\"><b>Impacto en los colaboradores</b></h3>\r\n\r\n      <p>\r\n        La certificación también impacta directamente en la forma en que los colaboradores trabajan:\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Mayor claridad en roles y responsabilidades.</li>\r\n        <li>Mejor comprensión de los riesgos de seguridad.</li>\r\n        <li>Participación activa en la protección de la información.</li>\r\n        <li>Desarrollo de una cultura organizacional orientada a la seguridad.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"La certificación ISO 27001 transforma la seguridad en una capacidad organizacional que impulsa eficiencia,\r\n            confianza y sostenibilidad.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <p>\r\n        En este contexto, la certificación no debe entenderse como un fin, sino como un proceso continuo\r\n        que fortalece a la organización de manera integral, permitiendo adaptarse a los desafíos actuales\r\n        y futuros en materia de seguridad de la información.\r\n      </p>\r\n\r\n      <!-- Relación general -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Relación con el SGSI</b></h2>\r\n      <p>\r\n        El marco legal y el cumplimiento están directamente relacionados con la gestión de la seguridad\r\n        de la información. El SGSI permite implementar controles, procesos y buenas prácticas que ayudan\r\n        a cumplir con los requisitos establecidos.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"El cumplimiento legal y la seguridad de la información trabajan juntos para proteger la organización y la\r\n            confianza de las personas.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>Las leyes establecen obligaciones para la protección de la información.</li>\r\n          <li>El SGSI ayuda a cumplir estos requisitos de forma estructurada.</li>\r\n          <li>El manejo adecuado de datos personales es fundamental.</li>\r\n          <li>El reporte de incidentes es clave para la gestión de riesgos.</li>\r\n          <li>La certificación ISO 27001 demuestra compromiso con la seguridad.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        Comprender el marco legal permite actuar de forma responsable y alineada con los requisitos\r\n        organizacionales y regulatorios.\r\n      </p>\r\n      <p>\r\n        La aplicación de buenas prácticas y el cumplimiento de las directrices contribuyen a una\r\n        organización más segura, confiable y preparada.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n\r\n\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "CONCIENTIZACIÓN EN SEGURIDAD (A.6.3)",
+      "slug": "concientizacion-en-seguridad-a63",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-blue w3-round-large w3-padding\">SGSI · Control A.6.3 · Concientización</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Concientización en seguridad de la información</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Comprender el rol del factor humano y aplicar buenas prácticas para prevenir incidentes.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> fortalecer la cultura de seguridad mediante la concientización,\r\n          promoviendo comportamientos seguros y la detección temprana de riesgos en el día a día.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. ¿Qué es la concientización en seguridad?</b></h2>\r\n      <p>\r\n        La concientización en seguridad es el proceso de formar, informar y sensibilizar a los colaboradores\r\n        para que comprendan los riesgos asociados a la información y adopten comportamientos seguros.\r\n      </p>\r\n      <p>\r\n        En el marco del control <b>A.6.3 de ISO/IEC 27001:2022</b>, la organización debe asegurar que las personas\r\n        conozcan sus responsabilidades y actúen de acuerdo con las políticas y procedimientos del SGSI.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Importante:</b> la seguridad no depende solo de herramientas tecnológicas,\r\n          sino del comportamiento consciente de cada persona.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. Rol del factor humano en incidentes</b></h2>\r\n      <p>\r\n        El factor humano es uno de los principales vectores de riesgo en seguridad de la información.\r\n        Muchas brechas se originan por errores, descuidos o falta de conocimiento.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Interacción con correos o enlaces maliciosos.</li>\r\n        <li>Uso indebido de credenciales.</li>\r\n        <li>Compartir información sin autorización.</li>\r\n        <li>Configuraciones incorrectas por desconocimiento.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red w3-round\">\r\n        <p>\r\n          <b>Importante:</b> muchos incidentes pueden prevenirse con atención, conocimiento y aplicación\r\n          de buenas prácticas.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. Buenas prácticas generales de seguridad</b></h2>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top\">\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-blue w3-padding-24 w3-round-large\">\r\n            <h3><b>Gestión de accesos</b></h3>\r\n            <ul class=\"w3-ul\">\r\n              <li>No compartir credenciales.</li>\r\n              <li>Usar autenticación definida.</li>\r\n              <li>Bloquear el equipo cuando no esté en uso.</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-green w3-padding-24 w3-round-large\">\r\n            <h3><b>Manejo de información</b></h3>\r\n            <ul class=\"w3-ul\">\r\n              <li>Usar sistemas autorizados.</li>\r\n              <li>Respetar la clasificación de la información.</li>\r\n              <li>Evitar compartir datos sin control.</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"w3-row-padding\">\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-yellow w3-padding-24 w3-round-large\">\r\n            <h3><b>Uso de dispositivos</b></h3>\r\n            <ul class=\"w3-ul\">\r\n              <li>Mantener equipos actualizados.</li>\r\n              <li>No usar dispositivos no autorizados.</li>\r\n              <li>Proteger físicamente los equipos.</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-red w3-padding-24 w3-round-large\">\r\n            <h3><b>Prevención</b></h3>\r\n            <ul class=\"w3-ul\">\r\n              <li>Verificar enlaces y remitentes.</li>\r\n              <li>No abrir archivos sospechosos.</li>\r\n              <li>Estar atento a comportamientos inusuales.</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <!-- Sección 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. Cultura de seguridad organizacional</b></h2>\r\n      <p>\r\n        La cultura de seguridad se construye cuando todos los colaboradores integran la seguridad\r\n        en sus actividades diarias.\r\n      </p>\r\n      <p>\r\n        Esto implica actuar de forma responsable, seguir procedimientos y contribuir activamente\r\n        a la protección de la información.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Compromiso con las políticas del SGSI.</li>\r\n        <li>Comunicación abierta sobre riesgos.</li>\r\n        <li>Participación en capacitaciones.</li>\r\n        <li>Responsabilidad individual en cada acción.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. Errores comunes</b></h2>\r\n      <p>\r\n        Algunos errores frecuentes pueden aumentar el riesgo de incidentes:\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Reutilizar contraseñas o compartir accesos.</li>\r\n        <li>Confiar en correos o enlaces sin verificar.</li>\r\n        <li>Almacenar información en lugares no autorizados.</li>\r\n        <li>No reportar incidentes o anomalías.</li>\r\n        <li>Ignorar políticas o procedimientos.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 6 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>6. ¿Cómo actuar ante situaciones sospechosas?</b></h2>\r\n      <p>\r\n        Actuar de forma oportuna es clave para prevenir o minimizar el impacto de un incidente.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>No interactuar con el contenido sospechoso.</li>\r\n        <li>No proporcionar información personal o credenciales.</li>\r\n        <li>Reportar inmediatamente a través de los canales definidos.</li>\r\n        <li>Seguir los procedimientos de gestión de incidentes.</li>\r\n        <li>Evitar tomar acciones no autorizadas.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> detectar y reportar a tiempo puede evitar impactos mayores\r\n          y mejorar la respuesta organizacional.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Mensaje -->\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"La seguridad comienza con la conciencia y se fortalece con cada acción responsable.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>La concientización es clave para prevenir incidentes.</li>\r\n          <li>El factor humano es un elemento crítico en la seguridad.</li>\r\n          <li>Las buenas prácticas reducen riesgos significativamente.</li>\r\n          <li>La cultura de seguridad se construye entre todos.</li>\r\n          <li>El reporte oportuno es fundamental.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        La concientización en seguridad permite tomar decisiones más seguras y prevenir riesgos en el trabajo diario.\r\n      </p>\r\n      <p>\r\n        El compromiso de cada colaborador es fundamental para fortalecer el SGSI y proteger la información.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n\r\n\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "ROLES Y RESPONSABILIDADES",
+      "slug": "roles-y-responsabilidades",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-blue w3-round-large w3-padding\">SGSI · Formación LMS</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Roles y responsabilidades en el SGSI</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Comprender cómo cada rol contribuye a la seguridad de la información y al funcionamiento del SGSI.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> identificar los roles clave dentro del SGSI y las responsabilidades asociadas\r\n          a cada uno, así como entender la importancia del cumplimiento individual y el flujo de reporte de incidentes.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. Rol de la Alta Dirección</b></h2>\r\n      <p>\r\n        La Alta Dirección tiene la responsabilidad de liderar el SGSI, asegurando que la seguridad de la información\r\n        esté alineada con los objetivos estratégicos de la organización.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Definir la política de seguridad de la información.</li>\r\n        <li>Asignar recursos necesarios para el SGSI.</li>\r\n        <li>Promover la cultura de seguridad.</li>\r\n        <li>Revisar el desempeño del sistema.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. Rol del Responsable del SGSI</b></h2>\r\n      <p>\r\n        El responsable del SGSI coordina la implementación, mantenimiento y mejora continua del sistema.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Gestionar riesgos de seguridad de la información.</li>\r\n        <li>Definir y mantener controles de seguridad.</li>\r\n        <li>Coordinar auditorías y revisiones.</li>\r\n        <li>Monitorear el cumplimiento del SGSI.</li>\r\n        <li>Gestionar incidentes de seguridad.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. Responsabilidades de líderes de área</b></h2>\r\n      <p>\r\n        Los líderes de área son responsables de implementar y asegurar el cumplimiento del SGSI dentro de sus equipos.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Asegurar que su equipo conozca y cumpla las políticas.</li>\r\n        <li>Supervisar el uso adecuado de la información.</li>\r\n        <li>Identificar riesgos en sus procesos.</li>\r\n        <li>Apoyar la gestión de incidentes.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. Responsabilidades del colaborador</b></h2>\r\n      <p>\r\n        Cada colaborador tiene un rol activo en la protección de la información.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Seguir políticas y procedimientos del SGSI.</li>\r\n        <li>Proteger accesos y credenciales.</li>\r\n        <li>Usar herramientas autorizadas.</li>\r\n        <li>Respetar la clasificación de la información.</li>\r\n        <li>Reportar incidentes o situaciones sospechosas.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. Importancia del cumplimiento individual</b></h2>\r\n      <p>\r\n        El SGSI solo funciona correctamente cuando cada persona cumple con sus responsabilidades.\r\n      </p>\r\n      <p>\r\n        El comportamiento individual puede prevenir o generar incidentes, por lo que el cumplimiento es clave\r\n        para la seguridad organizacional.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> pequeñas acciones individuales pueden tener un gran impacto en la seguridad\r\n          de la información.\r\n        </p>\r\n      </div>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Reducir riesgos mediante buenas prácticas.</li>\r\n        <li>Evitar errores que puedan generar incidentes.</li>\r\n        <li>Fortalecer la cultura de seguridad.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 6 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>6. Flujo de reporte de incidentes</b></h2>\r\n      <p>\r\n        El reporte de incidentes es un proceso fundamental dentro del SGSI que permite responder de forma oportuna\r\n        ante situaciones que puedan afectar la seguridad de la información.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p><b>Flujo general de reporte:</b></p>\r\n        <ol class=\"w3-ol\">\r\n          <li><b>Detección:</b> identificar una situación sospechosa o incidente.</li>\r\n          <li><b>Notificación:</b> reportar inmediatamente a través de los canales definidos.</li>\r\n          <li><b>Registro:</b> documentar el incidente.</li>\r\n          <li><b>Análisis:</b> evaluar el impacto y la causa.</li>\r\n          <li><b>Respuesta:</b> aplicar medidas de contención y solución.</li>\r\n          <li><b>Mejora:</b> implementar acciones para evitar recurrencia.</li>\r\n        </ol>\r\n      </div>\r\n\r\n      <p>\r\n        Actuar de forma oportuna y seguir este flujo permite reducir impactos y mejorar la gestión de la seguridad.\r\n      </p>\r\n\r\n      <!-- Mensaje -->\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"La seguridad de la información es el resultado del compromiso coordinado de todos los roles dentro de la\r\n            organización.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>La Alta Dirección lidera y define el SGSI.</li>\r\n          <li>El responsable del SGSI coordina su implementación y mejora.</li>\r\n          <li>Los líderes de área aseguran el cumplimiento en sus equipos.</li>\r\n          <li>Los colaboradores aplican las prácticas de seguridad.</li>\r\n          <li>El cumplimiento individual es clave para prevenir riesgos.</li>\r\n          <li>El reporte oportuno permite una respuesta efectiva ante incidentes.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        Comprender los roles y responsabilidades dentro del SGSI permite trabajar de forma coordinada\r\n        y fortalecer la seguridad de la información.\r\n      </p>\r\n      <p>\r\n        La participación activa de todos es fundamental para el éxito del sistema.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n\r\n\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "PROCESO SGSI (PDCA)",
+      "slug": "proceso-sgsi-pdca",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-blue w3-round-large w3-padding\">SGSI · Formación LMS · PDCA</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Proceso del SGSI (Ciclo PDCA)</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Entender cómo el SGSI se gestiona mediante mejora continua.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> comprender el ciclo PDCA aplicado al SGSI y cómo cada etapa\r\n          contribuye a la protección de la información y a la mejora continua.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. ¿Qué es el ciclo PDCA?</b></h2>\r\n      <p>\r\n        El ciclo PDCA (Plan-Do-Check-Act) es un modelo de gestión basado en mejora continua.\r\n        Es utilizado en ISO/IEC 27001:2022 para asegurar que el SGSI se planifique, implemente,\r\n        evalúe y mejore de manera constante.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li><b>PLAN:</b> planificar la gestión de riesgos y controles.</li>\r\n        <li><b>DO:</b> implementar lo planificado.</li>\r\n        <li><b>CHECK:</b> evaluar el desempeño.</li>\r\n        <li><b>ACT:</b> mejorar continuamente.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> el SGSI no es estático; evoluciona continuamente para adaptarse a nuevos riesgos\r\n          y cambios en el entorno.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. PLAN: Identificación de riesgos</b></h2>\r\n      <p>\r\n        En esta fase se identifican los riesgos que pueden afectar la seguridad de la información\r\n        y se definen las acciones necesarias para tratarlos.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Identificación de activos de información.</li>\r\n        <li>Evaluación de amenazas y vulnerabilidades.</li>\r\n        <li>Determinación del nivel de riesgo.</li>\r\n        <li>Definición de controles de seguridad.</li>\r\n      </ul>\r\n\r\n      <!-- Sección 3 (Ampliada) -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. DO: Implementación de controles</b></h2>\r\n\r\n      <p>\r\n        En esta etapa se ejecutan las acciones definidas en la fase de planificación, implementando los controles\r\n        necesarios para mitigar los riesgos identificados. Es el momento donde el SGSI se materializa en la operación\r\n        diaria.\r\n      </p>\r\n\r\n      <p>\r\n        La implementación de controles no se limita a herramientas tecnológicas, sino que incluye procesos,\r\n        políticas, comportamientos y decisiones organizacionales.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> un control es cualquier medida que reduce un riesgo, ya sea técnica, organizacional o\r\n          humana.\r\n        </p>\r\n      </div>\r\n\r\n      <h3 class=\"w3-large w3-text-blue-grey\"><b>Tipos de controles implementados</b></h3>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top\">\r\n\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-blue w3-padding-24 w3-round-large\">\r\n            <h4><b>🔐 Controles técnicos</b></h4>\r\n            <p>\r\n              Implementados mediante herramientas o sistemas tecnológicos para proteger accesos,\r\n              datos y plataformas.\r\n            </p>\r\n            <ul class=\"w3-ul\">\r\n              <li>Autenticación y control de accesos</li>\r\n              <li>Protección de redes y sistemas</li>\r\n              <li>Monitoreo y registros</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-green w3-padding-24 w3-round-large\">\r\n            <h4><b>📋 Controles organizacionales</b></h4>\r\n            <p>\r\n              Basados en políticas, procedimientos y lineamientos definidos por la organización.\r\n            </p>\r\n            <ul class=\"w3-ul\">\r\n              <li>Políticas de seguridad</li>\r\n              <li>Procedimientos operativos</li>\r\n              <li>Gestión de roles y responsabilidades</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-third w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-yellow w3-padding-24 w3-round-large\">\r\n            <h4><b>👤 Controles humanos</b></h4>\r\n            <p>\r\n              Relacionados con el comportamiento de los colaboradores y la concientización en seguridad.\r\n            </p>\r\n            <ul class=\"w3-ul\">\r\n              <li>Capacitación y concientización</li>\r\n              <li>Aplicación de buenas prácticas</li>\r\n              <li>Reporte de incidentes</li>\r\n            </ul>\r\n          </div>\r\n        </div>\r\n\r\n      </div>\r\n\r\n      <h3 class=\"w3-large w3-text-blue-grey\"><b>Actividades clave en esta fase</b></h3>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Aplicación de políticas y procedimientos del SGSI.</li>\r\n        <li>Configuración segura de sistemas y plataformas.</li>\r\n        <li>Asignación de accesos según roles definidos.</li>\r\n        <li>Capacitación continua a los colaboradores.</li>\r\n        <li>Uso de herramientas autorizadas.</li>\r\n        <li>Ejecución de controles operativos en el día a día.</li>\r\n      </ul>\r\n\r\n      <h3 class=\"w3-large w3-text-blue-grey\"><b>Ejemplo práctico</b></h3>\r\n\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <p>\r\n          Si se identifica un riesgo de acceso no autorizado a información, en la fase DO se pueden implementar:\r\n        </p>\r\n        <ul>\r\n          <li>Control técnico: autenticación multifactor.</li>\r\n          <li>Control organizacional: política de control de accesos.</li>\r\n          <li>Control humano: capacitación sobre uso seguro de credenciales.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <h3 class=\"w3-large w3-text-blue-grey\"><b>Importancia de la correcta implementación</b></h3>\r\n\r\n      <p>\r\n        Una implementación incompleta o incorrecta puede dejar riesgos sin tratar. Por ello, es fundamental que los\r\n        controles:\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Sean aplicados de forma consistente.</li>\r\n        <li>Sean conocidos por los colaboradores.</li>\r\n        <li>Estén alineados con los riesgos identificados.</li>\r\n        <li>Sean utilizados en la operación diaria.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"La implementación efectiva de controles convierte la planificación en seguridad real.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <p>\r\n        En esta fase, el compromiso de los colaboradores es clave, ya que los controles solo son efectivos\r\n        si se aplican correctamente en las actividades diarias.\r\n      </p>\r\n\r\n      <!-- Sección 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. CHECK: Auditoría y monitoreo</b></h2>\r\n      <p>\r\n        En esta fase se evalúa si los controles están funcionando correctamente y si el SGSI\r\n        cumple con los objetivos definidos.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Monitoreo de actividades y eventos.</li>\r\n        <li>Revisión de indicadores de seguridad.</li>\r\n        <li>Auditorías internas y externas.</li>\r\n        <li>Evaluación del cumplimiento de políticas.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Importante:</b> medir y evaluar permite identificar desviaciones y oportunidades de mejora.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. ACT: Mejora continua</b></h2>\r\n      <p>\r\n        En esta etapa se toman acciones para mejorar el SGSI con base en los resultados obtenidos.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Corrección de fallas identificadas.</li>\r\n        <li>Actualización de controles y procesos.</li>\r\n        <li>Implementación de mejoras.</li>\r\n        <li>Adaptación a nuevos riesgos o cambios.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-green w3-leftbar w3-border-green w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> la mejora continua permite mantener el SGSI vigente y efectivo frente a nuevos desafíos.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Sección 6 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>6. Rol del colaborador en el SGSI</b></h2>\r\n      <p>\r\n        El colaborador participa en todas las etapas del ciclo PDCA a través de sus acciones diarias.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Aplicar controles definidos (DO).</li>\r\n        <li>Reportar incidentes o desviaciones (CHECK).</li>\r\n        <li>Proponer mejoras o buenas prácticas (ACT).</li>\r\n        <li>Identificar riesgos en su entorno (PLAN).</li>\r\n      </ul>\r\n\r\n      <p>\r\n        Su participación es clave para que el SGSI funcione de manera efectiva y se mantenga actualizado.\r\n      </p>\r\n\r\n      <!-- Mensaje -->\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"El ciclo PDCA permite que la seguridad evolucione constantemente, adaptándose a nuevos riesgos y\r\n            fortaleciendo la organización.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>El PDCA es la base de la mejora continua del SGSI.</li>\r\n          <li>PLAN identifica riesgos y define controles.</li>\r\n          <li>DO implementa las medidas de seguridad.</li>\r\n          <li>CHECK evalúa el desempeño.</li>\r\n          <li>ACT mejora el sistema continuamente.</li>\r\n          <li>El colaborador participa en todas las etapas.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        Comprender el ciclo PDCA permite entender cómo el SGSI se mantiene actualizado y efectivo.\r\n      </p>\r\n      <p>\r\n        La mejora continua depende del compromiso de todos los colaboradores y del seguimiento\r\n        constante de los procesos definidos.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "RIESGOS DE SEGURIDAD",
+      "slug": "riesgos-de-seguridad",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-red w3-round-large w3-padding\">SGSI · Formación LMS · Riesgos</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Riesgos de Seguridad de la Información</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Identificación de riesgos comunes y cómo prevenirlos en el entorno laboral.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> reconocer los principales riesgos de seguridad en el entorno laboral\r\n          y aplicar buenas prácticas para prevenir incidentes.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. Acceso no autorizado en teletrabajo</b></h2>\r\n      <p>\r\n        En entornos de teletrabajo, el acceso a sistemas corporativos se realiza fuera de redes controladas,\r\n        lo que aumenta el riesgo de accesos no autorizados si no se aplican medidas adecuadas.\r\n      </p>\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Uso de dispositivos compartidos o no protegidos.</li>\r\n        <li>Sesiones abiertas sin supervisión.</li>\r\n        <li>Acceso desde ubicaciones no seguras.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-green w3-leftbar w3-border-green w3-round\">\r\n        <p>\r\n          <b>Buenas prácticas:</b> bloquear el equipo al ausentarse, usar conexiones seguras y no compartir\r\n          credenciales.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. Uso seguro de redes domésticas</b></h2>\r\n      <p>\r\n        Las redes domésticas pueden no tener el mismo nivel de seguridad que las redes corporativas,\r\n        lo que puede exponer la información a interceptaciones o accesos indebidos.\r\n      </p>\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Configurar contraseñas robustas en el router.</li>\r\n        <li>Utilizar cifrado (WPA2/WPA3).</li>\r\n        <li>Evitar el uso de redes abiertas o públicas.</li>\r\n        <li>Actualizar periódicamente el firmware del router.</li>\r\n      </ul>\r\n\r\n      <!-- 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. MFA y control de accesos</b></h2>\r\n      <p>\r\n        El control de accesos garantiza que solo las personas autorizadas puedan acceder a sistemas y datos.\r\n        La autenticación multifactor (MFA) añade una capa adicional de seguridad.\r\n      </p>\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Uso de múltiples factores de autenticación (contraseña + código).</li>\r\n        <li>Asignación de permisos según el rol (principio de mínimo privilegio).</li>\r\n        <li>Revisión periódica de accesos.</li>\r\n      </ul>\r\n      <div class=\"w3-panel w3-pale-green w3-leftbar w3-border-green w3-round\">\r\n        <p>\r\n          <b>Impacto:</b> reduce significativamente el riesgo de comprometer cuentas.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. Phishing e ingeniería social</b></h2>\r\n      <p>\r\n        El phishing y la ingeniería social buscan manipular a las personas para obtener información confidencial\r\n        o acceso a sistemas.\r\n      </p>\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Correos que simulan ser de fuentes confiables.</li>\r\n        <li>Solicitudes urgentes de información.</li>\r\n        <li>Mensajes con enlaces maliciosos.</li>\r\n      </ul>\r\n      <div class=\"w3-panel w3-pale-green w3-leftbar w3-border-green w3-round\">\r\n        <p>\r\n          <b>Buenas prácticas:</b> verificar siempre la fuente antes de actuar y no compartir información sensible.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. Identificación de correos maliciosos</b></h2>\r\n      <p>\r\n        Reconocer un correo malicioso es clave para prevenir incidentes de seguridad.\r\n      </p>\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Remitentes desconocidos o direcciones alteradas.</li>\r\n        <li>Errores ortográficos o gramaticales.</li>\r\n        <li>Solicitudes de urgencia o presión para actuar.</li>\r\n        <li>Enlaces que no coinciden con el dominio real.</li>\r\n        <li>Archivos adjuntos inesperados.</li>\r\n      </ul>\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-orange w3-round\">\r\n        <p>\r\n          <b>Acción recomendada:</b> no interactuar y reportar inmediatamente.\r\n        </p>\r\n      </div>\r\n      <!-- 6 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>6. Fuga de información</b></h2>\r\n      <p>\r\n        La fuga de información ocurre cuando datos sensibles son expuestos, ya sea de forma accidental o intencional.\r\n      </p>\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Envío de información a destinatarios incorrectos.</li>\r\n        <li>Uso de plataformas no autorizadas.</li>\r\n        <li>Almacenamiento en dispositivos no seguros.</li>\r\n      </ul>\r\n      <p>\r\n        <b>Prevención:</b> verificar destinatarios, usar herramientas autorizadas y respetar la clasificación de la\r\n        información.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red w3-round\">\r\n        <p>\r\n          <b>Importante:</b> la fuga de información puede afectar la confidencialidad, generar impactos legales\r\n          y dañar la reputación organizacional.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 7 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>7. Manejo de datos personales</b></h2>\r\n      <p>\r\n        El tratamiento inadecuado puede generar riesgos legales y de privacidad.\r\n      </p>\r\n\r\n      <!-- 8 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>8. Clasificación de la información</b></h2>\r\n      <p>\r\n        Permite aplicar controles adecuados según el nivel de sensibilidad de los datos.\r\n      </p>\r\n\r\n      <!-- 9 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>9. Configuración segura en la nube</b></h2>\r\n      <p>\r\n        Configuraciones incorrectas pueden exponer información a accesos no autorizados.\r\n      </p>\r\n\r\n      <!-- 10 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>10. Indisponibilidad de servicios</b></h2>\r\n      <p>\r\n        La indisponibilidad ocurre cuando los sistemas o servicios no están accesibles cuando se necesitan,\r\n        afectando la continuidad de la operación.\r\n      </p>\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Fallas técnicas o errores de configuración.</li>\r\n        <li>Interrupciones en proveedores de servicios.</li>\r\n        <li>Incidentes de seguridad o ataques.</li>\r\n      </ul>\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-orange w3-round\">\r\n        <p>\r\n          <b>Impacto:</b> interrupción de procesos, retrasos operativos y pérdida de productividad.\r\n        </p>\r\n        <p>\r\n          <b>Mitigación:</b> uso de planes de continuidad, respaldo de información y monitoreo constante.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 11 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>11. Dependencia de proveedores</b></h2>\r\n      <p>\r\n        El uso de servicios externos implica riesgos asociados a su disponibilidad y seguridad.\r\n      </p>\r\n\r\n      <!-- 12 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>12. Uso de dispositivos personales (BYOD)</b></h2>\r\n      <p>\r\n        El uso de equipos personales puede aumentar el riesgo si no están adecuadamente protegidos.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red w3-round\">\r\n        <p>\r\n          <b>Importante:</b> la mayoría de los riesgos pueden prevenirse mediante buenas prácticas\r\n          y cumplimiento de las políticas del SGSI.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Mensaje -->\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"Identificar los riesgos es el primer paso para proteger la información.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>Los riesgos están presentes en todas las actividades.</li>\r\n          <li>El teletrabajo introduce nuevos desafíos de seguridad.</li>\r\n          <li>El control de accesos y MFA son fundamentales.</li>\r\n          <li>El phishing es una de las principales amenazas.</li>\r\n          <li>La configuración segura y el uso adecuado de herramientas reduce riesgos.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        Reconocer los riesgos permite actuar de forma preventiva y proteger la información de manera efectiva.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "CONTROLES DE SEGURIDAD (SoA)",
+      "slug": "controles-de-seguridad-soa",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-indigo w3-round-large w3-padding\">SGSI · Formación LMS · SoA</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Controles de Seguridad (SoA)</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Conocer los controles clave aplicados en el SGSI y su relación con ISO/IEC 27001:2022.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> comprender los principales controles de seguridad definidos en la\r\n          Declaración de Aplicabilidad (SoA) y cómo contribuyen a la protección de la información.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Introducción -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>¿Qué es la SoA?</b></h2>\r\n      <p>\r\n        La Declaración de Aplicabilidad (SoA) es un documento que define qué controles de seguridad\r\n        son aplicables dentro del SGSI, en función de los riesgos identificados.\r\n      </p>\r\n      <p>\r\n        Cada control tiene un propósito específico y contribuye a reducir riesgos de seguridad\r\n        en la organización.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Importante:</b> los controles no son opcionales; deben aplicarse de acuerdo con su definición\r\n          y alcance dentro del SGSI.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Control 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. Políticas de seguridad (A.5.1)</b></h2>\r\n      <p>\r\n        Establecen los lineamientos generales para la protección de la información en la organización.\r\n      </p>\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Definen reglas y responsabilidades.</li>\r\n        <li>Orientan el comportamiento de los colaboradores.</li>\r\n        <li>Sirven como base para otros controles.</li>\r\n      </ul>\r\n\r\n      <!-- Control 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. Seguridad con proveedores (A.5.23)</b></h2>\r\n      <p>\r\n        Asegura que los proveedores cumplan con requisitos de seguridad adecuados.\r\n      </p>\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Evaluación de riesgos de terceros.</li>\r\n        <li>Definición de acuerdos de seguridad.</li>\r\n        <li>Monitoreo del cumplimiento.</li>\r\n      </ul>\r\n\r\n      <!-- Control 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. Continuidad del negocio (A.5.30)</b></h2>\r\n      <p>\r\n        Permite asegurar que los servicios continúen operando ante incidentes o interrupciones.\r\n      </p>\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Planes de continuidad.</li>\r\n        <li>Recuperación ante desastres.</li>\r\n        <li>Respaldo de información.</li>\r\n      </ul>\r\n\r\n      <!-- Control 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. Teletrabajo seguro (A.6.7)</b></h2>\r\n      <p>\r\n        Define medidas para proteger la información en entornos de trabajo remoto.\r\n      </p>\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Uso de conexiones seguras.</li>\r\n        <li>Protección de dispositivos.</li>\r\n        <li>Cumplimiento de políticas fuera de la oficina.</li>\r\n      </ul>\r\n\r\n      <!-- Control 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. Concientización (A.6.3)</b></h2>\r\n      <p>\r\n        Busca asegurar que los colaboradores comprendan los riesgos y adopten comportamientos seguros.\r\n      </p>\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Capacitación continua.</li>\r\n        <li>Programas de concientización.</li>\r\n        <li>Promoción de cultura de seguridad.</li>\r\n      </ul>\r\n\r\n      <!-- Control 6 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>6. Enmascaramiento de datos (A.8.11)</b></h2>\r\n      <p>\r\n        Protege información sensible ocultando datos en entornos donde no se requiere acceso completo.\r\n      </p>\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Uso en entornos de prueba.</li>\r\n        <li>Reducción de exposición de datos.</li>\r\n        <li>Protección de datos personales.</li>\r\n      </ul>\r\n\r\n      <!-- Control 7 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>7. Desarrollo seguro (A.8.28)</b></h2>\r\n      <p>\r\n        Asegura que los sistemas se desarrollen considerando la seguridad desde su diseño.\r\n      </p>\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Prácticas de desarrollo seguro.</li>\r\n        <li>Revisión de código.</li>\r\n        <li>Pruebas de seguridad.</li>\r\n      </ul>\r\n\r\n      <!-- Control 8 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>8. Gestión de accesos</b></h2>\r\n      <p>\r\n        Controla quién puede acceder a los sistemas y datos de la organización.\r\n      </p>\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Asignación de permisos por rol.</li>\r\n        <li>Uso de autenticación segura.</li>\r\n        <li>Revisión periódica de accesos.</li>\r\n      </ul>\r\n\r\n      <!-- Relación -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Relación con el SGSI</b></h2>\r\n      <p>\r\n        Los controles definidos en la SoA permiten reducir riesgos y asegurar la protección de la información.\r\n      </p>\r\n      <p>\r\n        Su correcta implementación y uso son fundamentales para el funcionamiento del SGSI.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"Los controles de seguridad transforman los riesgos en acciones gestionadas.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>La SoA define qué controles son aplicables.</li>\r\n          <li>Cada control responde a un riesgo específico.</li>\r\n          <li>Los controles deben aplicarse de forma consistente.</li>\r\n          <li>El cumplimiento fortalece la seguridad organizacional.</li>\r\n          <li>Todos los colaboradores participan en su aplicación.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        Comprender los controles de seguridad permite aplicar correctamente las medidas definidas\r\n        y contribuir a la protección de la información.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "USO DE PLATAFORMAS SGSI",
+      "slug": "uso-de-plataformas-sgsi",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-indigo w3-round-large w3-padding\">SGSI · Formación LMS · Plataformas</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Uso de Plataformas del SGSI</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Cómo interactuar correctamente con las herramientas del SGSI y generar evidencia auditable.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> comprender el uso de las plataformas del SGSI, el proceso de certificación\r\n          de lectura y la importancia de la trazabilidad y la evidencia para auditorías.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. Uso de esta plataforma como LMS</b></h2>\r\n\r\n      <p>\r\n        En esta plataforma se publican políticas, procedimientos, guías y contenidos formativos que deben ser\r\n        revisados por los colaboradores.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Acceder a contenidos de capacitación.</li>\r\n        <li>Consultar políticas y procedimientos vigentes.</li>\r\n        <li>Realizar lecturas obligatorias.</li>\r\n        <li>Registrar cumplimiento mediante certificación de lectura.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-green w3-leftbar w3-border-green w3-round\">\r\n        <p>\r\n          Esta plataforma es utilizada como un sistema de gestión de contenidos LMS (Learning Management System) para la\r\n          gestión de contenidos\r\n          de capacitación del SGSI.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. Uso de la plataforma SGSI</b></h2>\r\n      <p>\r\n        La plataforma SGSI centraliza la gestión de la seguridad de la información, permitiendo\r\n        administrar controles, riesgos, evidencias y cumplimiento.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Registro de actividades del SGSI.</li>\r\n        <li>Gestión de riesgos y controles.</li>\r\n        <li>Seguimiento de cumplimiento.</li>\r\n        <li>Almacenamiento de evidencias.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Importante:</b> el uso correcto de la plataforma asegura que la información esté disponible\r\n          y organizada para su revisión.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. Proceso de certificación de lectura</b></h2>\r\n      <p>\r\n        La certificación de lectura permite registrar que un colaborador ha revisado y comprendido\r\n        un contenido del SGSI.\r\n      </p>\r\n\r\n      <ul class=\"w3-card-4 w3-ul w3-border w3-round-large\">\r\n        <li>Acceder al contenido en la plataforma LMS.</li>\r\n        <li>Leer completamente el material.</li>\r\n        <li>Confirmar la lectura mediante el botón de certificación.</li>\r\n        <li>Registrar automáticamente la evidencia de cumplimiento.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-green w3-leftbar w3-border-green w3-round\">\r\n        <p>\r\n          Este proceso es fundamental para demostrar que los colaboradores conocen las políticas\r\n          y procedimientos aplicables.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. Importancia de la evidencia</b></h2>\r\n      <p>\r\n        La evidencia es el respaldo que demuestra que una actividad del SGSI ha sido ejecutada.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Registros de lectura y capacitación.</li>\r\n        <li>Historial de accesos y acciones.</li>\r\n        <li>Documentación de procesos.</li>\r\n        <li>Resultados de auditorías y controles.</li>\r\n      </ul>\r\n\r\n      <p>\r\n        Sin evidencia, no es posible demostrar cumplimiento ante auditorías o revisiones.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red w3-round\">\r\n        <p>\r\n          <b>Importante:</b> si una actividad no está registrada, no puede considerarse como realizada\r\n          desde el punto de vista del SGSI.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. Trazabilidad y auditoría</b></h2>\r\n      <p>\r\n        La trazabilidad permite seguir el rastro de las acciones realizadas dentro del SGSI,\r\n        asegurando transparencia y control.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Registro de quién realizó una acción.</li>\r\n        <li>Fecha y hora de ejecución.</li>\r\n        <li>Historial de cambios y actualizaciones.</li>\r\n        <li>Seguimiento de cumplimiento.</li>\r\n      </ul>\r\n\r\n      <p>\r\n        Esta información es clave durante auditorías internas y externas, ya que permite validar\r\n        el cumplimiento del SGSI de forma objetiva.\r\n      </p>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> la trazabilidad convierte las actividades del SGSI en información verificable\r\n          y auditable.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Mensaje -->\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"En el SGSI, lo que no se registra, no existe; la evidencia es la base del cumplimiento.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>Esta plataforma permite gestionar la capacitación del SGSI.</li>\r\n          <li>La plataforma SGSI centraliza la gestión de seguridad.</li>\r\n          <li>La certificación de lectura genera evidencia de cumplimiento.</li>\r\n          <li>La evidencia respalda las actividades realizadas.</li>\r\n          <li>La trazabilidad permite auditorías efectivas.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        El uso correcto de las plataformas del SGSI garantiza que las actividades estén documentadas,\r\n        sean trazables y cumplan con los requisitos de auditoría.\r\n      </p>\r\n      <p>\r\n        La participación activa de los colaboradores es clave para mantener un sistema ordenado,\r\n        verificable y alineado con la mejora continua.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    },
+    {
+      "title": "CUMPLIMIENTO Y AUDITORÍA",
+      "slug": "cumplimiento-y-auditoria",
+      "category": "Capacitación SGSI",
+      "version": "1.0",
+      "status": "published",
+      "html_content": "<section class=\"w3-container w3-padding-32 w3-light-grey\" style=\"max-width: 980px; margin: 0 auto;\">\r\n    <div class=\"w3-container w3-card w3-white w3-round-large w3-padding-32 w3-margin-bottom\">\r\n\r\n      <!-- Encabezado -->\r\n      <div class=\"w3-center w3-margin-bottom\">\r\n        <span class=\"w3-tag w3-indigo w3-round-large w3-padding\">SGSI · Formación LMS · Cumplimiento</span>\r\n        <h1 class=\"w3-xxlarge w3-text-dark-grey\"><b>Cumplimiento y Auditoría del SGSI</b></h1>\r\n        <p class=\"w3-large w3-text-grey\">\r\n          Cómo medir, evidenciar y verificar el cumplimiento del Sistema de Gestión de Seguridad de la Información.\r\n        </p>\r\n      </div>\r\n\r\n      <div class=\"w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-round\">\r\n        <p>\r\n          <b>Objetivo de este módulo:</b> comprender cómo se mide el cumplimiento del SGSI, cómo se preparan\r\n          las auditorías y cuál es la importancia de la evidencia y los indicadores.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 1 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>1. KPIs de seguridad</b></h2>\r\n      <p>\r\n        Los KPIs (Indicadores Clave de Desempeño) permiten medir el nivel de cumplimiento y efectividad\r\n        de los controles de seguridad implementados.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Porcentaje de cumplimiento de capacitación.</li>\r\n        <li>Número de incidentes reportados.</li>\r\n        <li>Tiempo de respuesta ante incidentes.</li>\r\n        <li>Nivel de cumplimiento de políticas.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-yellow w3-leftbar w3-border-amber w3-round\">\r\n        <p>\r\n          <b>Idea clave:</b> lo que no se mide no se puede mejorar; los KPIs permiten tomar decisiones informadas.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 2 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>2. Cumplimiento de capacitación</b></h2>\r\n      <p>\r\n        La capacitación en seguridad es obligatoria y su cumplimiento debe ser medido y registrado.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Registro de lecturas en el LMS.</li>\r\n        <li>Certificación de contenidos.</li>\r\n        <li>Seguimiento de participación.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-green w3-leftbar w3-border-green w3-round\">\r\n        <p>\r\n          Este cumplimiento permite asegurar que los colaboradores conocen sus responsabilidades\r\n          y aplican buenas prácticas.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 3 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>3. Medición de concientización</b></h2>\r\n      <p>\r\n        La concientización en seguridad debe evaluarse periódicamente para asegurar su efectividad.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Evaluaciones o cuestionarios.</li>\r\n        <li>Simulaciones de incidentes (ej. phishing).</li>\r\n        <li>Indicadores de comportamiento seguro.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-green w3-leftbar w3-border-green w3-round\">\r\n        <p>\r\n          Esto permite identificar áreas de mejora y fortalecer la cultura de seguridad.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 4 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>4. Auditorías internas y externas</b></h2>\r\n      <p>\r\n        Las auditorías permiten verificar que el SGSI cumple con los requisitos definidos\r\n        y que los controles están funcionando correctamente.\r\n      </p>\r\n\r\n      <div class=\"w3-row-padding w3-margin-top\">\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-blue w3-padding-24 w3-round-large\">\r\n            <h3><b>Auditoría interna</b></h3>\r\n            <p>Realizada por la organización para evaluar su propio cumplimiento.</p>\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"w3-half w3-margin-bottom\">\r\n          <div class=\"w3-container w3-card w3-pale-green w3-padding-24 w3-round-large\">\r\n            <h3><b>Auditoría externa</b></h3>\r\n            <p>Realizada por entidades certificadoras para validar el SGSI.</p>\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <!-- 5 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>5. Evidencias para auditoría ISO</b></h2>\r\n      <p>\r\n        Las evidencias son registros que demuestran que los procesos y controles del SGSI se están ejecutando.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-card-4 w3-round-large\">\r\n        <li>Registros de capacitación y certificación.</li>\r\n        <li>Documentación de políticas y procedimientos.</li>\r\n        <li>Registros de incidentes y acciones.</li>\r\n        <li>Resultados de auditorías y revisiones.</li>\r\n      </ul>\r\n\r\n      <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red w3-round\">\r\n        <p>\r\n          <b>Importante:</b> sin evidencia documentada, no es posible demostrar cumplimiento ante auditorías.\r\n        </p>\r\n      </div>\r\n\r\n      <!-- 6 -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>6. Consecuencias del incumplimiento</b></h2>\r\n      <p>\r\n        El incumplimiento de las políticas y controles del SGSI puede generar impactos significativos.\r\n      </p>\r\n\r\n      <ul class=\"w3-ul w3-border w3-round-large\">\r\n        <li>Incremento de riesgos de seguridad.</li>\r\n        <li>Posibles incidentes o brechas de información.</li>\r\n        <li>Impactos operativos y reputacionales.</li>\r\n        <li>No conformidades en auditorías.</li>\r\n      </ul>\r\n\r\n      <p>\r\n        El cumplimiento es responsabilidad de todos los colaboradores y es clave para mantener\r\n        la certificación y la seguridad organizacional.\r\n      </p>\r\n\r\n      <!-- Mensaje -->\r\n      <div class=\"w3-panel w3-sand w3-leftbar w3-border-orange w3-padding-16 w3-margin-top\">\r\n        <p class=\"w3-xlarge w3-serif w3-center\">\r\n          <i>\"El cumplimiento no es solo un requisito, es la base para una organización segura y confiable.\"</i>\r\n        </p>\r\n      </div>\r\n\r\n      <!-- Ideas clave -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Ideas clave para recordar</b></h2>\r\n      <div class=\"w3-panel w3-light-grey w3-round-large\">\r\n        <ul class=\"w3-ul\">\r\n          <li>Los KPIs permiten medir el desempeño del SGSI.</li>\r\n          <li>La capacitación es obligatoria y medible.</li>\r\n          <li>La concientización debe evaluarse continuamente.</li>\r\n          <li>Las auditorías verifican el cumplimiento.</li>\r\n          <li>La evidencia es clave para auditorías ISO.</li>\r\n          <li>El incumplimiento genera riesgos y consecuencias.</li>\r\n        </ul>\r\n      </div>\r\n\r\n      <!-- Cierre -->\r\n      <h2 class=\"w3-xlarge w3-text-blue-grey\"><b>Cierre</b></h2>\r\n      <p>\r\n        Medir, evidenciar y auditar permite mantener el SGSI efectivo y alineado con los requisitos\r\n        organizacionales y normativos.\r\n      </p>\r\n      <p>\r\n        El compromiso de cada colaborador es fundamental para asegurar el cumplimiento y la mejora continua.\r\n      </p>\r\n      <!-- Pie del Post -->\r\n      <footer class=\"w3-container w3-round-large w3-light-blue w3-padding-16\">\r\n        <p class=\"w3-center\">\r\n          Cualquier duda, sobre políticas y/o procedimientos puedes consultar el repositorio oficial\r\n          <b><a href=\"{{ url_for('lms_posts_view') }}\">Capacitación SGSI</a></b> 📚\r\n        </p>\r\n        <p class=\"w3-tiny w3-center\">\r\n          Post de Concientización Obligatoria - Programa de Certificación ISO 27001:2022 - WISE ASESORIAS LIMITADA.\r\n        </p>\r\n      </footer>\r\n    </div>\r\n\r\n\r\n  </section>",
+      "porcentaje_aprobacion": 80.0,
+      "max_intentos": 3,
+      "created_by_id": 1
+    }
+  ],
+  "quizzes": [
+    {
+      "post_slug": "fundamentos-del-sgsi",
+      "title": "Evaluación - Fundamentos del SGSI",
+      "instructions": "Selecciona la opción correcta en cada pregunta. Evaluación transversal para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Cuál describe mejor el propósito del SGSI en la empresa?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Proteger la información con controles y mejora continua",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Limitar la operación diaria para reducir carga de trabajo",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Aplicar seguridad solo en sistemas de TI",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Cumplir auditorías sin gestionar riesgos",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "En el contexto del post, ¿quién es responsable de la seguridad de la información?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Solo el área de IT y Desarrollo",
+              "is_correct": false
+            },
+            {
+              "option_order": 2,
+              "option_text": "Solo Gerencia y Oficial de Seguridad",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Todo el personal: RRHH, IT, Desarrollo, Gerencia y Call-Center",
+              "is_correct": true
+            },
+            {
+              "option_order": 4,
+              "option_text": "Solo quienes administran servidores",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "¿Qué acción está alineada con las responsabilidades del colaborador dentro del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Compartir credenciales para agilizar procesos urgentes",
+              "is_correct": false
+            },
+            {
+              "option_order": 2,
+              "option_text": "Reportar incidentes o comportamientos sospechosos oportunamente",
+              "is_correct": true
+            },
+            {
+              "option_order": 3,
+              "option_text": "Guardar información sensible en canales no autorizados",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Ignorar políticas si el cliente está esperando respuesta",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "¿Cuál opción representa correctamente la triada CIA mencionada en el módulo?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Confidencialidad, Integridad y Disponibilidad",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Cumplimiento, Inspección y Auditoría",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Calidad, Innovación y Ahorro",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Control, Implementación y Administración",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "Según el post, ¿cuál puede ser una consecuencia del incumplimiento en seguridad de la información?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Mayor exposición de información, afectación operativa y pérdida de confianza",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Reducción automática de incidentes",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Eliminación de requisitos legales y contractuales",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "No genera impactos si se cumple el objetivo comercial",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "alcance-y-contexto-del-sgsi",
+      "title": "Evaluación - Alcance y Contexto del SGSI",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Qué define principalmente el alcance del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Los procesos, activos y áreas que deben protegerse",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Solo los equipos del área de TI",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Únicamente las políticas de RRHH",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Solo los contratos con proveedores",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "¿Por qué es importante conocer el alcance del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Porque evita confusiones sobre responsabilidades y facilita auditorías",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Porque elimina todos los riesgos automáticamente",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Porque reemplaza la capacitación interna",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Porque solo sirve para cumplir un requisito documental",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "En trabajo remoto, ¿qué práctica está alineada con el módulo?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Usar redes seguras y proteger equipos física y lógicamente",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Compartir equipo corporativo con familiares sin controles",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Desactivar bloqueo de pantalla para responder más rápido",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Guardar credenciales en notas visibles",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "¿Qué hace que un activo de información sea crítico?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Su impacto en operación, cumplimiento o reputación si se compromete",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Que esté almacenado en una carpeta compartida",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Que lo use solo una persona",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Que no tenga clasificación de información",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Cómo aporta el conocimiento del contexto del SGSI al trabajo diario?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Permite aplicar controles adecuados según proceso y tipo de información",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Evita la necesidad de clasificar información",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Limita la seguridad solo a equipos técnicos",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Reemplaza la gestión de riesgos del SGSI",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "marco-legal-y-cumplimiento",
+      "title": "Evaluación - Marco Legal y Cumplimiento",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Qué describe mejor un dato personal según el módulo?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Información que identifica o puede identificar a una persona",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Solo información técnica de servidores",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Cualquier dato público sin restricciones",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Solo números de ticket de soporte",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "¿Cuál es una obligación del colaborador respecto a datos personales?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Usarlos solo para fines autorizados y proteger accesos",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Compartirlos por mensajería sin validación",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Conservar copias personales fuera de sistemas autorizados",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Ignorar la clasificación de información",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "Ante un incidente de seguridad con datos, ¿qué se debe hacer?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Notificar oportunamente según el flujo definido por la organización",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Esperar a que termine el semestre para reportarlo",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Resolverlo sin dejar evidencia",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Compartirlo en canales no oficiales",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "¿Por qué el marco legal es relevante para todas las áreas?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Porque el tratamiento de datos ocurre en RRHH, IT, Desarrollo, Gerencia y Call-Center",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Porque aplica solo al área jurídica",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Porque solo se usa en auditorías externas",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Porque excluye actividades de atención al cliente",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Qué práctica ayuda a cumplir con protección de datos personales?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Acceder y tratar datos personales solo cuando el rol y fin lo justifiquen",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Compartir bases de datos por canales no autorizados",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Usar datos personales para fines distintos sin aprobación",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Guardar copias sensibles en dispositivos personales sin control",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "concientizacion-en-seguridad-a63",
+      "title": "Evaluación - Concientización en Seguridad (A.6.3)",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Qué busca la concientización en seguridad (A.6.3)?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Fortalecer conductas seguras y reducir errores humanos",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Reemplazar controles técnicos y auditorías",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Capacitar únicamente al personal de TI",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Delegar toda la seguridad al proveedor",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "¿Cuál es un error humano común que puede causar incidentes?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Abrir enlaces maliciosos en correos de phishing",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Bloquear la sesión al ausentarse",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Usar autenticación definida por la empresa",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Reportar actividad sospechosa a tiempo",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "¿Qué práctica promueve una cultura de seguridad?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Seguir políticas, usar sistemas autorizados y reportar incidentes",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Compartir contraseñas con el equipo para agilizar",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Desactivar controles para reducir fricción",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Evitar reportes para no generar carga administrativa",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "Si detectas una situación sospechosa, ¿qué corresponde?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Reportarla de inmediato por el canal oficial",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Ignorarla si no hubo impacto visible",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Publicarla en redes sociales para alertar",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Esperar confirmación de compañeros antes de actuar",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Qué resultado espera la organización al fortalecer la concientización?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Reducir incidentes causados por errores humanos y mejorar respuesta",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Eliminar todos los controles técnicos",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Delegar seguridad únicamente en gerencia",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Disminuir reportes para reducir carga administrativa",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "roles-y-responsabilidades",
+      "title": "Evaluación - Roles y Responsabilidades",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Cuál es una responsabilidad clave de la Alta Dirección en el SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Definir política de seguridad y asignar recursos",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Administrar todas las contraseñas de usuarios",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Responder todos los incidentes de forma operativa",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Aprobar solo temas de infraestructura",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "¿Qué rol cumple el responsable del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Coordinar riesgos, controles, auditorías y seguimiento del cumplimiento",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Reemplazar a líderes de área en sus funciones",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Gestionar únicamente compras tecnológicas",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Autorizar vacaciones del personal",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "¿Qué deben hacer los líderes de área frente al SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Aplicar controles y asegurar cumplimiento en su proceso",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Delegar totalmente la seguridad al área de TI",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Excluir a su equipo de capacitaciones",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Usar canales informales para reportes críticos",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "En el nivel individual, ¿qué se espera de cada colaborador?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Cumplir políticas y reportar incidentes oportunamente",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Omitir controles en momentos de alta demanda",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Compartir accesos para continuidad operativa",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Aplicar solo controles técnicos",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Qué beneficio genera que cada rol cumpla su responsabilidad en SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Mejor coordinación, trazabilidad y cumplimiento sostenido del sistema",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Duplicar funciones sin responsables claros",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Concentrar todas las decisiones en un solo colaborador",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Reducir la comunicación de incidentes entre áreas",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "proceso-sgsi-pdca",
+      "title": "Evaluación - Proceso SGSI (PDCA)",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Qué significa PDCA en el SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Planificar, Hacer, Verificar y Actuar para mejorar continuamente",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Proteger, Detectar, Corregir y Aislar",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Programar, Diseñar, Controlar y Auditar",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Priorizar, Delegar, Comunicar y Aprobar",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "En la fase PLAN, ¿qué actividad es esperada?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Identificar activos, amenazas y riesgos",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Cerrar no conformidades de auditoría externa",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Ejecutar recuperación ante desastres en producción",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Publicar resultados finales de métricas",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "La fase CHECK del PDCA se relaciona con:",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Monitoreo, medición y auditoría del desempeño",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Desactivar controles no críticos",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Crear nuevos puestos de trabajo",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Eliminar el registro de evidencias históricas",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "¿Cuál es el objetivo de la fase ACT?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Aplicar mejoras correctivas y preventivas",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Repetir exactamente lo mismo sin ajustes",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Cerrar el SGSI al finalizar el semestre",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Suspender la gestión de riesgos",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Qué evidencia demuestra que el ciclo PDCA está funcionando?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Mejoras implementadas a partir de hallazgos y métricas de seguimiento",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Ausencia total de registros de verificación",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Controles definidos pero nunca revisados",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Cambios sin evaluación de impacto",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "riesgos-de-seguridad",
+      "title": "Evaluación - Riesgos de Seguridad",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "En teletrabajo, ¿cuál es un riesgo frecuente de seguridad?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Acceso no autorizado por sesiones abiertas o dispositivos compartidos",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Uso de MFA y contraseñas robustas",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Bloqueo automático de pantalla",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Actualización de firmware del router",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "¿Qué práctica mejora la seguridad de una red doméstica?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Usar WPA2/WPA3 y cambiar credenciales por defecto del router",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Mantener contraseña de fábrica para no olvidarla",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Usar cualquier red pública sin VPN",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Desactivar cifrado para mayor velocidad",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "¿Cuál es una señal típica de phishing?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Mensajes urgentes con enlaces sospechosos o remitente inusual",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Correo interno verificado sin enlaces",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Notificación oficial del SGSI por canal validado",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Recordatorio de capacitación del LMS autenticado",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "¿Cómo se reduce el riesgo de fuga de información?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Aplicando clasificación de información y canales autorizados",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Enviando archivos sensibles por cuentas personales",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Compartiendo accesos entre áreas para continuidad",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Evitando registrar incidentes menores",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Qué acción reduce el riesgo de acceso no autorizado en teletrabajo?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Cerrar sesión y bloquear equipo al ausentarse, incluso por poco tiempo",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Mantener sesión abierta para retomar más rápido",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Compartir usuario corporativo con compañeros del turno",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Guardar claves en texto plano para emergencias",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "controles-de-seguridad-soa",
+      "title": "Evaluación - Controles de Seguridad (SoA)",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Qué es la SoA dentro del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "La declaración de aplicabilidad de controles seleccionados",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Un inventario exclusivo de activos físicos",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Un plan de vacaciones de auditores",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Un listado de incidentes sin clasificación",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "¿Qué busca el control A.5.1 de políticas de seguridad?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Definir reglas y responsabilidades para toda la organización",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Eliminar la necesidad de capacitación",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Aplicar controles solo a proveedores",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Reemplazar el proceso de auditoría",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "En A.5.23, seguridad con proveedores implica:",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Evaluar riesgos de terceros y definir acuerdos de seguridad",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Confiar en proveedores sin evaluación previa",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Compartir datos críticos sin controles",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Excluir seguimiento de cumplimiento",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "¿Cuál es el propósito de A.5.30 (continuidad del negocio)?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Mantener operación y recuperación ante interrupciones",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Suspender servicios en incidentes menores",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Limitar controles a horario laboral",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Evitar pruebas de planes de continuidad",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Por qué la SoA es útil en auditoría del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Porque justifica qué controles aplican y cómo se implementan",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Porque reemplaza todas las políticas y procedimientos",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Porque elimina la necesidad de evidencias operativas",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Porque se limita a inventariar incidentes históricos",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "uso-de-plataformas-sgsi",
+      "title": "Evaluación - Uso de Plataformas SGSI",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Cuál es el propósito del LMS dentro del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Capacitar, evaluar y registrar cumplimiento de los colaboradores",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Reemplazar las políticas del SGSI",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Gestionar únicamente perfiles de TI",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Eliminar la necesidad de auditorías",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "¿Qué evidencia genera el proceso de certificación de lectura?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Registro trazable de lectura y cumplimiento por usuario",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Solo un correo informativo sin auditoría",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Un archivo local sin fecha ni usuario",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Una confirmación verbal del líder",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "¿Por qué la trazabilidad es clave en la plataforma SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Porque permite demostrar auditoría y seguimiento histórico",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Porque evita documentar actividades",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Porque reemplaza controles de acceso",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Porque aplica solo a personal de gerencia",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "¿Qué uso correcto aplica a todo el personal?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Consultar políticas vigentes y completar actividades obligatorias",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Compartir cuentas para acelerar capacitaciones",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Registrar cumplimiento sin realizar lectura",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Usar plataformas no autorizadas para evidencias",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Qué conducta favorece la trazabilidad en plataformas SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Completar actividades en cuenta personal y conservar registros del proceso",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Usar cuentas compartidas para completar cursos más rápido",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Omitir confirmaciones de lectura para ahorrar tiempo",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Registrar cumplimiento sin revisar contenido",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "post_slug": "cumplimiento-y-auditoria",
+      "title": "Evaluación - Cumplimiento y Auditoría",
+      "instructions": "Selecciona una única respuesta por pregunta. Evaluación aplicable para todas las áreas de la organización.",
+      "version": "1.0",
+      "is_active": true,
+      "questions": [
+        {
+          "question_order": 1,
+          "statement": "¿Para qué sirven los KPIs en el SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Medir cumplimiento y efectividad para tomar decisiones",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Reemplazar auditorías y controles",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Evaluar solo desempeño comercial",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Evitar registrar incidentes",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 2,
+          "statement": "¿Qué indicador está alineado con el módulo de cumplimiento?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Porcentaje de cumplimiento de capacitación",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Número de publicaciones en redes sociales",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Costo de mobiliario de oficina",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Horas de reuniones no técnicas",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 3,
+          "statement": "¿Cuál es una evidencia válida para auditoría ISO del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Registros de capacitación, incidentes y revisiones documentadas",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Comentarios verbales sin soporte documental",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Archivos sin fecha ni responsable",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Mensajes eliminados después de revisión",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 4,
+          "statement": "¿Qué puede ocurrir por incumplir políticas del SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "No conformidades, mayor riesgo e impactos reputacionales",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Mejora automática de cumplimiento",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Reducción total de incidentes sin controles",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Eliminación de auditorías futuras",
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_order": 5,
+          "statement": "¿Qué relación correcta existe entre KPI y mejora continua en SGSI?",
+          "weight": 1.0,
+          "options": [
+            {
+              "option_order": 1,
+              "option_text": "Los KPI permiten identificar brechas y priorizar acciones de mejora",
+              "is_correct": true
+            },
+            {
+              "option_order": 2,
+              "option_text": "Los KPI reemplazan el análisis de incidentes",
+              "is_correct": false
+            },
+            {
+              "option_order": 3,
+              "option_text": "Los KPI solo se revisan al final de la certificación",
+              "is_correct": false
+            },
+            {
+              "option_order": 4,
+              "option_text": "Los KPI no se relacionan con auditorías",
+              "is_correct": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -87,38 +87,14 @@
 <br>
 
 <section class="w3-card w3-round-xlarge lms-config-panel">
-    <h3>Crear quiz (y activar)</h3>
-    <form action="{{ url_for('lms_config_create_quiz') }}" method="post" class="lms-config-grid">
-        <select class="w3-select w3-border w3-round-large" name="post_id" required>
-            <option value="" selected disabled>Selecciona un post</option>
-            {% for post in posts %}
-            <option value="{{ post.id }}">{{ post.title }} ({{ post.slug }})</option>
-            {% endfor %}
-        </select>
-        <input class="w3-input w3-border w3-round-large" type="text" name="title" placeholder="Título del quiz" required>
-        <input class="w3-input w3-border w3-round-large" type="text" name="version" value="1.0" required>
-        <input class="w3-input w3-border w3-round-large lms-col-span" type="text" name="instructions" placeholder="Instrucciones">
-        <textarea class="w3-input w3-border w3-round-large lms-col-span" rows="12" name="questions_json" required>[
-  {
-    "question_order": 1,
-    "statement": "Pregunta de ejemplo",
-    "weight": 1.0,
-    "options": [
-      {"option_order": 1, "option_text": "Opción correcta", "is_correct": true},
-      {"option_order": 2, "option_text": "Opción incorrecta", "is_correct": false}
-    ]
-  }
-]</textarea>
-        <button class="w3-button w3-round-large lms-btn-primary" type="submit">Crear y activar quiz</button>
-    </form>
-    <p class="w3-small">Formato esperado de <code>questions_json</code>: arreglo con <code>question_order</code>, <code>statement</code>, <code>weight</code> y <code>options</code> (cada opción con <code>option_order</code>, <code>option_text</code>, <code>is_correct</code>).</p>
-
+    <h3>Quizzes</h3>
     <div class="lms-config-table">
         <table class="w3-table w3-striped w3-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Post</th>
+                    <th>Título</th>
                     <th>Versión</th>
                     <th>Activo</th>
                     <th>Acción</th>
@@ -128,15 +104,22 @@
                 {% for quiz in quizzes %}
                 <tr>
                     <td>{{ quiz.id }}</td>
-                    <td>{{ quiz.post_id }}</td>
+                    <td>{{ quiz.post_title }}</td>
+                    <td>{{ quiz.title }}</td>
                     <td>{{ quiz.version }}</td>
                     <td>{{ 'Sí' if quiz.is_active else 'No' }}</td>
                     <td>
-                        {% if not quiz.is_active %}
-                        <form action="{{ url_for('lms_config_activate_quiz', quiz_id=quiz.id) }}" method="post">
-                            <button class="w3-button w3-round lms-btn-secondary" type="submit">Activar</button>
-                        </form>
-                        {% endif %}
+                        <button
+                            type="button"
+                            class="w3-button w3-round lms-btn-secondary lms-edit-quiz-btn"
+                            data-quiz-id="{{ quiz.id }}"
+                            data-quiz-post-title="{{ quiz.post_title }}"
+                            data-quiz-title="{{ quiz.title }}"
+                            data-quiz-version="{{ quiz.version }}"
+                            data-quiz-instructions="{{ quiz.instructions|e }}"
+                            data-quiz-questions='{{ quiz.questions_payload|tojson|safe }}'>
+                            Editar
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -159,6 +142,38 @@
             <div class="lms-modal-actions">
                 <button type="button" class="w3-button w3-round-large lms-btn-secondary" data-close-modal>Cancelar</button>
                 <button type="submit" class="w3-button w3-round-large lms-btn-primary">Guardar HTML</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="lmsEditQuizModal" class="lms-modal-wrap" style="display:none;" data-action-template="{{ url_for('lms_config_edit_quiz', quiz_id=0) }}">
+    <div class="lms-modal-backdrop" data-close-quiz-modal></div>
+    <div class="lms-modal-card w3-card-4">
+        <div class="lms-modal-head">
+            <h4 id="lmsQuizModalTitle">Editar Quiz</h4>
+            <button type="button" class="w3-button" data-close-quiz-modal>&times;</button>
+        </div>
+        <form id="lmsEditQuizForm" method="post">
+            <div class="lms-modal-body">
+                <label><b>Post</b></label>
+                <input id="lmsQuizPostTitle" class="w3-input w3-border w3-round-large w3-margin-bottom" type="text" disabled>
+
+                <label><b>Título</b></label>
+                <input id="lmsQuizTitle" class="w3-input w3-border w3-round-large w3-margin-bottom" type="text" name="title" required>
+
+                <label><b>Versión (si se repite, el sistema incrementa automáticamente)</b></label>
+                <input id="lmsQuizVersion" class="w3-input w3-border w3-round-large w3-margin-bottom" type="text" name="version" required>
+
+                <label><b>Instrucciones</b></label>
+                <input id="lmsQuizInstructions" class="w3-input w3-border w3-round-large w3-margin-bottom" type="text" name="instructions">
+
+                <label><b>Preguntas JSON</b></label>
+                <textarea id="lmsQuizQuestions" class="w3-input w3-border w3-round-large" name="questions_json" rows="14" required></textarea>
+            </div>
+            <div class="lms-modal-actions">
+                <button type="button" class="w3-button w3-round-large lms-btn-secondary" data-close-quiz-modal>Cancelar</button>
+                <button type="submit" class="w3-button w3-round-large lms-btn-primary">Guardar Quiz</button>
             </div>
         </form>
     </div>
@@ -195,6 +210,58 @@
 
     modal.querySelectorAll("[data-close-modal]").forEach((el) => {
         el.addEventListener("click", closeModal);
+    });
+
+    const quizModal = document.getElementById("lmsEditQuizModal");
+    const quizForm = document.getElementById("lmsEditQuizForm");
+    const quizModalTitle = document.getElementById("lmsQuizModalTitle");
+    const quizPostTitle = document.getElementById("lmsQuizPostTitle");
+    const quizTitle = document.getElementById("lmsQuizTitle");
+    const quizVersion = document.getElementById("lmsQuizVersion");
+    const quizInstructions = document.getElementById("lmsQuizInstructions");
+    const quizQuestions = document.getElementById("lmsQuizQuestions");
+
+    if (!quizModal || !quizForm || !quizModalTitle || !quizPostTitle || !quizTitle || !quizVersion || !quizInstructions || !quizQuestions) {
+        return;
+    }
+
+    function closeQuizModal() {
+        quizModal.style.display = "none";
+    }
+
+    function openQuizModal(quizId, postTitle, titleValue, versionValue, instructionsValue, questionsPayload) {
+        quizModalTitle.textContent = `Editar Quiz: ${postTitle}`;
+        quizPostTitle.value = postTitle || "";
+        quizTitle.value = titleValue || "";
+        quizVersion.value = versionValue || "1.0";
+        quizInstructions.value = instructionsValue || "";
+        quizQuestions.value = JSON.stringify(questionsPayload || [], null, 2);
+        const actionTemplate = quizModal.dataset.actionTemplate || "";
+        quizForm.action = actionTemplate.replace(/0$/, String(quizId));
+        quizModal.style.display = "flex";
+    }
+
+    document.querySelectorAll(".lms-edit-quiz-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            let questionsPayload = [];
+            try {
+                questionsPayload = JSON.parse(btn.dataset.quizQuestions || "[]");
+            } catch (_error) {
+                questionsPayload = [];
+            }
+            openQuizModal(
+                btn.dataset.quizId,
+                btn.dataset.quizPostTitle,
+                btn.dataset.quizTitle,
+                btn.dataset.quizVersion,
+                btn.dataset.quizInstructions,
+                questionsPayload
+            );
+        });
+    });
+
+    quizModal.querySelectorAll("[data-close-quiz-modal]").forEach((el) => {
+        el.addEventListener("click", closeQuizModal);
     });
 })();
 </script>
