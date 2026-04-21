@@ -283,6 +283,7 @@ def test_policy_reading_report_preview_renders_inline_without_download_header(cl
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/html")
     assert "content-disposition" not in {key.lower(): value for key, value in response.headers.items()}
+    assert "/static/css/policy_reading_audit_report.css" in response.text
     assert "Informe Global de Confirmación de Lectura de Políticas" in response.text
     assert "Politica preview" in response.text
 

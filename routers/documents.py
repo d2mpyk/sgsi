@@ -547,6 +547,7 @@ def build_policy_reading_audit_report(
 def render_policy_reading_audit_report_html(
     db: Session,
     responsible_username: str,
+    report_stylesheet_href: str = "/static/css/policy_reading_audit_report.css",
 ) -> str:
     """Renderiza el HTML del informe global de auditoría."""
     report_context = build_policy_reading_audit_report(
@@ -559,6 +560,7 @@ def render_policy_reading_audit_report_html(
         company_name=settings.COMPANY_NAME.get_secret_value(),
         project_name=settings.PROJECT_NAME.get_secret_value(),
         report_due_days=READ_DUE_DAYS,
+        report_stylesheet_href=report_stylesheet_href,
         **report_context,
     )
 
@@ -1173,6 +1175,7 @@ def persist_audit_report_as_document(
     name="preview_policy_reading_report",
 )
 def preview_policy_reading_report(
+    request: Request,
     db: Annotated[Session, Depends(get_db)],
     admin_user: Annotated[User, Depends(get_current_admin)],
 ):
@@ -1183,6 +1186,9 @@ def preview_policy_reading_report(
     html_content = render_policy_reading_audit_report_html(
         db=db,
         responsible_username=admin_user.username,
+        report_stylesheet_href=str(
+            request.url_for("static", path="css/policy_reading_audit_report.css")
+        ),
     )
     return HTMLResponse(content=html_content, media_type="text/html")
 

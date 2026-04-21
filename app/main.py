@@ -19,7 +19,6 @@ from routers import audit, auth, dashboard, documents, media, suggestions, users
 from utils.database import Base, engine
 from utils.init_db import (
     get_init_config,
-    init_iso_controls,
     init_approved_users,
 )
 from utils.middleware import HTMLAuthMiddleware
@@ -31,7 +30,6 @@ settings = get_settings()
 Base.metadata.create_all(bind=engine)
 # Verificación inicial de base de datos
 init_approved_users()
-init_iso_controls()
 
 # Instancia la aplicación de FastAPI
 app = FastAPI(
@@ -131,9 +129,10 @@ async def not_found_handler(request: Request, exc):
     wants_html = _client_wants_html(request)
 
     if not wants_html:
+        detail = getattr(exc, "detail", "Not Found")
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
-            content={"detail": "Not Found"},
+            content={"detail": detail if detail else "Not Found"},
         )
 
     return _render_error_page(

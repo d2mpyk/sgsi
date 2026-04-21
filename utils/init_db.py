@@ -1,10 +1,7 @@
 from sqlalchemy.orm import Session
 import sys
-import os
-import re
 
 from models.departments import Department
-from models.iso_controls import ISOControl
 from models.users import ApprovedUsers, User
 from utils.auth import hash_password
 from utils.config import get_settings
@@ -22,14 +19,6 @@ DEFAULT_DEPARTMENTS = [
     "Operaciones",
     "Recursos Humanos",
 ]
-
-ISO_THEME_BY_DOMAIN = {
-    "5": "Organizacionales",
-    "6": "Personas",
-    "7": "Físicos",
-    "8": "Tecnológicos",
-}
-
 
 def get_init_config():
     """Verifica si el archivo config esta ok"""
@@ -156,107 +145,3 @@ def seed_departments(db: Session) -> int:
         raise RuntimeError("No fue posible inicializar el catálogo de departamentos.")
 
     return ordered_departments[0].id
-
-
-def _resolve_iso_controls_source_path(controls_file: str | None = None) -> str:
-    if controls_file:
-        return controls_file
-    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(repo_root, "SGSI-All_Controls-93.txt")
-
-
-def parse_iso_controls_file(controls_file: str | None = None) -> list[dict[str, str]]:
-    """
-    Parsea el archivo SGSI-All_Controls-93.txt y retorna controles normalizados.
-
-    Estructura esperada por item:
-    - tema: Organizacionales | Personas | Físicos | Tecnológicos
-    - control: A.5.1, A.6.8, ...
-    - nombre: Nombre del control
-    """
-    source_path = _resolve_iso_controls_source_path(controls_file)
-    with open(source_path, "r", encoding="utf-8") as source:
-        content = source.read().splitlines()
-
-    control_line_regex = re.compile(r'^"(?P<control>A\.(?P<domain>[5-8])\.\d+)\s+(?P<name>.+)"[,]?$')
-    controls: list[dict[str, str]] = []
-    seen_controls: set[str] = set()
-
-    for raw_line in content:
-        line = raw_line.strip()
-        match = control_line_regex.match(line)
-        if not match:
-            continue
-
-        control_code = match.group("control").strip()
-        domain = match.group("domain")
-        control_name = match.group("name").strip()
-        theme = ISO_THEME_BY_DOMAIN.get(domain)
-
-        if theme is None:
-            continue
-        if control_code in seen_controls:
-            continue
-
-        controls.append(
-            {
-                "tema": theme,
-                "control": control_code,
-                "nombre": control_name,
-            }
-        )
-        seen_controls.add(control_code)
-
-    return sorted(
-        controls,
-        key=lambda item: tuple(int(part) if part.isdigit() else part for part in item["control"].replace("A.", "").split(".")),
-    )
-
-
-def seed_iso_controls(db: Session, controls_file: str | None = None) -> int:
-    """Carga el catálogo ISO 27001 en la tabla iso_controls de forma idempotente."""
-    parsed_controls = parse_iso_controls_file(controls_file=controls_file)
-    if not parsed_controls:
-        raise RuntimeError("No se encontraron controles ISO válidos para poblar iso_controls.")
-
-    existing_by_control = {
-        row.control: row
-        for row in db.query(ISOControl).all()
-    }
-
-    created = 0
-    updated = 0
-    for item in parsed_controls:
-        existing = existing_by_control.get(item["control"])
-        if existing is None:
-            db.add(
-                ISOControl(
-                    tema=item["tema"],
-                    control=item["control"],
-                    nombre=item["nombre"],
-                )
-            )
-            created += 1
-            continue
-
-        if existing.tema != item["tema"] or existing.nombre != item["nombre"]:
-            existing.tema = item["tema"]
-            existing.nombre = item["nombre"]
-            updated += 1
-
-    if created or updated:
-        db.commit()
-
-    return len(parsed_controls)
-
-
-def init_iso_controls():
-    """Inicializa el catálogo de controles ISO en el arranque de la app."""
-    db = SessionLocal()
-    try:
-        seed_iso_controls(db)
-    except Exception as e:
-        print(f"Error: Inicializando catálogo ISO controls: {e}", file=sys.stderr)
-        sys.exit(1)
-    finally:
-        db.close()

@@ -93,6 +93,7 @@ def test_calculate_next_report_version_fallback_when_versions_are_not_numeric(db
 def test_preview_policy_reading_report_returns_redirect_from_dependency(db_session):
     redirect = RedirectResponse(url="/api/v1/auth/login", status_code=303)
     response = documents_router.preview_policy_reading_report(
+        request=_fake_request(path="/api/v1/documents/reports/policies-reading-preview"),
         db=db_session,
         admin_user=redirect,
     )
