@@ -1,0 +1,48 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Capacitación SGSI{% endblock %}
+
+{% block content %}
+<section class="w3-card w3-round-xlarge lms-hero">
+    <div class="lms-hero-inner">
+        <p class="lms-kicker">Academia Interna SGSI</p>
+        <h2>Capacitación SGSI</h2>
+        <p>Ruta semestral de formación en seguridad de la información. Cada tema incluye evaluación con máximo tres intentos por semestre.</p>
+    </div>
+</section>
+<br>
+
+<section class="w3-card w3-round-xlarge lms-grid-wrap">
+    <div class="lms-grid">
+        {% for post in posts %}
+        <article class="lms-card">
+            <div class="lms-card-top">
+                <span class="lms-chip">{{ post.category }}</span>
+                <span class="lms-version">v{{ post.version }}</span>
+            </div>
+            <h3>{{ post.title }}</h3>
+            <p>Contenido pendiente de carga. Este tema ya está habilitado para la ruta formativa del semestre.</p>
+            <div class="lms-card-actions">
+                <a href="{{ url_for('lms_post_view', slug=post.slug) }}" class="w3-button w3-round-large lms-btn-primary">
+                    Abrir tema
+                </a>
+            </div>
+        </article>
+        {% else %}
+        <div class="w3-panel w3-pale-yellow w3-round-large">
+            No hay posts de capacitación configurados.
+        </div>
+        {% endfor %}
+    </div>
+    {% if user.role == 'admin' %}
+    <div class="lms-config-cta">
+        <a href="{{ url_for('lms_config_view') }}" class="w3-button w3-round-large w3-margin lms-btn-secondary">
+            <i class="fa fa-cog"></i> Configuración
+        </a>
+        <a href="{{ url_for('lms_metrics_view') }}" class="w3-button w3-round-large w3-margin lms-btn-secondary">
+            <i class="fa fa-line-chart"></i> Métricas
+        </a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

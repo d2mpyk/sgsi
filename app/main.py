@@ -15,12 +15,14 @@ from utils.config import get_settings
 from utils.auth import verify_access_token
 
 # Imports Locales
-from routers import audit, auth, dashboard, documents, media, suggestions, users
+from routers import audit, auth, dashboard, documents, lms, media, suggestions, users
 from utils.database import Base, engine
 from utils.init_db import (
     get_init_config,
     init_approved_users,
 )
+from utils.lms_period_rollover import ensure_lms_period_rollover
+from utils.lms_seed import seed_lms_catalog
 from utils.middleware import HTMLAuthMiddleware
 
 # Verificación de configuraciones iniciales
@@ -30,6 +32,8 @@ settings = get_settings()
 Base.metadata.create_all(bind=engine)
 # Verificación inicial de base de datos
 init_approved_users()
+seed_lms_catalog()
+ensure_lms_period_rollover()
 
 # Instancia la aplicación de FastAPI
 app = FastAPI(
@@ -185,6 +189,7 @@ api_prefix = settings.API_PREFIX.rstrip("/")
 app.include_router(auth.router, prefix=f"{api_prefix}/auth", tags=["Auth"])
 app.include_router(dashboard.router, prefix=f"{api_prefix}/dashboard", tags=["Dashboard"])
 app.include_router(documents.router, prefix=f"{api_prefix}/documents", tags=["Documents"])
+app.include_router(lms.router, prefix=f"{api_prefix}", tags=["LMS"])
 app.include_router(audit.router, prefix=f"{api_prefix}/audit", tags=["Audit"])
 app.include_router(suggestions.router, prefix=f"{api_prefix}/suggestions", tags=["Suggestions"])
 app.include_router(users.router, prefix=f"{api_prefix}/users", tags=["Users"])

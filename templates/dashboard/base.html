@@ -87,6 +87,10 @@
                         class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('documents_view').path %}w3-blue{% endif %}">
                         <i class="fa fa-files-o"></i><span>Documentos</span>
                     </a>
+                    <a href="{{ url_for('lms_posts_view') }}"
+                        class="w3-bar-item w3-button app-nav-link {% if request.url.path.startswith(url_for('lms_posts_view').path) %}w3-blue{% endif %}">
+                        <i class="fa fa-graduation-cap"></i><span>Capacitación SGSI</span>
+                    </a>
                     <a href="{{ url_for('suggestions_view') }}"
                         class="w3-bar-item w3-button app-nav-link {% if request.url.path == url_for('suggestions_view').path %}w3-blue{% endif %}">
                         <i class="fa fa-lightbulb-o"></i><span>Sugerencias</span>
@@ -174,11 +178,11 @@
                 <div class="w3-container w3-round-xlarge w3-padding-16 app-stat-card app-stat-alert">
                     <div class="app-stat-top">
                         <span class="app-stat-icon"><i class="fa fa-exclamation-triangle"></i></span>
-                        <span class="app-stat-label">Errores</span>
+                        <span class="app-stat-label">Evaluaciones</span>
                     </div>
-                    <div class="app-stat-value">{{ data.total_errors }}</div>
-                    <a class="w3-button w3-round-large app-stat-link" href="{% if user.role == 'admin' %}{{ url_for('view_security_logs') }}{% else %}#{% endif %}">
-                        Incidentes registrados
+                    <div class="app-stat-value">{{ data.total_pending_evaluations or 0 }}</div>
+                    <a class="w3-button w3-round-large app-stat-link" href="{{ url_for('lms_posts_view') }}">
+                        Evaluzaciones pendientes
                     </a>
                 </div>
             </div>

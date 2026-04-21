@@ -15,6 +15,8 @@ from sqlalchemy.orm import Session
 
 # Import's Locales
 from models.documents import Document, DocumentRead
+from models.lms import LMSPost, LMSQuiz, LMSQuizAttempt
+from services import lms_service
 from utils.auth import CurrentUser
 from utils.database import get_db
 from utils.stats import get_dashboard_stats
@@ -73,6 +75,39 @@ def dashboard(
     # 3. Filtrar: Políticas Activas - Leídas = Pendientes
     pending_documents = [doc for doc in policies if doc.id not in user_reads]
 
+    # --- Calcular Evaluaciones Pendientes ---
+    active_period = lms_service.get_active_period(db)
+    evaluable_posts = (
+        db.execute(
+            select(LMSPost)
+            .join(LMSQuiz, LMSQuiz.post_id == LMSPost.id)
+            .where(
+                LMSPost.status == "published",
+                LMSQuiz.is_active == True,
+            )
+            .distinct()
+            .order_by(LMSPost.id.asc())
+        )
+        .scalars()
+        .all()
+    )
+    approved_post_ids = set(
+        db.execute(
+            select(LMSQuizAttempt.post_id)
+            .where(
+                LMSQuizAttempt.user_id == current_user.id,
+                LMSQuizAttempt.period_id == active_period.id,
+                LMSQuizAttempt.is_passed == True,
+            )
+            .distinct()
+        )
+        .scalars()
+        .all()
+    )
+    pending_evaluations = [
+        post for post in evaluable_posts if post.id not in approved_post_ids
+    ]
+
     return templates.TemplateResponse(
         request,
         "dashboard/dashboard.html",
@@ -80,5 +115,6 @@ def dashboard(
             "user": current_user,
             "data": data,
             "pending_documents": pending_documents,
+            "pending_evaluations": pending_evaluations,
         },
     )

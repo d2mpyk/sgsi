@@ -1679,6 +1679,7 @@ async def upload_documents_batch(
 @router.delete(
     "/by-code/{code}",
     status_code=status.HTTP_200_OK,
+    include_in_schema=False,
 )
 def delete_documents_by_code(
     request: Request,

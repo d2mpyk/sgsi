@@ -1,0 +1,243 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Métricas LMS{% endblock %}
+
+{% block content %}
+<section class="w3-card w3-round-xlarge audit-hero">
+    <div class="w3-row-padding">
+        <div class="w3-col l8 m12">
+            <span class="dashboard-section-kicker">Evidencia de Cumplimiento LMS</span>
+            <h2>Informe de Estado de Cumplimiento de Evaluaciones SGSI</h2>
+            <p>Resumen ejecutivo del período activo para auditoría interna: avance por usuario, dificultad por tema y cumplimiento general de capacitación.</p>
+            <p><strong>Período:</strong> {{ period.name }} ({{ period.start_date }} a {{ period.end_date }})</p>
+            <p><strong>Emitido:</strong> {{ generated_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</p>
+            <div class="w3-left documents-card-actions" style="margin-top:12px;">
+                <a href="{{ url_for('lms_metrics_export_pdf') }}"
+                    class="w3-button w3-round-large documents-tertiary-btn">
+                    <i class="fa fa-download"></i> Generar informe PDF
+                </a>
+            </div>
+        </div>
+        <div class="w3-col l4 m12">
+            <div class="audit-hero-metrics">
+                <div class="audit-hero-metric">
+                    <span>Cumplimiento LMS</span>
+                    <strong>{{ kpis.cumplimiento_porcentaje }}%</strong>
+                </div>
+                <div class="audit-hero-metric">
+                    <span>Aprobación</span>
+                    <strong>{{ kpis.aprobacion_porcentaje }}%</strong>
+                </div>
+                <div class="audit-hero-metric">
+                    <span>Intentos</span>
+                    <strong>{{ kpis.total_attempts }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="w3-card w3-round-xlarge audit-panel">
+    <div class="audit-panel-head">
+        <h3>KPIs del Período</h3>
+        <p>Indicadores agregados del LMS para seguimiento de cumplimiento semestral.</p>
+    </div>
+    <div class="audit-section-body">
+        <div class="w3-row-padding">
+            <div class="w3-col l3 m6 s12 w3-margin-bottom">
+                <div class="documents-hero-metric">
+                    <span>Usuarios esperados</span>
+                    <strong>{{ kpis.total_users }}</strong>
+                </div>
+            </div>
+            <div class="w3-col l3 m6 s12 w3-margin-bottom">
+                <div class="documents-hero-metric">
+                    <span>Posts evaluables</span>
+                    <strong>{{ kpis.total_posts }}</strong>
+                </div>
+            </div>
+            <div class="w3-col l3 m6 s12 w3-margin-bottom">
+                <div class="documents-hero-metric">
+                    <span>Promedio intentos</span>
+                    <strong>{{ kpis.promedio_intentos }}</strong>
+                </div>
+            </div>
+            <div class="w3-col l3 m6 s12 w3-margin-bottom">
+                <div class="documents-hero-metric">
+                    <span>Usuarios pendientes</span>
+                    <strong>{{ kpis.usuarios_pendientes }}</strong>
+                </div>
+            </div>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-col l4 m12">
+                <div class="w3-panel dashboard-notice dashboard-notice-ok w3-round-large">
+                    <p><strong>1er intento:</strong> {{ kpis.aprobacion_primer_intento }}%</p>
+                </div>
+            </div>
+            <div class="w3-col l4 m12">
+                <div class="w3-panel dashboard-notice dashboard-notice-warn w3-round-large">
+                    <p><strong>2do intento:</strong> {{ kpis.aprobacion_segundo_intento }}%</p>
+                </div>
+            </div>
+            <div class="w3-col l4 m12">
+                <div class="w3-panel w3-pale-red w3-round-large">
+                    <p><strong>3er intento:</strong> {{ kpis.aprobacion_tercer_intento }}%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="w3-card w3-round-xlarge audit-panel">
+    <div class="audit-panel-head">
+        <h3>Detalle por Post</h3>
+        <p>Identifica posts con mayor dificultad y comportamiento de intentos.</p>
+    </div>
+    <div class="audit-section-body">
+        <div class="audit-table-shell">
+            <table class="w3-table audit-table">
+                <thead>
+                    <tr>
+                        <th>Post</th>
+                        <th>Intentos</th>
+                        <th>Aprobados</th>
+                        <th>Fallidos</th>
+                        <th>% aprobación</th>
+                        <th>Prom. intento</th>
+                        <th>Dificultad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in post_rows %}
+                    <tr>
+                        <td>{{ row.title }}</td>
+                        <td>{{ row.total_attempts }}</td>
+                        <td>{{ row.approved_attempts }}</td>
+                        <td>{{ row.failed_attempts }}</td>
+                        <td>{{ row.approval_rate }}%</td>
+                        <td>{{ row.avg_attempt_number }}</td>
+                        <td>{{ row.difficulty_score }}%</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7">Sin datos de intentos en el período activo.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="w3-card w3-round-xlarge audit-panel">
+    <div class="audit-panel-head">
+        <h3>Detalle por Usuario</h3>
+        <p>Seguimiento individual de avance y cumplimiento en capacitación.</p>
+    </div>
+    <div class="audit-section-body">
+        <div class="audit-table-shell">
+            <table class="w3-table audit-table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Posts totales</th>
+                        <th>Aprobados</th>
+                        <th>Pendientes</th>
+                        <th>% cumplimiento</th>
+                        <th>% aprobación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in user_rows %}
+                    <tr>
+                        <td>{{ row.username }}</td>
+                        <td>{{ row.total_posts }}</td>
+                        <td>{{ row.approved_posts }}</td>
+                        <td>{{ row.pending_posts }}</td>
+                        <td>{{ row.compliance_percentage }}%</td>
+                        <td>{{ row.approval_percentage }}%</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">Sin resúmenes por usuario en el período activo.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="w3-card w3-round-xlarge audit-panel">
+    <div class="audit-panel-head">
+        <h3>Cumplimiento por Tema</h3>
+        <p>Estado de usuarios aprobados y pendientes por post del LMS.</p>
+    </div>
+    <div class="audit-section-body">
+        <div class="audit-table-shell">
+            <table class="w3-table audit-table">
+                <thead>
+                    <tr>
+                        <th>Tema</th>
+                        <th>Usuarios esperados</th>
+                        <th>Aprobados</th>
+                        <th>Pendientes</th>
+                        <th>% cumplimiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in compliance_rows %}
+                    <tr>
+                        <td>{{ row.title }}</td>
+                        <td>{{ row.users_expected }}</td>
+                        <td>{{ row.users_approved }}</td>
+                        <td>{{ row.users_pending }}</td>
+                        <td>{{ row.compliance_percentage }}%</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">Sin datos de cumplimiento para el período activo.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="w3-card w3-round-xlarge audit-panel">
+    <div class="audit-panel-head">
+        <h3>Hallazgos Operativos</h3>
+        <p>Puntos clave para priorización de acciones correctivas.</p>
+    </div>
+    <div class="audit-section-body">
+        <div class="w3-row-padding">
+            <div class="w3-col l6 m12">
+                <div class="w3-panel w3-pale-yellow w3-round-large">
+                    <p><strong>Posts más difíciles (top 5):</strong></p>
+                    <ul>
+                        {% for row in hardest_posts %}
+                        <li>{{ row.title }} - dificultad {{ row.difficulty_score }}%</li>
+                        {% else %}
+                        <li>Sin registros de dificultad por ahora.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="w3-col l6 m12">
+                <div class="w3-panel w3-pale-blue w3-round-large">
+                    <p><strong>Usuarios con más pendientes (top 5):</strong></p>
+                    <ul>
+                        {% for row in users_pending %}
+                        <li>{{ row.username }} - {{ row.pending_posts }} pendientes</li>
+                        {% else %}
+                        <li>Sin usuarios con pendientes en este momento.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{{ post.title }} - LMS SGSI{% endblock %}
+
+{% block content %}
+<section class="w3-card w3-round-xlarge lms-detail-head">
+    <div class="lms-detail-head-top">
+        <span class="lms-chip">{{ post.category }}</span>
+        <span class="lms-version">v{{ post.version }}</span>
+    </div>
+    <h2>{{ post.title }}</h2>
+    <p>Porcentaje mínimo de aprobación: <strong>{{ post.porcentaje_aprobacion }}%</strong> · Intentos máximos por semestre: <strong>{{ post.max_intentos }}</strong></p>
+    <a href="{{ url_for('lms_posts_view') }}" class="w3-button w3-round-large lms-btn-secondary">Volver a Capacitación</a>
+</section>
+<br>
+
+<section class="w3-card w3-round-xlarge lms-content-panel">
+    {% if rendered_post_html %}
+    <div class="lms-html-content">{{ rendered_post_html|safe }}</div>
+    {% else %}
+    <div class="lms-empty-state">
+        <i class="fa fa-file-text-o"></i>
+        <p>Este post se creó correctamente y está listo para contenido HTML.</p>
+    </div>
+    {% endif %}
+</section>
+<br>
+
+<section class="w3-card w3-round-xlarge lms-quiz-panel">
+    <h3>Evaluación del tema</h3>
+    <p>Intentos restantes este semestre: <strong>{{ attempts_remaining }}</strong></p>
+    {% if quiz %}
+    <form id="lmsQuizForm">
+        {% for question in quiz.questions %}
+        <div class="lms-question">
+            <p><strong>{{ loop.index }}. {{ question.statement }}</strong></p>
+            {% for option in question.options %}
+            <label class="lms-option">
+                <input type="radio" name="question_{{ question.id }}" value="{{ option.id }}">
+                <span>{{ option.option_text }}</span>
+            </label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="w3-button w3-round-large lms-btn-primary" {% if not can_answer %}disabled{% endif %}>
+            Realizar evaluación
+        </button>
+        <p id="quizResult" class="lms-quiz-result">{{ reason }}</p>
+    </form>
+    {% else %}
+    <div class="w3-panel w3-pale-yellow w3-round-large">
+        Este post aún no tiene quiz asociado.
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(() => {
+    const form = document.getElementById("lmsQuizForm");
+    if (!form) return;
+    const resultNode = document.getElementById("quizResult");
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const answers = [];
+        const inputs = form.querySelectorAll("input[type='radio']:checked");
+        for (const input of inputs) {
+            const questionId = Number(input.name.replace("question_", ""));
+            answers.push({
+                question_id: questionId,
+                option_id: Number(input.value)
+            });
+        }
+        try {
+            const response = await fetch(`{{ url_for('submit_post_attempt', post_id=post.id) }}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ answers })
+            });
+            const payload = await response.json();
+            if (!response.ok) {
+                resultNode.textContent = payload.detail || "No fue posible registrar el intento.";
+                return;
+            }
+            resultNode.textContent = `Intento #${payload.attempt_number}: ${payload.score_percentage}% (${payload.is_passed ? "Aprobado" : "No aprobado"})`;
+        } catch (_error) {
+            resultNode.textContent = "Error de conexión al enviar la evaluación.";
+        }
+    });
+})();
+</script>
+{% endblock %}

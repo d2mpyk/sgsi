@@ -41,6 +41,42 @@
         {% endif %}
       </div>
     </section>
+
+    <section class="w3-card w3-round-xlarge dashboard-panel w3-margin-bottom">
+      <header class="dashboard-panel-header">
+        <div>
+          <span class="dashboard-section-kicker">Atención prioritaria</span>
+          <h3><i class="fa fa-graduation-cap"></i> Mis evaluaciones pendientes</h3>
+        </div>
+        <span class="dashboard-count-badge">{{ pending_evaluations|length }} abiertas</span>
+      </header>
+
+      <div class="w3-container w3-padding-large">
+        {% if pending_evaluations %}
+        <div class="w3-panel dashboard-notice dashboard-notice-warn w3-round-large">
+          <p>Tienes <strong>{{ pending_evaluations|length }}</strong> evaluaciones LMS pendientes en el semestre activo.</p>
+        </div>
+        <div class="dashboard-list">
+          {% for post in pending_evaluations %}
+          <article class="dashboard-list-item">
+            <div>
+              <span class="dashboard-list-title">{{ post.title }}</span>
+              <span class="dashboard-list-meta">Categoría: {{ post.category }} | Versión: {{ post.version }}</span>
+            </div>
+            <a href="{{ url_for('lms_post_view', slug=post.slug) }}"
+              class="w3-button w3-round-large dashboard-action-btn">
+              <i class="fa fa-pencil-square-o"></i> Evaluar
+            </a>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="w3-panel dashboard-notice dashboard-notice-ok w3-round-large">
+          <p><i class="fa fa-check-circle"></i> Estás al día con todas las evaluaciones de capacitación SGSI.</p>
+        </div>
+        {% endif %}
+      </div>
+    </section>
   </div>
 
   <div class="w3-col l4 m12">
@@ -57,14 +93,21 @@
           <strong>{{ pending_documents|length }}</strong>
         </div>
         <div class="dashboard-mini-stat">
+          <span class="dashboard-mini-label">Evaluaciones pendientes</span>
+          <strong>{{ data.total_pending_evaluations or 0 }}</strong>
+        </div>
+        <div class="dashboard-mini-stat">
           <span class="dashboard-mini-label">Repositorio</span>
           <strong>{{ data.total_documents }}</strong>
         </div>
         <div class="dashboard-side-copy">
-          <p>Usa el módulo documental para confirmar lecturas, descargar archivos y revisar el estado general del sistema.</p>
+          <p>Usa el módulo documental para confirmar lecturas y la capacitación SGSI para completar evaluaciones pendientes.</p>
         </div>
         <a href="{{ url_for('documents_view') }}" class="w3-button w3-block w3-round-large dashboard-primary-link">
           <i class="fa fa-files-o"></i> Ir a documentos
+        </a>
+        <a href="{{ url_for('lms_posts_view') }}" class="w3-button w3-block w3-round-large dashboard-primary-link">
+          <i class="fa fa-graduation-cap"></i> Ir a Capacitación SGSI
         </a>
       </div>
     </section>
