@@ -114,7 +114,9 @@ def test_seed_lms_posts_themes_and_quizzes(db_session, monkeypatch):
 
     init_db._ensure_lms_themes_table(db_session)
     init_db._seed_lms_posts(db_session, payload)
-    assert db_session.query(LMSPost).filter(LMSPost.slug == "tema-a").first() is not None
+    saved_post = db_session.query(LMSPost).filter(LMSPost.slug == "tema-a").first()
+    assert saved_post is not None
+    assert "📚" not in saved_post.html_content
 
     init_db._seed_lms_themes(db_session, payload)
     themes_qty = init_db._count_rows(db_session, "lms_themes")
@@ -192,3 +194,9 @@ def test_ensure_lms_bootstrap_data_success_and_failure_paths(monkeypatch):
     with pytest.raises(SystemExit):
         init_db.ensure_lms_bootstrap_data()
     assert bad_db.closed is True
+
+
+def test_sanitize_for_mysql_utf8_removes_non_bmp_chars():
+    source = "Capacitación SGSI 📚 ✅"
+    sanitized = init_db._sanitize_for_mysql_utf8(source)
+    assert sanitized == "Capacitación SGSI  ✅"

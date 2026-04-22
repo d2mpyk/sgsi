@@ -14,13 +14,18 @@ settings = get_settings()
 #)
 
 # Configuración de la DB MariaDB, MySQL
-SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{settings.DB_USER.get_secret_value()}:{settings.DB_PASSWORD.get_secret_value()}@{settings.DB_HOST.get_secret_value()}:{settings.DB_PORT}/{settings.DB_NAME.get_secret_value()}"
+SQLALCHEMY_DATABASE_URL = (
+    f"mysql+pymysql://{settings.DB_USER.get_secret_value()}:"
+    f"{settings.DB_PASSWORD.get_secret_value()}@{settings.DB_HOST.get_secret_value()}:"
+    f"{settings.DB_PORT}/{settings.DB_NAME.get_secret_value()}?charset=utf8mb4"
+)
 
 # Engine Connection para MariaDB
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
     pool_pre_ping=True, # Recomendado para MySQL para manejar desconexiones
-    pool_recycle=3600   # Reciclar conexiones cada hora
+    pool_recycle=3600,   # Reciclar conexiones cada hora
+    connect_args={"charset": "utf8mb4"},
 )
 
 # Sesiones de acceso a la DB

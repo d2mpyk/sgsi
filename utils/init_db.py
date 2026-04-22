@@ -45,6 +45,16 @@ LMS_BOOTSTRAP_DATA_PATH = (
     Path(__file__).resolve().parents[1] / "utils" / "bootstrap" / "lms_bootstrap_data.json"
 )
 
+
+def _sanitize_for_mysql_utf8(value: str | None) -> str:
+    """
+    Elimina caracteres fuera del BMP (4 bytes UTF-8) para compatibilidad
+    con despliegues MySQL/MariaDB en utf8 (3 bytes).
+    """
+    if not value:
+        return ""
+    return "".join(ch for ch in value if ord(ch) <= 0xFFFF)
+
 def get_init_config():
     """Verifica si el archivo config esta ok"""
     # Verificación de seguridad
@@ -267,13 +277,16 @@ def _load_lms_bootstrap_payload() -> dict:
 
 def _seed_lms_posts(db: Session, payload: dict) -> None:
     for item in payload.get("posts", []):
+        html_content = _sanitize_for_mysql_utf8(item.get("html_content", ""))
+        title = _sanitize_for_mysql_utf8(item["title"])
+        category = _sanitize_for_mysql_utf8(item.get("category", "Capacitación SGSI"))
         post = LMSPost(
-            title=item["title"],
+            title=title,
             slug=item["slug"],
-            category=item.get("category", "Capacitación SGSI"),
+            category=category,
             version=item.get("version", "1.0"),
             status=item.get("status", "published"),
-            html_content=item.get("html_content", ""),
+            html_content=html_content,
             porcentaje_aprobacion=float(item.get("porcentaje_aprobacion", 80.0)),
             max_intentos=int(item.get("max_intentos", 3)),
             created_by_id=item.get("created_by_id"),
