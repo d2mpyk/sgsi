@@ -215,6 +215,35 @@ th {
     background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
 }
 
+.progress-bar-native {
+    width: 100%;
+    min-width: 140px;
+    height: 10px;
+    display: block;
+    border: none;
+    border-radius: 999px;
+    overflow: hidden;
+    background-color: #e2e8f0;
+    color: #2563eb;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.progress-bar-native::-webkit-progress-bar {
+    background-color: #e2e8f0;
+    border-radius: 999px;
+}
+
+.progress-bar-native::-webkit-progress-value {
+    background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+    border-radius: 999px;
+}
+
+.progress-bar-native::-moz-progress-bar {
+    background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+    border-radius: 999px;
+}
+
 ul {
     margin: 0;
     padding-left: 18px;

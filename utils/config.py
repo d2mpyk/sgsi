@@ -29,10 +29,10 @@ class Settings(BaseSettings):
     EMAIL_PASSWD: SecretStr
     UTC_SERVER: str = "America/Santiago"
     API_PREFIX: str = "/api/v1"
-    DASHBOARD_W3CSS_URL: str = "https://www.w3schools.com/w3css/4/w3.css"
-    AUTH_W3CSS_URL: str = "https://www.w3schools.com/w3css/5/w3.css"
+    DASHBOARD_W3CSS_URL: str = "vendor/w3css/w3.css"
+    AUTH_W3CSS_URL: str = "vendor/w3css/w3.css"
     GOOGLE_FONTS_URL: str = "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Montserrat:wght@600;700;800&display=swap"
-    FONTAWESOME_URL: str = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    FONTAWESOME_URL: str = "vendor/font-awesome/css/font-awesome.min.css"
     CHART_JS_URL: str = "https://cdn.jsdelivr.net/npm/chart.js"
     PROJECT_REPOSITORY_URL: str = "https://github.com/d2mpyk/sgsi"
     W3CSS_DOCS_URL: str = "https://www.w3schools.com/w3css/default.asp"

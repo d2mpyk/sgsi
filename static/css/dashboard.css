@@ -1556,6 +1556,77 @@ a {
   border-color: rgba(91, 127, 159, 0.2) !important;
 }
 
+.app-avatar-56 {
+  width: 56px;
+}
+
+.app-overlay-clickable {
+  cursor: pointer;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+.admin-form-card-680 {
+  max-width: 680px;
+  margin: auto;
+}
+
+.row-padding-reset {
+  margin: 0 -16px;
+}
+
+.documents-modal-500 {
+  max-width: 500px;
+}
+
+.documents-modal-520 {
+  max-width: 520px;
+}
+
+.documents-modal-600 {
+  max-width: 600px;
+}
+
+.documents-modal-720 {
+  max-width: 720px;
+}
+
+.documents-modal-z101 {
+  z-index: 101;
+}
+
+.documents-modal-z102 {
+  z-index: 102;
+}
+
+.logs-table-full {
+  width: 100%;
+}
+
+.mt-12 {
+  margin-top: 12px;
+}
+
+.mb-12 {
+  margin-bottom: 12px;
+}
+
+.chart-frame-300 {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+.audit-preview-frame {
+  width: 100%;
+  min-height: 980px;
+  border: 1px solid rgba(51, 65, 85, 0.12);
+  border-radius: 24px;
+  background: #fff;
+}
+
 .admin-panel-head {
   padding: 24px 24px 10px;
   display: flex;

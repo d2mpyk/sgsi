@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ title or 'Dashboard' }} - Document Management{% endblock %}</title>
     <script src="{{ url_for('static', path='js/theme-init.js') }}"></script>
-    <link rel="stylesheet" href="{{ request.app.state.dashboard_w3css_url }}">
+    <link rel="stylesheet"
+        href="{{ request.app.state.dashboard_w3css_url if request.app.state.dashboard_w3css_url.startswith(('http://', 'https://', '//')) else url_for('static', path=request.app.state.dashboard_w3css_url.lstrip('/')) }}">
     <link rel="stylesheet" href="{{ request.app.state.google_fonts_url }}">
-    <link rel="stylesheet" href="{{ request.app.state.fontawesome_url }}">
+    <link rel="stylesheet"
+        href="{{ request.app.state.fontawesome_url if request.app.state.fontawesome_url.startswith(('http://', 'https://', '//')) else url_for('static', path=request.app.state.fontawesome_url.lstrip('/')) }}">
     <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
     {% block head %}{% endblock %}
 </head>
@@ -50,10 +52,10 @@
                     <div class="app-avatar-wrap">
                 {% if user.image_file %}
                 <img src="{{ url_for('media', path='profile_pics/' + user.image_file) }}"
-                    class="w3-circle app-avatar" style="width:56px">
+                    class="w3-circle app-avatar app-avatar-56">
                 {% else %}
-                <img src="{{ url_for('static', path='profile_pics/avatar3.png') }}" class="w3-circle app-avatar"
-                    style="width:56px">
+                <img src="{{ url_for('static', path='profile_pics/avatar3.png') }}"
+                    class="w3-circle app-avatar app-avatar-56">
                 {% endif %}
                     </div>
                     <div class="app-user-meta">
@@ -121,7 +123,7 @@
         </div>
     </nav>
 
-    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer"
+    <div class="w3-overlay w3-hide-large w3-animate-opacity app-overlay-clickable" onclick="w3_close()"
         title="close side menu" id="myOverlay"></div>
 
     <div class="w3-main app-main">

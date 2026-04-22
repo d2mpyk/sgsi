@@ -1,0 +1,49 @@
+.email-body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.email-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.email-title {
+    color: #333333;
+    text-align: center;
+}
+
+.email-text {
+    color: #555555;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.email-cta-wrap {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.email-cta {
+    background-color: #007bff;
+    color: #ffffff !important;
+    padding: 14px 28px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.email-footnote {
+    color: #999999;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 30px;
+}

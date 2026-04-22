@@ -112,7 +112,7 @@
     <br>
 </div>
 
-<div id="Records" class="w3-container city documents-panel" style="display:none">
+<div id="Records" class="w3-container city documents-panel is-hidden">
     <div class="documents-section-head">
         <div>
             <h3>Documentos generales</h3>
@@ -160,7 +160,7 @@
 </div>
 
 {% if user.role == 'admin' %}
-<div id="AdminPanel" class="w3-container city documents-panel" style="display:none">
+<div id="AdminPanel" class="w3-container city documents-panel is-hidden">
     <div class="w3-row-padding w3-margin-top">
         <div class="w3-col m12">
             <div class="w3-card w3-round-xlarge documents-admin-card w3-padding-large">
@@ -183,11 +183,11 @@
                     </div>
                 </div>
                 <p class="w3-small">Porcentaje de usuarios activos que han confirmado lectura.</p>
-                <div style="position: relative; height:300px; width:100%">
+                <div class="chart-frame-300">
                     <canvas id="complianceChart"></canvas>
                 </div>
                 <div class="w3-margin-top">
-                    <div class="documents-section-head" style="margin-bottom: 12px;">
+                    <div class="documents-section-head mb-12">
                         <div>
                             <h4><i class="fa fa-search"></i> Vista previa del informe</h4>
                             <p>Revisa el informe completo dentro del panel antes de descargarlo.</p>
@@ -203,7 +203,7 @@
                         id="auditReportPreviewFrame"
                         title="Vista previa del informe de auditoría"
                         data-src="{{ url_for('preview_policy_reading_report') }}"
-                        style="display:none; width:100%; min-height:980px; border:1px solid rgba(51, 65, 85, 0.12); border-radius:24px; background:#fff;"
+                        class="audit-preview-frame is-hidden"
                         loading="lazy">
                     </iframe>
                 </div>
@@ -219,8 +219,8 @@
     <i class="fa fa-plus w3-xlarge"></i>
 </button>
 
-<div id="uploadModal" class="w3-modal" style="z-index:101">
-    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-xlarge documents-modal" style="max-width:600px">
+<div id="uploadModal" class="w3-modal documents-modal-z101">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-xlarge documents-modal documents-modal-600">
         <header class="w3-container w3-round-top-large documents-modal-header">
             <span onclick="document.getElementById('uploadModal').style.display='none'"
                 class="w3-button w3-xlarge w3-display-topright w3-round-top-large">&times;</span>
@@ -239,7 +239,7 @@
                     <option value="record">Registro / Documento</option>
                 </select>
 
-                <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-row-padding row-padding-reset">
                     <div class="w3-half w3-margin-bottom">
                         <label><b>Código</b> <span class="w3-small w3-text-grey">(ej: POL-01)</span></label>
                         <input class="w3-input w3-border w3-round-large documents-input" type="text" name="code">
@@ -261,8 +261,8 @@
     </div>
 </div>
 
-<div id="deleteDocumentsModal" class="w3-modal" style="z-index:102">
-    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-xlarge documents-modal" style="max-width:520px">
+<div id="deleteDocumentsModal" class="w3-modal documents-modal-z102">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-xlarge documents-modal documents-modal-520">
         <header class="w3-container w3-round-top-large documents-modal-header">
             <span onclick="closeDeleteDocumentsModal()"
                 class="w3-button w3-xlarge w3-display-topright w3-round-top-large">&times;</span>

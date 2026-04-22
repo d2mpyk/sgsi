@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informe Global de Lectura de Políticas SGSI</title>
-    <link rel="stylesheet" href="{{ report_stylesheet_href or '/static/css/policy_reading_audit_report.css' }}">
+    <link rel="stylesheet" href="{{ report_stylesheet_href }}">
 </head>
 <body>
     <main class="page">
@@ -112,9 +112,7 @@
                             <td>{{ row.total_collaborators }}</td>
                             <td>{{ row.confirmations }}</td>
                             <td>
-                                <div class="progress-shell">
-                                    <div class="progress-bar" style="width: {{ row.compliance_percentage }}%"></div>
-                                </div>
+                                <progress class="progress-bar-native" value="{{ row.compliance_percentage }}" max="100"></progress>
                                 {{ row.compliance_percentage }}%
                             </td>
                             <td><span class="badge {{ row.semaphore }}">{{ row.semaphore|upper }}</span></td>

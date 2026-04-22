@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title or "500" }}</title>
     <link rel="stylesheet" href="{{ request.app.state.google_fonts_url }}">
-    <link rel="stylesheet" href="{{ request.app.state.fontawesome_url }}">
+    <link rel="stylesheet"
+        href="{{ request.app.state.fontawesome_url if request.app.state.fontawesome_url.startswith(('http://', 'https://', '//')) else url_for('static', path=request.app.state.fontawesome_url.lstrip('/')) }}">
     <link rel="stylesheet" href="{{ url_for('static', path='css/error-404.css') }}">
 </head>
 

@@ -11,7 +11,7 @@
             <p>Resumen ejecutivo del período activo para auditoría interna: avance por usuario, dificultad por tema y cumplimiento general de capacitación.</p>
             <p><strong>Período:</strong> {{ period.name }} ({{ period.start_date }} a {{ period.end_date }})</p>
             <p><strong>Emitido:</strong> {{ generated_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</p>
-            <div class="w3-left documents-card-actions" style="margin-top:12px;">
+            <div class="w3-left documents-card-actions mt-12">
                 <a href="{{ url_for('lms_metrics_export_pdf') }}"
                     class="w3-button w3-round-large documents-tertiary-btn">
                     <i class="fa fa-download"></i> Generar informe PDF
