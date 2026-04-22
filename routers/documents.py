@@ -85,6 +85,14 @@ DOCUMENT_SORT_ORDER = (
 READ_DUE_DAYS = 30
 AUDIT_REPORT_DOC_CODE = "REP-AUD-LECT-POL"
 AUDIT_REPORT_DOC_TITLE = "Informe Global de Confirmación de Lectura de Políticas"
+DEFAULT_CERT_PAGE_SIZE = 20
+CERT_PAGE_SIZE_OPTIONS = [10, 20, 50, 100]
+
+
+def _normalize_cert_page_size(value: int | None) -> int:
+    if value in CERT_PAGE_SIZE_OPTIONS:
+        return int(value)
+    return DEFAULT_CERT_PAGE_SIZE
 
 
 def _extract_certificate_id_from_filename(filename: str) -> int:
@@ -1253,6 +1261,8 @@ def documents_view(
     request: Request,
     user_or_redirect: CurrentUser,
     db: Annotated[Session, Depends(get_db)],
+    cert_page: int = 1,
+    cert_page_size: int = DEFAULT_CERT_PAGE_SIZE,
 ):
     """
     Renderiza la página principal de gestión documental.
@@ -1308,7 +1318,39 @@ def documents_view(
         docs_context.append(d_dict)
 
     flash_message, flash_type = get_flash_messages(request)
-    generated_certificates = _load_generated_certificates() if current_user.role == "admin" else []
+    generated_certificates_all = (
+        _load_generated_certificates() if current_user.role == "admin" else []
+    )
+    normalized_cert_page_size = _normalize_cert_page_size(cert_page_size)
+    current_cert_page = max(1, int(cert_page))
+    cert_total = len(generated_certificates_all)
+    cert_total_pages = max(1, (cert_total + normalized_cert_page_size - 1) // normalized_cert_page_size)
+    current_cert_page = min(current_cert_page, cert_total_pages)
+    cert_start_idx = (current_cert_page - 1) * normalized_cert_page_size
+    generated_certificates = generated_certificates_all[
+        cert_start_idx: cert_start_idx + normalized_cert_page_size
+    ]
+
+    def build_cert_url(page: int) -> str:
+        return (
+            f"{request.url_for('documents_view')}?"
+            f"cert_page_size={normalized_cert_page_size}&cert_page={page}&tab=Certificates"
+        )
+
+    cert_pagination = {
+        "page": current_cert_page,
+        "page_size": normalized_cert_page_size,
+        "total_items": cert_total,
+        "total_pages": cert_total_pages,
+        "has_prev": current_cert_page > 1,
+        "has_next": current_cert_page < cert_total_pages,
+        "prev_url": build_cert_url(current_cert_page - 1) if current_cert_page > 1 else "",
+        "next_url": build_cert_url(current_cert_page + 1) if current_cert_page < cert_total_pages else "",
+        "first_url": build_cert_url(1),
+        "last_url": build_cert_url(cert_total_pages),
+        "window_start": ((current_cert_page - 1) * normalized_cert_page_size) + 1 if cert_total else 0,
+        "window_end": min(current_cert_page * normalized_cert_page_size, cert_total),
+    }
 
     response = templates.TemplateResponse(
         request=request,
@@ -1321,6 +1363,12 @@ def documents_view(
             "flash_message": flash_message,
             "flash_type": flash_type,
             "generated_certificates": generated_certificates,
+            "cert_page_size_options": CERT_PAGE_SIZE_OPTIONS,
+            "cert_filters": {
+                "cert_page": current_cert_page,
+                "cert_page_size": normalized_cert_page_size,
+            },
+            "cert_pagination": cert_pagination,
         },
     )
     if flash_message:

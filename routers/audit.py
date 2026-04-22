@@ -11,6 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from models.documents import Document, DocumentRead
+from models.lms import LMSPeriod, LMSPost, LMSUserPostStatus
 from models.users import User
 from utils.auth import (
     CurrentAuditorOrAdmin,
@@ -37,6 +38,16 @@ class AuditConfirmationRow:
     status: str
 
 
+@dataclass
+class AuditEvaluationConfirmationRow:
+    post_title: str
+    username: str
+    department_name: str
+    period_name: str
+    confirmed_at: datetime | None
+    status: str
+
+
 def _normalize_page_size(value: int | None) -> int:
     if value in PAGE_SIZE_OPTIONS:
         return int(value)
@@ -58,6 +69,8 @@ def audit_view(
     doc_page_size: int = DEFAULT_PAGE_SIZE,
     confirm_page: int = 1,
     confirm_page_size: int = DEFAULT_PAGE_SIZE,
+    eval_page: int = 1,
+    eval_page_size: int = DEFAULT_PAGE_SIZE,
 ):
     if isinstance(user_or_redirect, RedirectResponse):
         return user_or_redirect
@@ -72,6 +85,14 @@ def audit_view(
 
     users_by_id = {
         user.id: user for user in db.execute(select(User).order_by(User.id.asc())).scalars().all()
+    }
+    lms_posts_by_id = {
+        post.id: post
+        for post in db.execute(select(LMSPost).order_by(LMSPost.id.asc())).scalars().all()
+    }
+    lms_periods_by_id = {
+        period.id: period
+        for period in db.execute(select(LMSPeriod).order_by(LMSPeriod.id.asc())).scalars().all()
     }
 
     reads = db.execute(select(DocumentRead).order_by(DocumentRead.id.desc())).scalars().all()
@@ -101,16 +122,56 @@ def audit_view(
             )
         )
 
+    evaluation_statuses = db.execute(
+        select(LMSUserPostStatus).order_by(
+            LMSUserPostStatus.id.asc(),
+            LMSUserPostStatus.is_passed.desc(),
+            LMSUserPostStatus.attempts_used.desc(),
+        )
+    ).scalars().all()
+    evaluation_confirmation_rows_all: list[AuditEvaluationConfirmationRow] = []
+    for evaluation_status in evaluation_statuses:
+        post = lms_posts_by_id.get(evaluation_status.post_id)
+        user = users_by_id.get(evaluation_status.user_id)
+        period = lms_periods_by_id.get(evaluation_status.period_id)
+        if post is None or user is None or period is None:
+            continue
+
+        if evaluation_status.is_passed:
+            status_value = "Confirmado"
+            confirmed_at = evaluation_status.passed_at
+        elif evaluation_status.attempts_used > 0:
+            status_value = "Evaluado - pendiente"
+            confirmed_at = evaluation_status.last_attempt_at
+        else:
+            status_value = "Sin evidencia"
+            confirmed_at = None
+
+        evaluation_confirmation_rows_all.append(
+            AuditEvaluationConfirmationRow(
+                post_title=post.title,
+                username=user.username,
+                department_name=user.department_name,
+                period_name=period.name,
+                confirmed_at=confirmed_at,
+                status=status_value,
+            )
+        )
+
     normalized_doc_page_size = _normalize_page_size(doc_page_size)
     current_doc_page = max(1, int(doc_page))
     normalized_confirm_page_size = _normalize_page_size(confirm_page_size)
     current_confirm_page = max(1, int(confirm_page))
+    normalized_eval_page_size = _normalize_page_size(eval_page_size)
+    current_eval_page = max(1, int(eval_page))
 
     global_query_state: dict[str, int] = {
         "doc_page_size": normalized_doc_page_size,
         "doc_page": current_doc_page,
         "confirm_page_size": normalized_confirm_page_size,
         "confirm_page": current_confirm_page,
+        "eval_page_size": normalized_eval_page_size,
+        "eval_page": current_eval_page,
     }
 
     def build_query_url(**updates: int) -> str:
@@ -119,6 +180,7 @@ def audit_view(
             f"{request.url_for('audit_view')}?"
             f"doc_page_size={params['doc_page_size']}&doc_page={params['doc_page']}"
             f"&confirm_page_size={params['confirm_page_size']}&confirm_page={params['confirm_page']}"
+            f"&eval_page_size={params['eval_page_size']}&eval_page={params['eval_page']}"
         )
 
     documents_total = len(documents_all)
@@ -160,6 +222,27 @@ def audit_view(
         "window_start": ((current_confirm_page - 1) * normalized_confirm_page_size) + 1 if confirmations_total else 0,
         "window_end": min(current_confirm_page * normalized_confirm_page_size, confirmations_total),
     }
+    evaluations_total = len(evaluation_confirmation_rows_all)
+    evaluations_total_pages = max(1, (evaluations_total + normalized_eval_page_size - 1) // normalized_eval_page_size)
+    current_eval_page = min(current_eval_page, evaluations_total_pages)
+    evaluations_start_idx = (current_eval_page - 1) * normalized_eval_page_size
+    evaluation_confirmation_rows = evaluation_confirmation_rows_all[
+        evaluations_start_idx: evaluations_start_idx + normalized_eval_page_size
+    ]
+    eval_pagination = {
+        "page": current_eval_page,
+        "page_size": normalized_eval_page_size,
+        "total_items": evaluations_total,
+        "total_pages": evaluations_total_pages,
+        "has_prev": current_eval_page > 1,
+        "has_next": current_eval_page < evaluations_total_pages,
+        "prev_url": build_query_url(eval_page=current_eval_page - 1) if current_eval_page > 1 else "",
+        "next_url": build_query_url(eval_page=current_eval_page + 1) if current_eval_page < evaluations_total_pages else "",
+        "first_url": build_query_url(eval_page=1),
+        "last_url": build_query_url(eval_page=evaluations_total_pages),
+        "window_start": ((current_eval_page - 1) * normalized_eval_page_size) + 1 if evaluations_total else 0,
+        "window_end": min(current_eval_page * normalized_eval_page_size, evaluations_total),
+    }
 
     flash_message, flash_type = get_flash_messages(request)
     response = templates.TemplateResponse(
@@ -177,15 +260,20 @@ def audit_view(
             "active_policy_documents": active_policy_documents,
             "confirmation_rows": confirmation_rows,
             "confirmation_total": confirmations_total,
+            "evaluation_confirmation_rows": evaluation_confirmation_rows,
+            "evaluation_confirmation_total": evaluations_total,
             "page_size_options": PAGE_SIZE_OPTIONS,
             "filters": {
                 "doc_page_size": normalized_doc_page_size,
                 "doc_page": current_doc_page,
                 "confirm_page_size": normalized_confirm_page_size,
                 "confirm_page": current_confirm_page,
+                "eval_page_size": normalized_eval_page_size,
+                "eval_page": current_eval_page,
             },
             "docs_pagination": docs_pagination,
             "confirm_pagination": confirm_pagination,
+            "eval_pagination": eval_pagination,
         },
     )
     if flash_message:

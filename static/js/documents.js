@@ -214,9 +214,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    const firstTab = document.querySelector(".tablink");
-    if (firstTab) {
-        firstTab.classList.add("w3-red", "documents-tab-active");
+    const tabFromQuery = new URLSearchParams(window.location.search).get("tab");
+    const tabFromQueryButton = tabFromQuery
+        ? document.querySelector(`.tablink[data-tab="${tabFromQuery}"]`)
+        : null;
+
+    if (tabFromQuery && tabFromQueryButton) {
+        openTab({ currentTarget: tabFromQueryButton }, tabFromQuery);
+    } else {
+        const firstTab = document.querySelector(".tablink");
+        if (firstTab) {
+            firstTab.classList.add("w3-red", "documents-tab-active");
+        }
     }
 
     const previewButton = document.getElementById("previewAuditReportButton");

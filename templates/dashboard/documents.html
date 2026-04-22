@@ -33,17 +33,17 @@
 
 <div class="documents-tabs-wrap">
     <div class="w3-bar documents-tabs">
-        <button class="w3-bar-item w3-button tablink documents-tab-active" onclick="openTab(event,'Policies')">
+        <button class="w3-bar-item w3-button tablink documents-tab-active" data-tab="Policies" onclick="openTab(event,'Policies')">
             <i class="fa fa-shield"></i> Políticas
         </button>
         {% if user.role == 'admin' %}
-        <button class="w3-bar-item w3-button tablink" onclick="openTab(event,'Records')">
+        <button class="w3-bar-item w3-button tablink" data-tab="Records" onclick="openTab(event,'Records')">
             <i class="fa fa-file-text"></i> Documentos
         </button>
-        <button class="w3-bar-item w3-button tablink" onclick="openTab(event,'Certificates')">
+        <button class="w3-bar-item w3-button tablink" data-tab="Certificates" onclick="openTab(event,'Certificates')">
             <i class="fa fa-id-badge"></i> Registros
         </button>
-        <button class="w3-bar-item w3-button tablink" onclick="openTab(event,'AdminPanel')">
+        <button class="w3-bar-item w3-button tablink" data-tab="AdminPanel" onclick="openTab(event,'AdminPanel')">
             <i class="fa fa-cogs"></i> Administración y métricas
         </button>
         <button class="w3-bar-item w3-button tablink" type="button" onclick="openDeleteDocumentsModal()">
@@ -206,6 +206,47 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
+    <br>
+    <div class="audit-pagination-bar audit-pagination-bar-confirm w3-cell-row">
+        <div class="w3-cell w3-mobile audit-confirm-left">
+            <div class="audit-pagination-meta">
+                Mostrando {{ cert_pagination.window_start }}-{{ cert_pagination.window_end }} de {{
+                cert_pagination.total_items }} certificados.
+            </div>
+            <div class="audit-pagination-actions w3-bar">
+                <a href="{{ cert_pagination.first_url }}"
+                    class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not cert_pagination.has_prev else '' }}">Primera</a>
+                <a href="{{ cert_pagination.prev_url if cert_pagination.has_prev else '#' }}"
+                    class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not cert_pagination.has_prev else '' }}">Anterior</a>
+                <span class="w3-bar-item audit-page-indicator">Página {{ cert_pagination.page }} / {{
+                    cert_pagination.total_pages }}</span>
+                <a href="{{ cert_pagination.next_url if cert_pagination.has_next else '#' }}"
+                    class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not cert_pagination.has_next else '' }}">Siguiente</a>
+                <a href="{{ cert_pagination.last_url }}"
+                    class="w3-bar-item w3-button w3-round-large documents-secondary-btn {{ 'disabled-link' if not cert_pagination.has_next else '' }}">Última</a>
+            </div>
+        </div>
+        <div class="w3-cell w3-mobile audit-confirm-controls">
+            <form action="{{ url_for('documents_view') }}" method="get" class="audit-confirm-form">
+                <input type="hidden" name="tab" value="Certificates">
+                <input type="hidden" name="cert_page" value="1">
+                <label><b>Registros por página</b></label>
+                <div class="audit-confirm-form-row w3-bar">
+                    <select
+                        class="w3-bar-item w3-select w3-border w3-round-large documents-input audit-confirm-select"
+                        name="cert_page_size">
+                        {% for size in cert_page_size_options %}
+                        <option value="{{ size }}" {{ 'selected' if cert_filters.cert_page_size==size else '' }}>{{
+                            size }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit"
+                        class="w3-bar-item w3-button w3-round-large documents-secondary-btn">Aplicar</button>
+                </div>
+            </form>
+        </div>
     </div>
     <br>
 </div>
