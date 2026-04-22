@@ -1206,6 +1206,11 @@ a {
   padding-top: 0 !important;
 }
 
+.admin-section-body {
+  padding: 32px !important;
+  padding-top: 0 !important;
+}
+
 .audit-table-shell {
   overflow-x: auto;
   border-radius: 24px;
@@ -1984,6 +1989,11 @@ a {
   }
 
   .audit-section-body {
+    padding: 20px !important;
+    padding-top: 0 !important;
+  }
+
+  .admin-section-body {
     padding: 20px !important;
     padding-top: 0 !important;
   }

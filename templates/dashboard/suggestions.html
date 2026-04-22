@@ -13,35 +13,37 @@
         <span class="dashboard-count-badge">{{ suggestions|length }} registradas</span>
     </div>
 
-    <div class="admin-table-shell w3-responsive">
-        <table class="w3-table w3-hoverable admin-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    {% if is_admin_view %}
-                    <th>Usuario</th>
-                    {% endif %}
-                    <th>Sugerencia</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in suggestions %}
-                <tr>
-                    <td>{{ item.id }}</td>
-                    {% if is_admin_view %}
-                    <td>{{ item.username }}</td>
-                    {% endif %}
-                    <td>{{ item.suggestion }}</td>
-                    <td>{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="{% if is_admin_view %}4{% else %}3{% endif %}">{% if is_admin_view %}Aún no hay sugerencias registradas.{% else %}Aún no has enviado sugerencias.{% endif %}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="w3-container w3-padding-32 admin-section-body">
+        <div class="admin-table-shell w3-responsive">
+            <table class="w3-table w3-hoverable admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        {% if is_admin_view %}
+                        <th>Usuario</th>
+                        {% endif %}
+                        <th>Sugerencia</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in suggestions %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        {% if is_admin_view %}
+                        <td>{{ item.username }}</td>
+                        {% endif %}
+                        <td>{{ item.suggestion }}</td>
+                        <td>{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="{% if is_admin_view %}4{% else %}3{% endif %}">{% if is_admin_view %}Aún no hay sugerencias registradas.{% else %}Aún no has enviado sugerencias.{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 

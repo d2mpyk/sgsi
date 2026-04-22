@@ -10,44 +10,46 @@
         </div>
         <span class="dashboard-count-badge">{{ users|length }} usuarios</span>
     </div>
-    <div class="admin-table-shell w3-responsive">
-        <table class="w3-table w3-hoverable admin-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Usuario</th>
-                    <th>Email</th>
-                    <th>Departamento</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Creado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for u in users %}
-                <tr>
-                    <td>{{ u.id }}</td>
-                    <td>{{ u.username }}</td>
-                    <td>{{ u.email }}</td>
-                    <td>{{ u.department_name }}</td>
-                    <td><span class="w3-tag w3-round admin-role-tag">{{ u.role }}</span></td>
-                    <td>
-                        <span class="w3-tag w3-round {{ 'admin-status-ok' if u.is_active else 'admin-status-off' }}">
-                            {{ "Activo" if u.is_active else "Inactivo" }}
-                        </span>
-                    </td>
-                    <td>{{ u.created_at.strftime('%Y-%m-%d') }}</td>
-                    <td>
-                        <a href="{{ url_for('get_user_edit_view', user_id=u.id) }}"
-                            class="w3-button w3-round-large admin-action-btn">
-                            <i class="fa fa-edit"></i> Editar
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="w3-container w3-padding-32 admin-section-body">
+        <div class="admin-table-shell w3-responsive">
+            <table class="w3-table w3-hoverable admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Departamento</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Creado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>{{ u.id }}</td>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.email }}</td>
+                        <td>{{ u.department_name }}</td>
+                        <td><span class="w3-tag w3-round admin-role-tag">{{ u.role }}</span></td>
+                        <td>
+                            <span class="w3-tag w3-round {{ 'admin-status-ok' if u.is_active else 'admin-status-off' }}">
+                                {{ "Activo" if u.is_active else "Inactivo" }}
+                            </span>
+                        </td>
+                        <td>{{ u.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <a href="{{ url_for('get_user_edit_view', user_id=u.id) }}"
+                                class="w3-button w3-round-large admin-action-btn">
+                                <i class="fa fa-edit"></i> Editar
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 
