@@ -326,7 +326,10 @@ def _next_quiz_version(current_version: str, existing_versions: set[str]) -> str
     return candidate
 
 
-@router.get("/posts", response_model=list[LMSPostResponse], include_in_schema=False)
+@router.get("/posts",
+    include_in_schema=False,
+    response_model=list[LMSPostResponse],
+    )
 def get_posts(
     current_user: CurrentUser,
     db: Session = Depends(get_db),
@@ -339,7 +342,10 @@ def get_posts(
     return repo.list_published_posts()
 
 
-@router.get("/posts/{slug}", response_model=LMSPostResponse, include_in_schema=False)
+@router.get("/posts/{slug}",
+    include_in_schema=False,
+    response_model=LMSPostResponse,
+    )
 def get_post(slug: str, current_user: CurrentUser, db: Session = Depends(get_db)):
     if isinstance(current_user, RedirectResponse):
         return current_user
@@ -462,7 +468,11 @@ def get_post_status(post_id: int, current_user: CurrentUser, db: Session = Depen
     )
 
 
-@router.get("/users/{user_id}/attempts", response_model=list[LMSAttemptResponse])
+@router.get(
+    "/users/{user_id}/attempts",
+    response_model=list[LMSAttemptResponse],
+    include_in_schema=False,
+)
 def get_user_attempts(
     user_id: int,
     current_user: CurrentUser,
@@ -476,7 +486,11 @@ def get_user_attempts(
     return repo.list_attempts_by_user(user_id=user_id)
 
 
-@router.get("/users/{user_id}/dashboard", response_model=LMSUserDashboardResponse)
+@router.get(
+    "/users/{user_id}/dashboard",
+    response_model=LMSUserDashboardResponse,
+    include_in_schema=False,
+)
 def get_user_dashboard(
     user_id: int,
     current_user: CurrentUser,
@@ -495,14 +509,23 @@ def get_user_dashboard(
     }
 
 
-@router.get("/periods/active", response_model=LMSPeriodResponse)
+@router.get(
+    "/periods/active",
+    response_model=LMSPeriodResponse,
+    include_in_schema=False,
+)
 def get_period_active(current_user: CurrentUser, db: Session = Depends(get_db)):
     if isinstance(current_user, RedirectResponse):
         return current_user
     return lms_service.get_active_period(db)
 
 
-@router.post("/periods", response_model=LMSPeriodResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/periods",
+    response_model=LMSPeriodResponse,
+    status_code=status.HTTP_201_CREATED,
+    include_in_schema=False,
+)
 def create_period(
     payload: LMSPeriodCreate,
     admin: CurrentAdmin,
@@ -513,7 +536,11 @@ def create_period(
     return lms_service.create_or_activate_period(db=db, payload=payload)
 
 
-@router.post("/periods/activate/{period_id}", response_model=LMSPeriodResponse)
+@router.post(
+    "/periods/activate/{period_id}",
+    response_model=LMSPeriodResponse,
+    include_in_schema=False,
+)
 def activate_period(
     period_id: int,
     admin: CurrentAdmin,
@@ -524,7 +551,11 @@ def activate_period(
     return lms_service.activate_period(db=db, period_id=period_id)
 
 
-@router.get("/metrics/period/{period_id}", response_model=LMSPeriodMetrics)
+@router.get(
+    "/metrics/period/{period_id}",
+    response_model=LMSPeriodMetrics,
+    include_in_schema=False,
+)
 def get_period_metrics(
     period_id: int,
     auditor_or_admin: CurrentAuditorOrAdmin,
@@ -535,7 +566,7 @@ def get_period_metrics(
     return lms_service.metrics_by_period(db=db, period_id=period_id)["kpis"]
 
 
-@router.get("/metrics/period/{period_id}/posts")
+@router.get("/metrics/period/{period_id}/posts", include_in_schema=False)
 def get_period_metrics_posts(
     period_id: int,
     auditor_or_admin: CurrentAuditorOrAdmin,
@@ -546,7 +577,7 @@ def get_period_metrics_posts(
     return lms_service.metrics_posts_by_period(db=db, period_id=period_id)
 
 
-@router.get("/metrics/period/{period_id}/users")
+@router.get("/metrics/period/{period_id}/users", include_in_schema=False)
 def get_period_metrics_users(
     period_id: int,
     auditor_or_admin: CurrentAuditorOrAdmin,
@@ -557,7 +588,11 @@ def get_period_metrics_users(
     return lms_service.metrics_users_by_period(db=db, period_id=period_id)
 
 
-@router.get("/metrics/period/{period_id}/compliance", response_model=list[LMSComplianceItem])
+@router.get(
+    "/metrics/period/{period_id}/compliance",
+    response_model=list[LMSComplianceItem],
+    include_in_schema=False,
+)
 def get_period_compliance(
     period_id: int,
     auditor_or_admin: CurrentAuditorOrAdmin,
