@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ title or 'Dashboard' }} - Document Management{% endblock %}</title>
-    <script src="{{ url_for('static', path='js/theme-init.js') }}"></script>
+    <script src="{{ url_for('static', path='js/theme-init.js') }}?v={{ request.app.state.static_asset_version }}"></script>
     <link rel="stylesheet"
-        href="{{ request.app.state.dashboard_w3css_url if request.app.state.dashboard_w3css_url.startswith(('http://', 'https://', '//')) else url_for('static', path=request.app.state.dashboard_w3css_url.lstrip('/')) }}">
+        href="{{ request.app.state.dashboard_w3css_url if request.app.state.dashboard_w3css_url.startswith(('http://', 'https://', '//')) else (url_for('static', path=request.app.state.dashboard_w3css_url.lstrip('/')) ~ '?v=' ~ request.app.state.static_asset_version) }}">
     <link rel="stylesheet" href="{{ request.app.state.google_fonts_url }}">
     <link rel="stylesheet"
-        href="{{ request.app.state.fontawesome_url if request.app.state.fontawesome_url.startswith(('http://', 'https://', '//')) else url_for('static', path=request.app.state.fontawesome_url.lstrip('/')) }}">
-    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+        href="{{ request.app.state.fontawesome_url if request.app.state.fontawesome_url.startswith(('http://', 'https://', '//')) else (url_for('static', path=request.app.state.fontawesome_url.lstrip('/')) ~ '?v=' ~ request.app.state.static_asset_version) }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}?v={{ request.app.state.static_asset_version }}">
     {% block head %}{% endblock %}
 </head>
 
@@ -220,8 +220,8 @@
 
     </div>
 
-    <script src="{{ url_for('static', path='js/theme.js') }}"></script>
-    <script src="{{ url_for('static', path='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', path='js/theme.js') }}?v={{ request.app.state.static_asset_version }}"></script>
+    <script src="{{ url_for('static', path='js/dashboard.js') }}?v={{ request.app.state.static_asset_version }}"></script>
 
     {% block scripts %}{% endblock %}
 

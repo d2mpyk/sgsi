@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     CHART_JS_URL: str = "https://cdn.jsdelivr.net/npm/chart.js"
     PROJECT_REPOSITORY_URL: str = "https://github.com/d2mpyk/sgsi"
     W3CSS_DOCS_URL: str = "https://www.w3schools.com/w3css/default.asp"
+    STATIC_ASSET_VERSION: str = "20260422"
     LOG_MAX_BYTES: int = 5242880  # 5 MB por defecto
     LOG_BACKUP_COUNT: int = 5
 

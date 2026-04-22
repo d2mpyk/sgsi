@@ -7,8 +7,8 @@
     <title>{{ title or "500" }}</title>
     <link rel="stylesheet" href="{{ request.app.state.google_fonts_url }}">
     <link rel="stylesheet"
-        href="{{ request.app.state.fontawesome_url if request.app.state.fontawesome_url.startswith(('http://', 'https://', '//')) else url_for('static', path=request.app.state.fontawesome_url.lstrip('/')) }}">
-    <link rel="stylesheet" href="{{ url_for('static', path='css/error-404.css') }}">
+        href="{{ request.app.state.fontawesome_url if request.app.state.fontawesome_url.startswith(('http://', 'https://', '//')) else (url_for('static', path=request.app.state.fontawesome_url.lstrip('/')) ~ '?v=' ~ request.app.state.static_asset_version) }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/error-404.css') }}?v={{ request.app.state.static_asset_version }}">
 </head>
 
 <body>

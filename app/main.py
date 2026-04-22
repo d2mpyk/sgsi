@@ -68,6 +68,7 @@ app.state.fontawesome_url = settings.FONTAWESOME_URL
 app.state.chart_js_url = settings.CHART_JS_URL
 app.state.project_repository_url = settings.PROJECT_REPOSITORY_URL
 app.state.w3css_docs_url = settings.W3CSS_DOCS_URL
+app.state.static_asset_version = settings.STATIC_ASSET_VERSION
 
 # Añade un manejador de excepciones para RateLimitExceeded
 @app.exception_handler(RateLimitExceeded)
