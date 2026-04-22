@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+import re
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request, status
@@ -36,22 +38,29 @@ class AuditConfirmationRow:
     download_at: datetime | None
     read_at: datetime | None
     status: str
+    certificate_url: str | None
 
 
 @dataclass
 class AuditEvaluationConfirmationRow:
     post_title: str
+    post_slug: str
     username: str
     department_name: str
     period_name: str
     confirmed_at: datetime | None
     status: str
+    certificate_url: str | None
 
 
 def _normalize_page_size(value: int | None) -> int:
     if value in PAGE_SIZE_OPTIONS:
         return int(value)
     return DEFAULT_PAGE_SIZE
+
+
+def _safe_certificate_token(value: str) -> str:
+    return re.sub(r"[^a-zA-Z0-9_.-]", "_", value)
 
 
 @router.get(
@@ -75,6 +84,7 @@ def audit_view(
     if isinstance(user_or_redirect, RedirectResponse):
         return user_or_redirect
     current_user = user_or_redirect
+    media_root = Path("media")
 
     documents_all = db.execute(
         select(Document).order_by(Document.created_at.desc(), Document.id.desc())
@@ -110,6 +120,23 @@ def audit_view(
         else:
             status_value = "Sin evidencia"
 
+        certificate_url: str | None = None
+        if read.read_at is not None:
+            safe_department = _safe_certificate_token(user.department_name or "Sin_Departamento")
+            safe_username = _safe_certificate_token(user.username)
+            timestamp_suffix = read.read_at.strftime("%Y%m%d_%H%M%S")
+            certificate_filename = (
+                f"Certificado_Lectura_{policy.code or policy.id}_{safe_department}_{safe_username}_{timestamp_suffix}.pdf"
+            )
+            certificate_relative_path = (
+                Path("documents") / "certificates" / safe_department / certificate_filename
+            )
+            certificate_file = media_root / certificate_relative_path
+            if certificate_file.exists():
+                certificate_url = str(
+                    request.url_for("media", path=certificate_relative_path.as_posix())
+                )
+
         confirmation_rows_all.append(
             AuditConfirmationRow(
                 policy_code=policy.code or f"POL-{policy.id}",
@@ -119,6 +146,7 @@ def audit_view(
                 download_at=read.download_at,
                 read_at=read.read_at,
                 status=status_value,
+                certificate_url=certificate_url,
             )
         )
 
@@ -147,14 +175,35 @@ def audit_view(
             status_value = "Sin evidencia"
             confirmed_at = None
 
+        certificate_url: str | None = None
+        if confirmed_at is not None:
+            safe_department = _safe_certificate_token(user.department_name or "Sin_Departamento")
+            safe_username = _safe_certificate_token(user.username)
+            safe_slug = _safe_certificate_token(post.slug or str(post.id))
+            status_label = "APROBADO" if evaluation_status.is_passed else "NO_APROBADO"
+            timestamp_suffix = confirmed_at.strftime("%Y%m%d_%H%M%S")
+            certificate_filename = (
+                f"Certificado_Evaluacion_{safe_slug}_{status_label}_{safe_department}_{safe_username}_{timestamp_suffix}.pdf"
+            )
+            certificate_relative_path = (
+                Path("documents") / "certificates" / safe_department / certificate_filename
+            )
+            certificate_file = media_root / certificate_relative_path
+            if certificate_file.exists():
+                certificate_url = str(
+                    request.url_for("media", path=certificate_relative_path.as_posix())
+                )
+
         evaluation_confirmation_rows_all.append(
             AuditEvaluationConfirmationRow(
                 post_title=post.title,
+                post_slug=post.slug,
                 username=user.username,
                 department_name=user.department_name,
                 period_name=period.name,
                 confirmed_at=confirmed_at,
                 status=status_value,
+                certificate_url=certificate_url,
             )
         )
 

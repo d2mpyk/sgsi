@@ -139,6 +139,7 @@
                         <th>Descarga</th>
                         <th>Confirmación</th>
                         <th>Estado</th>
+                        <th>Certificado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -158,10 +159,23 @@
                             <span class="w3-tag w3-round audit-status-muted">{{ row.status }}</span>
                             {% endif %}
                         </td>
+                        <td>
+                            {% if row.certificate_url %}
+                            <a
+                                href="{{ row.certificate_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="w3-button w3-round-large documents-secondary-btn">
+                                <i class="fa fa-eye"></i> Ver
+                            </a>
+                            {% else %}
+                            <span class="w3-tag w3-round audit-status-muted">N/A</span>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6">No hay confirmaciones registradas.</td>
+                        <td colspan="7">No hay confirmaciones registradas.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -233,6 +247,7 @@
                         <th>Período</th>
                         <th>Confirmación</th>
                         <th>Estado</th>
+                        <th>Certificado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -252,10 +267,23 @@
                             <span class="w3-tag w3-round audit-status-muted">{{ row.status }}</span>
                             {% endif %}
                         </td>
+                        <td>
+                            {% if row.certificate_url %}
+                            <a
+                                href="{{ row.certificate_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="w3-button w3-round-large documents-secondary-btn">
+                                <i class="fa fa-eye"></i> Ver
+                            </a>
+                            {% else %}
+                            <span class="w3-tag w3-round audit-status-muted">N/A</span>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6">No hay confirmaciones de evaluaciones registradas.</td>
+                        <td colspan="7">No hay confirmaciones de evaluaciones registradas.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
