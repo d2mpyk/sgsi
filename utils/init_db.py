@@ -296,13 +296,12 @@ def _seed_lms_themes(db: Session, payload: dict) -> None:
             for idx, post in enumerate(posts, start=1)
         ]
 
-    now_utc = datetime.now(UTC)
     for row in theme_rows:
         db.execute(
             text(
                 """
                 INSERT INTO lms_themes (name, slug, display_order, is_active, created_at, updated_at)
-                VALUES (:name, :slug, :display_order, :is_active, :created_at, :updated_at)
+                VALUES (:name, :slug, :display_order, :is_active, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
                 """
             ),
             {
@@ -310,8 +309,6 @@ def _seed_lms_themes(db: Session, payload: dict) -> None:
                 "slug": row["slug"],
                 "display_order": int(row.get("display_order", 1)),
                 "is_active": bool(row.get("is_active", True)),
-                "created_at": now_utc,
-                "updated_at": now_utc,
             },
         )
     db.commit()
