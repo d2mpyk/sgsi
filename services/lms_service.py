@@ -3,7 +3,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
+import io
+import os
 import re
+import hashlib
+
+from reportlab.lib.colors import black, blue
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
@@ -40,6 +47,162 @@ class CanAnswerResult:
     max_attempts: int
     is_passed: bool
     is_blocked: bool
+
+
+def _build_lms_certificate_storage_paths(
+    user: User,
+    post: LMSPost,
+    attempt: LMSQuizAttempt,
+) -> tuple[str, str, str]:
+    safe_department = re.sub(r"[^a-zA-Z0-9_.-]", "_", user.department_name)
+    safe_username = re.sub(r"[^a-zA-Z0-9_.-]", "_", user.username)
+    safe_slug = re.sub(r"[^a-zA-Z0-9_.-]", "_", post.slug or str(post.id))
+    status_label = "APROBADO" if attempt.is_passed else "NO_APROBADO"
+    timestamp_suffix = attempt.submitted_at.strftime("%Y%m%d_%H%M%S")
+    filename = (
+        f"Certificado_Evaluacion_{safe_slug}_{status_label}_{safe_department}_{safe_username}_{timestamp_suffix}.pdf"
+    )
+    relative_path = os.path.join("documents", "certificates", safe_department, filename)
+    file_path = os.path.join("media", relative_path)
+    return relative_path.replace("\\", "/"), file_path, filename
+
+
+def _generate_lms_attempt_certificate_pdf(
+    user: User,
+    post: LMSPost,
+    quiz: LMSQuiz,
+    period: LMSPeriod,
+    attempt: LMSQuizAttempt,
+    certificate_record_code: str,
+    certificate_url: str,
+) -> io.BytesIO:
+    buffer = io.BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    _, height = letter
+
+    score_hash = hashlib.sha256(
+        f"{user.id}-{post.id}-{attempt.id}-{attempt.score_percentage}".encode()
+    ).hexdigest()[:32]
+    submitted_at = attempt.submitted_at.strftime("%Y-%m-%d %H:%M:%S")
+    result_label = "APROBADO" if attempt.is_passed else "NO APROBADO"
+
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(50, height - 50, "CERTIFICADO DE CUMPLIMIENTO - EVALUACION LMS SGSI")
+    c.setFont("Helvetica", 10)
+
+    y = height - 80
+    line_height = 14
+    lines = [
+        "________________________________________________________________________________",
+        "1. INFORMACIÓN DEL DOCUMENTO",
+        f"Codigo de certificado: {certificate_record_code}",
+        f"Fecha de generacion: {datetime.now(UTC).strftime('%Y-%m-%d %H:%M:%S')}",
+        "________________________________________________________________________________",
+        "2. IDENTIFICACIÓN DEL COLABORADOR",
+        f"Nombre del Colaborador: {user.username} (ID: {user.id})",
+        f"Correo corporativo: {user.email}",
+        f"Departamento: {user.department_name}",
+        f"Rol Sistema: {user.role}",
+        "________________________________________________________________________________",
+        "3. INFORMACIÓN DEL POST",
+        f"Post LMS: {post.title}",
+        f"Slug: {post.slug}",
+        f"Version del post: {attempt.version_post}",
+        f"Quiz: {quiz.title}",
+        f"Version del quiz: {attempt.version_quiz}",
+        f"Periodo: {period.name} ({period.start_date} a {period.end_date})",
+        "________________________________________________________________________________",
+        "4. RESULTADO DE LA EVALUACIÓN",
+        f"Resultado: {result_label}",
+        f"Puntaje: {attempt.score_percentage}%",
+        f"Minimo aprobacion: {post.porcentaje_aprobacion}%",
+        f"Respuestas correctas: {attempt.correct_answers} de {attempt.total_questions}",
+        f"Intento numero: {attempt.attempt_number}",
+        "________________________________________________________________________________",
+        "5. EVIDENCIA DE ACEPTACIÓN DIGITAL",
+        "Método de autenticación: Token",
+        f"Dirección IP: {attempt.ip_origen or 'No disponible'}",
+        f"Dispositivo/navegador: {(attempt.user_agent or 'No disponible')[:42]}",
+        f"Fecha de evaluación: {submitted_at}",
+        "________________________________________________________________________________",
+        "6. FIRMA ELECTRÓNICA Y VALIDACIÓN",
+        f"Firma digital (hash): {score_hash}",
+        "Algoritmo: SHA-256",
+        "________________________________________________________________________________",
+        "7. CONTROL DE INTEGRIDAD Y TRAZABILIDAD",
+        "Este registro incluye:",
+        "Hash del registro generado",
+        f"Identificador único (UUID) del post leído: {post.id}",
+        "Registro en base de datos SGSI",
+        "Log de evento en sistema",
+        "Cualquier modificación posterior invalidará la integridad del documento.",
+        "________________________________________________________________________________",
+        "8. CONTROL DE REGISTRO",
+        "Este documento:",
+        "* Es generado automáticamente por el SGSI",
+        "* Se almacena en repositorio controlado",
+        "* Mantiene trazabilidad con:",
+        "   * Usuario",
+        "   * Post",
+        "   * Versión",
+        f"   * Fecha de evaluación: {submitted_at}",
+        "Cumple con:",         
+        "* ISO/IEC 27001:2022 – Cláusula 4.4",       
+        "* ISO/IEC 27001:2022 – Cláusula 7.2",
+        "* ISO/IEC 27001:2022 – Cláusula 7.3",
+        "* ISO/IEC 27001:2022 – Cláusula 7.5",
+        "* Control A.6.3",
+        "________________________________________________________________________________",
+        "9. CONFIDENCIALIDAD DEL REGISTRO",
+        "Este documento contiene información confidencial y será tratado conforme a ",
+        "las políticas de seguridad de la información y protección de datos personales de la organización.",
+        "________________________________________________________________________________",
+        "10. VALIDACIÓN DE AUTENTICIDAD",
+        "Este documento puede ser validado mediante:",
+        "* Comparación del hash SHA-256 REGISTRO DIGITAL DE LECTURA Y TÓPICO PUBLICADO",
+        f"Hash de evidencia (SHA-256): {score_hash}",
+        "",
+    ]
+
+    for line in lines:
+        c.drawString(50, y, line)
+        y -= line_height
+        if y < 60:
+            c.showPage()
+            c.setFont("Helvetica", 10)
+            y = height - 50
+
+    c.setFont("Helvetica-Bold", 10)
+    c.drawString(50, y, "URL del certificado:")
+    link_label = " CERTIFICADO"
+    prefix_width = c.stringWidth("URL del certificado:", "Helvetica-Bold", 10)
+    c.setFillColor(blue)
+    c.drawString(50 + prefix_width + 4, y, link_label)
+    link_width = c.stringWidth(link_label, "Helvetica-Bold", 10)
+    c.linkURL(
+        certificate_url,
+        (
+            50 + prefix_width + 4,
+            y - 2,
+            50 + prefix_width + 4 + link_width,
+            y + 10,
+        ),
+        relative=0,
+    )
+    c.setFillColor(black)
+
+    c.showPage()
+    c.save()
+    buffer.seek(0)
+    return buffer
+
+
+def _save_lms_certificate_pdf(file_path: str, pdf_bytes: bytes) -> str:
+    certificates_dir = os.path.dirname(file_path)
+    os.makedirs(certificates_dir, exist_ok=True)
+    with open(file_path, "wb") as certificate_file:
+        certificate_file.write(pdf_bytes)
+    return file_path
 
 
 def _slugify(value: str) -> str:
@@ -330,6 +493,29 @@ def submit_quiz_attempt(
     saved_attempt = repo.create_attempt(attempt=attempt, answers=answer_rows)
     refresh_user_post_status(db=db, user_id=user.id, post=post, period=period)
     refresh_user_period_summary(db=db, user_id=user.id, period=period)
+
+    certificate_relative_path, certificate_path, certificate_filename = (
+        _build_lms_certificate_storage_paths(user=user, post=post, attempt=saved_attempt)
+    )
+    certificate_url = f"/media/{certificate_relative_path}"
+    certificate_record_code = (
+        f"REG-LMS-{post.id}-{user.id}-{saved_attempt.id}-{int(saved_attempt.submitted_at.timestamp())}"
+    )
+    certificate_buffer = _generate_lms_attempt_certificate_pdf(
+        user=user,
+        post=post,
+        quiz=quiz,
+        period=period,
+        attempt=saved_attempt,
+        certificate_record_code=certificate_record_code,
+        certificate_url=certificate_url,
+    )
+    _save_lms_certificate_pdf(
+        file_path=certificate_path,
+        pdf_bytes=certificate_buffer.getvalue(),
+    )
+    saved_attempt.certificate_filename = certificate_filename
+    saved_attempt.certificate_relative_path = certificate_relative_path
     return saved_attempt
 
 

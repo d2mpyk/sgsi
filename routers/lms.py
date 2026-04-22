@@ -430,7 +430,7 @@ def submit_post_attempt(
         return current_user
     ip_origen = request.client.host if request.client else None
     user_agent = request.headers.get("user-agent")
-    return lms_service.submit_quiz_attempt(
+    attempt = lms_service.submit_quiz_attempt(
         db=db,
         user=current_user,
         post_id=post_id,
@@ -438,6 +438,18 @@ def submit_post_attempt(
         ip_origen=ip_origen,
         user_agent=user_agent,
     )
+    response_payload = LMSAttemptResponse.model_validate(attempt).model_dump()
+    certificate_relative_path = getattr(attempt, "certificate_relative_path", None)
+    if certificate_relative_path:
+        response_payload["certificate_url"] = str(
+            request.url_for("media", path=certificate_relative_path)
+        )
+    response_payload["certificate_filename"] = getattr(
+        attempt,
+        "certificate_filename",
+        None,
+    )
+    return response_payload
 
 
 @router.get(

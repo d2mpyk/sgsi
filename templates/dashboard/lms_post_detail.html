@@ -30,7 +30,10 @@
     <h3>Evaluación del tema</h3>
     <p>Intentos restantes este semestre: <strong>{{ attempts_remaining }}</strong></p>
     {% if quiz %}
-    <form id="lmsQuizForm">
+    <form
+        id="lmsQuizForm"
+        data-submit-url="{{ url_for('submit_post_attempt', post_id=post.id) }}"
+        data-posts-url="{{ url_for('lms_posts_view') }}">
         {% for question in quiz.questions %}
         <div class="lms-question">
             <p><strong>{{ loop.index }}. {{ question.statement }}</strong></p>
@@ -57,38 +60,5 @@
 
 {% block scripts %}
 {{ super() }}
-<script>
-(() => {
-    const form = document.getElementById("lmsQuizForm");
-    if (!form) return;
-    const resultNode = document.getElementById("quizResult");
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const answers = [];
-        const inputs = form.querySelectorAll("input[type='radio']:checked");
-        for (const input of inputs) {
-            const questionId = Number(input.name.replace("question_", ""));
-            answers.push({
-                question_id: questionId,
-                option_id: Number(input.value)
-            });
-        }
-        try {
-            const response = await fetch(`{{ url_for('submit_post_attempt', post_id=post.id) }}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ answers })
-            });
-            const payload = await response.json();
-            if (!response.ok) {
-                resultNode.textContent = payload.detail || "No fue posible registrar el intento.";
-                return;
-            }
-            resultNode.textContent = `Intento #${payload.attempt_number}: ${payload.score_percentage}% (${payload.is_passed ? "Aprobado" : "No aprobado"})`;
-        } catch (_error) {
-            resultNode.textContent = "Error de conexión al enviar la evaluación.";
-        }
-    });
-})();
-</script>
+<script src="{{ url_for('static', path='js/lms_post_detail.js') }}?v={{ request.app.state.static_asset_version }}"></script>
 {% endblock %}

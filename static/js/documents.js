@@ -7,14 +7,19 @@ function openTab(evt, tabName) {
     var i, x, tablinks;
     x = document.getElementsByClassName("city");
     for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
+        x[i].classList.add("is-hidden");
+        x[i].style.display = "";
     }
     tablinks = document.getElementsByClassName("tablink");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
         tablinks[i].className = tablinks[i].className.replace(" documents-tab-active", "");
     }
-    document.getElementById(tabName).style.display = "block";
+    const targetTab = document.getElementById(tabName);
+    if (targetTab) {
+        targetTab.classList.remove("is-hidden");
+        targetTab.style.display = "block";
+    }
     evt.currentTarget.className += " w3-red documents-tab-active";
 
     if (tabName === "AdminPanel") {
@@ -33,8 +38,10 @@ function loadAuditReportPreview() {
         iframe.dataset.loaded = "true";
     }
 
+    iframe.classList.remove("is-hidden");
     iframe.style.display = "block";
     if (emptyState) {
+        emptyState.classList.add("is-hidden");
         emptyState.style.display = "none";
     }
 }
@@ -42,6 +49,7 @@ function loadAuditReportPreview() {
 function openDeleteDocumentsModal() {
     const modal = document.getElementById("deleteDocumentsModal");
     if (modal) {
+        modal.classList.remove("is-hidden");
         modal.style.display = "block";
     }
 }
@@ -49,8 +57,30 @@ function openDeleteDocumentsModal() {
 function closeDeleteDocumentsModal() {
     const modal = document.getElementById("deleteDocumentsModal");
     if (modal) {
+        modal.classList.add("is-hidden");
         modal.style.display = "none";
     }
+}
+
+function openCertificateInBackground(url) {
+    if (!url) return;
+    const newTab = window.open(url, "_blank", "noopener,noreferrer");
+    if (newTab) {
+        newTab.blur();
+        window.focus();
+        return;
+    }
+
+    // Fallback cuando el navegador bloquea window.open sin interacción directa.
+    const link = document.createElement("a");
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.focus();
 }
 
 // --- Marcar como Leído ---
@@ -67,21 +97,14 @@ async function markAsRead(docId, btnElement) {
         });
 
         if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Certificado_Lectura_${docId}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
+            const payload = await response.json();
+            openCertificateInBackground(payload.certificate_url);
 
             const parent = btnElement.parentElement;
             btnElement.remove();
             const badge = document.createElement("span");
             badge.className = "w3-tag w3-round-large documents-read-tag";
-            badge.innerHTML = '<i class="fa fa-check"></i> Leído (Certificado Descargado)';
+            badge.innerHTML = '<i class="fa fa-check"></i> Leído (Certificado generado)';
             parent.appendChild(badge);
         } else {
             const err = await response.json();

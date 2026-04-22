@@ -158,6 +158,8 @@ class LMSAttemptResponse(BaseModel):
     submitted_at: datetime
     created_at: datetime
     answers: list[LMSAttemptAnswerResponse]
+    certificate_filename: str | None = None
+    certificate_url: str | None = None
 
 
 class LMSUserPostStatusResponse(BaseModel):
@@ -262,4 +264,3 @@ class LMSComplianceItem(BaseModel):
     users_approved: int
     users_pending: int
     compliance_percentage: float
-

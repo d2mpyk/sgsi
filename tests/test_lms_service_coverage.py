@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+from unittest.mock import mock_open, patch
 from fastapi import HTTPException
 
 from models.lms import LMSPeriod, LMSPost, LMSQuiz, LMSQuizOption, LMSQuizQuestion, LMSUserPostStatus
@@ -239,18 +240,22 @@ def test_submit_attempt_and_dashboard_metrics_errors(db_session):
     question = post.quizzes[0].questions[0]
     correct_option = question.options[0]
 
-    attempt = lms_service.submit_quiz_attempt(
-        db=db_session,
-        user=user,
-        post_id=post.id,
-        payload=LMSAttemptSubmitRequest(
-            answers=[{"question_id": question.id, "option_id": correct_option.id}]
-        ),
-        ip_origen="127.0.0.1",
-        user_agent="pytest",
-    )
+    mocked_open = mock_open()
+    with patch("services.lms_service.os.makedirs"), patch("services.lms_service.open", mocked_open):
+        attempt = lms_service.submit_quiz_attempt(
+            db=db_session,
+            user=user,
+            post_id=post.id,
+            payload=LMSAttemptSubmitRequest(
+                answers=[{"question_id": question.id, "option_id": correct_option.id}]
+            ),
+            ip_origen="127.0.0.1",
+            user_agent="pytest",
+        )
     assert attempt.is_passed is True
     assert attempt.attempt_number == 1
+    assert getattr(attempt, "certificate_filename", "").endswith(".pdf")
+    assert "documents/certificates/" in getattr(attempt, "certificate_relative_path", "")
 
     dashboard = lms_service.dashboard_by_user(db=db_session, user_id=user.id)
     assert dashboard["summary"].approved_posts >= 1

@@ -531,6 +531,7 @@ a {
   width: 300px;
   background: transparent !important;
   padding: 90px 18px 22px;
+  z-index: 1002 !important;
 }
 
 .app-sidebar-inner {
@@ -1562,6 +1563,7 @@ a {
 
 .app-overlay-clickable {
   cursor: pointer;
+  z-index: 1001;
 }
 
 .is-hidden {
@@ -1842,7 +1844,35 @@ a {
   }
 
   .app-sidebar {
+    display: block !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100%;
     padding-top: 86px;
+    transform: translateX(-112%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.24s ease, opacity 0.2s ease;
+    will-change: transform;
+  }
+
+  .app-sidebar.is-open {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .app-overlay-clickable {
+    display: block !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .app-overlay-clickable.is-open {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .app-page-header {

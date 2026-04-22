@@ -3,22 +3,39 @@ var mySidebar = document.getElementById("mySidebar");
 
 // Get the DIV with overlay effect
 var overlayBg = document.getElementById("myOverlay");
+var mobileSidebarQuery = window.matchMedia("(max-width: 992px)");
+
+function isMobileSidebarViewport() {
+    return mobileSidebarQuery.matches;
+}
+
+function setSidebarState(isOpen) {
+    if (!mySidebar || !overlayBg) {
+        return;
+    }
+
+    if (!isMobileSidebarViewport()) {
+        mySidebar.classList.remove("is-open");
+        overlayBg.classList.remove("is-open");
+        return;
+    }
+
+    mySidebar.classList.toggle("is-open", isOpen);
+    overlayBg.classList.toggle("is-open", isOpen);
+}
 
 // Toggle between showing and hiding the sidebar, and add overlay effect
 function w3_open() {
-    if (mySidebar.style.display === 'block') {
-        mySidebar.style.display = 'none';
-        overlayBg.style.display = "none";
-    } else {
-        mySidebar.style.display = 'block';
-        overlayBg.style.display = "block";
+    if (!mySidebar || !overlayBg || !isMobileSidebarViewport()) {
+        return;
     }
+
+    setSidebarState(!mySidebar.classList.contains("is-open"));
 }
 
 // Close the sidebar with the close button
 function w3_close() {
-    mySidebar.style.display = "none";
-    overlayBg.style.display = "none";
+    setSidebarState(false);
 }
 
 // Script to highlight the active menu link
@@ -47,8 +64,13 @@ document.addEventListener('DOMContentLoaded', function () {
         bestMatch.classList.add('w3-blue');
     }
 
-    if (window.innerWidth < 993) {
-        mySidebar.style.display = "none";
-        overlayBg.style.display = "none";
+    if (isMobileSidebarViewport()) {
+        setSidebarState(false);
+    }
+});
+
+window.addEventListener("resize", function () {
+    if (!isMobileSidebarViewport()) {
+        setSidebarState(false);
     }
 });

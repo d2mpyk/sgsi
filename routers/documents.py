@@ -3,6 +3,7 @@
 import csv, io, os, shutil, uuid, hashlib, re, math
 from collections import defaultdict
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from typing import Annotated, List, Optional
 from xml.sax.saxutils import escape
 
@@ -84,6 +85,52 @@ DOCUMENT_SORT_ORDER = (
 READ_DUE_DAYS = 30
 AUDIT_REPORT_DOC_CODE = "REP-AUD-LECT-POL"
 AUDIT_REPORT_DOC_TITLE = "Informe Global de Confirmación de Lectura de Políticas"
+
+
+def _extract_certificate_id_from_filename(filename: str) -> int:
+    """
+    Extrae un ID estable de certificado desde el nombre de archivo.
+    Prioriza sufijo timestamp YYYYMMDD_HHMMSS; fallback hash estable.
+    """
+    stem = Path(filename).stem
+    match = re.search(r"(\d{8}_\d{6})$", stem)
+    if match:
+        return int(match.group(1).replace("_", ""))
+    return abs(hash(stem)) % 10_000_000_000
+
+
+def _load_generated_certificates() -> list[dict]:
+    certificates_root = Path("media") / "documents" / "certificates"
+    if not certificates_root.exists():
+        return []
+
+    rows: list[dict] = []
+    media_root = Path("media")
+    for file_path in certificates_root.rglob("*.pdf"):
+        if not file_path.is_file():
+            continue
+
+        certificate_id = _extract_certificate_id_from_filename(file_path.name)
+        if file_path.name.startswith("Certificado_Lectura_"):
+            certificate_type = "Lectura de política"
+        elif file_path.name.startswith("Certificado_Evaluacion_"):
+            certificate_type = "Evaluación LMS"
+        else:
+            certificate_type = "General"
+
+        rows.append(
+            {
+                "certificate_id": certificate_id,
+                "filename": file_path.name,
+                "department": file_path.parent.name,
+                "certificate_type": certificate_type,
+                "generated_at": datetime.fromtimestamp(file_path.stat().st_mtime),
+                "relative_path": file_path.relative_to(media_root).as_posix(),
+            }
+        )
+
+    rows.sort(key=lambda item: (item["certificate_id"], item["filename"].lower()))
+    return rows
 
 
 def extract_document_metadata_from_filename(
@@ -1261,6 +1308,7 @@ def documents_view(
         docs_context.append(d_dict)
 
     flash_message, flash_type = get_flash_messages(request)
+    generated_certificates = _load_generated_certificates() if current_user.role == "admin" else []
 
     response = templates.TemplateResponse(
         request=request,
@@ -1272,6 +1320,7 @@ def documents_view(
             "title": "Gestión Documental",
             "flash_message": flash_message,
             "flash_type": flash_type,
+            "generated_certificates": generated_certificates,
         },
     )
     if flash_message:
@@ -1907,7 +1956,9 @@ def generate_certificate_pdf(
         "   * Política",
         "   * Versión",
         f"   * Fecha de aceptación: {read_date_str}",
-        "Cumple con:",
+        "Cumple con:",        
+        "* ISO/IEC 27001:2022 – Cláusula 4.4",       
+        "* ISO/IEC 27001:2022 – Cláusula 7.2",
         "* ISO/IEC 27001:2022 – Cláusula 7.3",
         "* ISO/IEC 27001:2022 – Cláusula 7.5",
         "* Control A.6.3",
@@ -2008,10 +2059,10 @@ def build_certificate_storage_paths(
 
 
 # ----------------------------------------------------------------------
-# Confirmar Lectura (Marcar como leído) y Descargar Certificado
+# Confirmar Lectura (Marcar como leído) y generar certificado
 @router.post(
     "/{doc_id}/read",
-    # response_model eliminado porque retornamos un File (PDF)
+    # response_model omitido: retorna JSON con metadata/URL del certificado
     status_code=status.HTTP_200_OK,
     include_in_schema=False,
 )
@@ -2023,7 +2074,8 @@ def mark_document_as_read(
 ):
     """
     El usuario confirma que ha leído y comprendido una política.
-    Retorna un certificado PDF de lectura automáticamente.
+    Genera y guarda el certificado PDF en servidor, y retorna la URL
+    para abrirlo en una nueva pestaña desde frontend.
     """
     if isinstance(user_or_redirect, RedirectResponse):
         return user_or_redirect
@@ -2094,8 +2146,12 @@ def mark_document_as_read(
     # Guardar copia del certificado en el servidor para auditoría
     save_certificate_pdf(current_user, doc, existing_read, pdf_bytes)
 
-    return StreamingResponse(
-        io.BytesIO(pdf_bytes),
-        media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename="{certificate_filename}"'},
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "detail": "Lectura confirmada y certificado generado.",
+            "action": "certificate_generated",
+            "certificate_filename": certificate_filename,
+            "certificate_url": certificate_url,
+        },
     )

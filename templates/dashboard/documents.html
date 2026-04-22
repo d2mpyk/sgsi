@@ -38,7 +38,10 @@
         </button>
         {% if user.role == 'admin' %}
         <button class="w3-bar-item w3-button tablink" onclick="openTab(event,'Records')">
-            <i class="fa fa-file-text"></i> Documentos y registros
+            <i class="fa fa-file-text"></i> Documentos
+        </button>
+        <button class="w3-bar-item w3-button tablink" onclick="openTab(event,'Certificates')">
+            <i class="fa fa-id-badge"></i> Registros
         </button>
         <button class="w3-bar-item w3-button tablink" onclick="openTab(event,'AdminPanel')">
             <i class="fa fa-cogs"></i> Administración y métricas
@@ -151,6 +154,54 @@
             {% else %}
             <tr>
                 <td colspan="5">No hay documentos generales.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <br>
+</div>
+
+<div id="Certificates" class="w3-container city documents-panel is-hidden">
+    <div class="documents-section-head">
+        <div>
+            <h3>Registros de certificados</h3>
+            <p>Certificados generados automáticamente en <code>media/documents/certificates</code>.</p>
+        </div>
+    </div>
+
+    <div class="documents-table-shell">
+    <table class="w3-table w3-striped w3-bordered w3-border documents-table">
+        <thead>
+            <tr>
+                <th>ID Certificado</th>
+                <th>Tipo</th>
+                <th>Departamento</th>
+                <th>Archivo</th>
+                <th>Fecha generación</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cert in generated_certificates %}
+            <tr>
+                <td>{{ cert.certificate_id }}</td>
+                <td>{{ cert.certificate_type }}</td>
+                <td>{{ cert.department }}</td>
+                <td>{{ cert.filename }}</td>
+                <td>{{ cert.generated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a
+                        href="{{ url_for('media', path=cert.relative_path) }}"
+                        target="_blank"
+                        class="w3-button w3-round-large documents-secondary-btn">
+                        <i class="fa fa-eye"></i> Ver
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No hay certificados generados todavía.</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -298,5 +349,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', path='js/documents.js') }}?v={{ request.app.state.static_asset_version }}</script>
+<script src="{{ url_for('static', path='js/documents.js') }}?v={{ request.app.state.static_asset_version }}"></script>
 {% endblock %}

@@ -62,7 +62,11 @@ def test_mark_document_as_read_saves_certificate_on_server(client, db_session):
         response = client.post(f"/api/v1/documents/{document.id}/read")
 
     assert response.status_code == 200
-    assert response.headers["content-type"] == "application/pdf"
+    assert response.headers["content-type"].startswith("application/json")
+    payload = response.json()
+    assert payload["action"] == "certificate_generated"
+    assert payload["certificate_filename"].endswith(".pdf")
+    assert f"/media/documents/certificates/Infraestructura/" in payload["certificate_url"]
 
     mocked_makedirs.assert_called_once()
     saved_path = mocked_open.call_args[0][0]
@@ -271,6 +275,9 @@ def test_admin_policy_download_and_confirmation_follow_business_rules(client, db
         confirm_response = client.post(f"/api/v1/documents/{policy.id}/read")
 
     assert confirm_response.status_code == 200
+    confirm_payload = confirm_response.json()
+    assert confirm_payload["action"] == "certificate_generated"
+    assert confirm_payload["certificate_filename"].endswith(".pdf")
 
     db_session.refresh(read_record)
     assert read_record.download_at == refreshed_download_at

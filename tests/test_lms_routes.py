@@ -1,6 +1,7 @@
 from models.departments import Department
 from models.lms import LMSPost, LMSQuiz, LMSQuizOption, LMSQuizQuestion
 from models.users import User
+from unittest.mock import mock_open, patch
 from utils.auth import hash_password
 
 
@@ -137,15 +138,20 @@ def test_lms_passed_attempt_blocks_remaining_attempts(client, db_session):
     correct_option = post.quizzes[0].questions[0].options[0]
 
     login(client, user.username, password)
-    passed = client.post(
-        f"/api/v1/lms/posts/{post.id}/attempt",
-        json={"answers": [{"question_id": post.quizzes[0].questions[0].id, "option_id": correct_option.id}]},
-    )
+    mocked_open = mock_open()
+    with patch("services.lms_service.os.makedirs"), patch("services.lms_service.open", mocked_open):
+        passed = client.post(
+            f"/api/v1/lms/posts/{post.id}/attempt",
+            json={"answers": [{"question_id": post.quizzes[0].questions[0].id, "option_id": correct_option.id}]},
+        )
     assert passed.status_code == 200
-    assert passed.json()["is_passed"] is True
-    assert passed.json()["ip_origen"] is not None
-    assert passed.json()["version_post"] == "1.0"
-    assert passed.json()["version_quiz"] == "1.0"
+    payload = passed.json()
+    assert payload["is_passed"] is True
+    assert payload["ip_origen"] is not None
+    assert payload["version_post"] == "1.0"
+    assert payload["version_quiz"] == "1.0"
+    assert payload["certificate_filename"].endswith(".pdf")
+    assert "/media/documents/certificates/" in payload["certificate_url"]
 
     blocked = client.post(
         f"/api/v1/lms/posts/{post.id}/attempt",
