@@ -27,7 +27,6 @@ class Settings(BaseSettings):
     EMAIL_PORT: SecretStr
     EMAIL_USER: SecretStr
     EMAIL_PASSWD: SecretStr
-    UTC_SERVER: str = "America/Santiago"
     API_PREFIX: str = "/api/v1"
     DASHBOARD_W3CSS_URL: str = "vendor/w3css/w3.css"
     AUTH_W3CSS_URL: str = "vendor/w3css/w3.css"

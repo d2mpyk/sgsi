@@ -1211,25 +1211,6 @@ a {
   padding-top: 0 !important;
 }
 
-.audit-table-shell {
-  overflow-x: auto;
-  border-radius: 24px;
-  margin: 0;
-  background: var(--theme-panel-strong);
-  box-shadow: var(--app-shadow-soft);
-}
-
-.audit-table thead {
-  background: var(--theme-table-head);
-  color: var(--theme-heading);
-}
-
-.audit-table td,
-.audit-table th {
-  padding: 15px 16px;
-  color: var(--theme-text);
-}
-
 .audit-status-ok {
   background: #eef9f0;
   color: #2c6841;
@@ -1821,10 +1802,6 @@ a {
   background: #132336 !important;
 }
 
-[data-theme="dark"] .audit-table thead {
-  background: #132336 !important;
-}
-
 [data-theme="dark"] .documents-table tbody tr,
 [data-theme="dark"] .admin-table tbody tr {
   background: #0f1b2a !important;
@@ -1850,11 +1827,6 @@ a {
 [data-theme="dark"] .admin-table td,
 [data-theme="dark"] .admin-table th,
 [data-theme="dark"] .documents-row-note {
-  color: #d9e5f2 !important;
-}
-
-[data-theme="dark"] .audit-table td,
-[data-theme="dark"] .audit-table th {
   color: #d9e5f2 !important;
 }
 
