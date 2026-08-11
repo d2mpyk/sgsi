@@ -45,10 +45,15 @@ Al importarse, **no es pasivo**: ejecuta validaciones y tareas de arranque.
 - `routers/users.py`: ciclo de vida de cuentas y administración.
 - `routers/suggestions.py`: sugerencias internas.
 - `routers/media.py`: entrega segura de imágenes de perfil.
+- `routers/audit.py`: consultas y vistas del reporte global de auditoría.
 - `utils/auth.py`: hash, JWT, usuario actual, tokens de correo y logs de seguridad.
 - `utils/middleware.py`: protección de vistas HTML del dashboard por cookie.
 - `utils/init_db.py`: bootstrap y ajustes de esquema.
 - `models/`: entidades SQLAlchemy 2.x (`users`, `approved`, `departments`, `documents`, `document_reads`, `suggestions`, `lms`).
+- `schemas/`: modelos Pydantic de entrada/salida.
+- `services/lms_service.py`: reglas de evaluación, intentos, estados y certificados LMS.
+- `repositories/lms_repository.py`: consultas y persistencia específica del LMS.
+- `alembic/`: migraciones versionadas; actualmente existe una migración inicial para las tablas LMS.
 
 ## Reglas de negocio importantes
 
@@ -69,17 +74,22 @@ Al importarse, **no es pasivo**: ejecuta validaciones y tareas de arranque.
 ```text
 app/
 models/
+repositories/
 routers/
 schemas/
+services/
 static/
 templates/
   auth/
   dashboard/
   email/
 media/
+alembic/
 tests/
 utils/
 ```
+
+Las rutas HTTP se publican bajo `/api/v1` por defecto y la aplicación usa `/sgsi` como `root_path` por defecto. El prefijo puede cambiarse mediante `API_PREFIX` y `ROOT_PATH`.
 
 ## Requisitos
 
@@ -100,6 +110,8 @@ Usa `.env_example` como plantilla y define, al menos:
 - branding/URLs: `COMPANY_NAME`, `PROJECT_NAME`, `DOMINIO`
 
 `ROOT_PATH` se lee del entorno y por defecto es `/sgsi`.
+
+No versionar `.env`: contiene credenciales de base de datos, secretos JWT y credenciales SMTP. Usa `.env_example` como plantilla y rota cualquier secreto que haya sido expuesto.
 
 ## Ejecución local
 
@@ -130,16 +142,37 @@ Ejecutar archivo puntual:
 .\.venv\Scripts\pytest tests\test_document_read_certificate.py -q
 ```
 
+Estado de la última verificación local (11 de agosto de 2026): 165 pruebas recolectadas, 160 pasaron y 5 fallaron. Las fallas se producen al escribir PDFs en `media/documents` o `media/documents/certificates` con `PermissionError`; antes de atribuirlas a lógica de negocio, verifica que el usuario del proceso tenga permisos de lectura/escritura sobre `media/`.
+
+La suite usa SQLite en memoria, mientras que el runtime usa MySQL/MariaDB. Por ello, las pruebas no sustituyen una verificación de migraciones, charset, permisos de archivos y conectividad contra la base de datos real.
+
+## Persistencia y despliegue
+
+- La conexión de producción se construye como `mysql+pymysql` desde las variables `DB_*`.
+- `app.main` ejecuta `Base.metadata.create_all()` y ajustes incrementales al importarse. Esto puede modificar el esquema durante un arranque; coordina este comportamiento con Alembic antes de desplegar varias réplicas.
+- `alembic.ini` contiene una URL de ejemplo; si se adopta Alembic como mecanismo principal, debe configurarse la URL real en el entorno de migración y revisar el orden de las revisiones.
+- `media/` contiene documentos, certificados y perfiles; debe tener backup, permisos mínimos y una política de retención acorde con la evidencia SGSI.
+
 ## Seguridad y operación
 
-- El login deja `secure=False` en cookie (válido para local); en producción HTTPS debe endurecerse.
+- El login deja `secure=False` en cookie (válido para local); en producción HTTPS debe endurecerse con `Secure`, `HttpOnly`, `SameSite` y una estrategia CSRF apropiada.
 - Hay dos capas de acceso:
   - middleware HTML (`utils/middleware.py`)
   - dependencias por router (`get_current_user` / `get_current_admin`)
+- `static/` y `media/` se montan como directorios estáticos en `app.main` y el middleware permite su acceso sin autenticación. No coloques secretos ni archivos que deban estar sujetos a autorización dentro de esas rutas; las descargas de documentos sensibles deben pasar por los endpoints que validan rol y trazabilidad.
 - Logs:
   - `security.log`
   - `email_logs.log`
 - Archivos persistidos y evidencia en `media/`.
+
+## Hallazgos de la revisión del repositorio
+
+- La arquitectura está separada en routers, modelos, schemas, servicios y repositorios, con cobertura funcional extensa para autenticación, usuarios, documentos, auditoría, LMS y sugerencias.
+- La cadena documental queda explícita: descarga (`download_at`) -> confirmación (`read_at`) -> certificado PDF -> auditoría.
+- La cadena LMS queda explícita: intento -> aprobación/bloqueo -> métricas -> informe PDF versionado.
+- El arranque tiene efectos de esquema y bootstrap; debe tratarse como operación de infraestructura, no como una importación inocua.
+- El principal bloqueo observado en la ejecución de pruebas fue la escritura en `media/`; corregir permisos del directorio y repetir la suite antes de aceptar un cambio que genere evidencia PDF.
+- La publicación directa de `/media` y la cookie no segura son decisiones válidas para el entorno local, pero riesgosas si se trasladan sin cambios a producción.
 
 ## Riesgos al modificar
 
@@ -154,4 +187,5 @@ Revisa con cuidado cambios en:
 ## Estado actual
 
 - versión de app declarada en FastAPI: `5.3.1`
+- dependencias fijadas en `requirements.txt`; runtime verificado con Python 3.14 en el entorno local inspeccionado.
 - orientación: portal SGSI enfocado en trazabilidad de lectura y evidencia auditable
