@@ -234,6 +234,240 @@ Esta función SÍ crea resúmenes, pero solo se llamada cuando:
 
 ---
 
+## 2. Problema de Confirmación de Lectura (Usuario ID=13, Política 0038P)
+
+### 2.1 Descripción del Problema
+El usuario con id=13 descarga la política con código "0038P" pero al presionar el botón "Confirmar Lectura" recibe un error: **"Primero debe descargar la política antes de confirmar la lectura."**
+
+### 2.2 Flujo Normal de Confirmación
+
+```
+1. Usuario descarga política (GET /{doc_id}/download)
+   ↓
+2. Se crea/actualiza DocumentRead con download_at = now()
+   ↓
+3. Usuario hace clic en "Confirmar Lectura" (POST /{doc_id}/read)
+   ↓
+4. mark_document_as_read() verifica que existe DocumentRead con download_at != None
+   ↓
+5. Si OK: actualiza read_at = now() y genera certificado
+   ↓
+6. Si NO: devuelve error 409
+```
+
+### 2.3 Causas Posibles
+
+#### 2.3.1 La política 0038P NO es de tipo "policy"
+**🎯 Esta es la causa más probable.**
+
+En `routers/documents.py`, el endpoint de descarga solo registra la descarga si el documento es de tipo "policy":
+
+```python
+if doc.doc_type == "policy":
+    upsert_policy_download_read(
+        db=db,
+        user_id=current_user.id,
+        document_id=doc.id,
+    )
+```
+
+Si la política 0038P es de tipo "record" en lugar de "policy", **no se creará el registro `DocumentRead`**, y al intentar confirmar la lectura, el usuario recibirá el error 409.
+
+**Solución:**
+```sql
+-- Verificar el tipo de la política 0038P
+SELECT doc_type, code, title FROM documents WHERE code = '0038P';
+
+-- Si no es 'policy', actualizarla
+UPDATE documents SET doc_type = 'policy' WHERE code = '0038P';
+```
+
+#### 2.3.2 El registro DocumentRead no se creó correctamente
+Si el usuario descargó la política pero el registro no se insertó en la base de datos, también recibirá el error.
+
+**Verificación:**
+```sql
+-- Buscar el registro para usuario 13 y política 0038P
+SELECT * FROM document_reads 
+WHERE user_id = 13 AND document_id = (SELECT id FROM documents WHERE code = '0038P');
+```
+
+Si el registro no existe o tiene `download_at IS NULL`, este es el problema.
+
+**Posible causa:** Error de transacción o fallo en `db.commit()` en `upsert_policy_download_read()`.
+
+#### 2.3.3 El botón en el template no está disponible
+El botón "Confirmar Lectura" solo aparece si el documento es de tipo "policy" y el usuario no lo ha leído:
+
+```html
+{% if doc.is_read_by_user %}
+<span>Leído ({{ doc.read_at.strftime('%Y-%m-%d') }})</span>
+{% else %}
+<button onclick="markAsRead({{ doc.id }}, this)">Confirmar Lectura</button>
+{% endif %}
+```
+
+Si el documento es de tipo "record", el botón no aparecerá en la tabla de políticas.
+
+---
+
+### 2.4 Código Involucrado
+
+#### 2.4.1 Endpoint de Descarga (`/api/v1/documents/{doc_id}/download`)
+**Archivo:** `routers/documents.py` - `download_document()`
+
+```python
+if doc.doc_type == "policy":
+    upsert_policy_download_read(
+        db=db,
+        user_id=current_user.id,
+        document_id=doc.id,
+    )
+```
+
+**Problema:** Solo registra descarga si el documento es de tipo "policy".
+
+#### 2.4.2 Función de Registro de Descarga
+**Archivo:** `routers/documents.py` - `upsert_policy_download_read()`
+
+```python
+def upsert_policy_download_read(db: Session, user_id: int, document_id: int) -> DocumentRead:
+    existing_read = db.execute(select(DocumentRead).where(...)).scalars().first()
+    
+    if existing_read is None:
+        # Crea nuevo registro
+        existing_read = DocumentRead(
+            user_id=user_id,
+            document_id=document_id,
+            download_at=datetime.now(UTC),
+            read_at=None,
+        )
+        db.add(existing_read)
+        db.commit()
+        db.refresh(existing_read)
+        return existing_read
+    
+    if existing_read.read_at is None:
+        # Actualiza download_at si no ha confirmado lectura
+        existing_read.download_at = datetime.now(UTC)
+        db.commit()
+        db.refresh(existing_read)
+    
+    return existing_read
+```
+
+**Nota:** Si el usuario ya confirmó lectura (`read_at is not None`), no actualiza el `download_at`.
+
+#### 2.4.3 Endpoint de Confirmación (`/api/v1/documents/{doc_id}/read`)
+**Archivo:** `routers/documents.py` - `mark_document_as_read()`
+
+```python
+# Verificar si ya lo leyó
+if not existing_read or existing_read.download_at is None:
+    return JSONResponse(
+        status_code=status.HTTP_409_CONFLICT,
+        content={
+            "detail": "Primero debe descargar la política antes de confirmar la lectura.",
+            "action": "download_required",
+            "download_url": str(request.url_for("download_document", doc_id=doc_id)),
+        },
+    )
+elif existing_read.read_at is None:
+    existing_read.read_at = datetime.now(UTC)
+    db.commit()
+    db.refresh(existing_read)
+```
+
+**Requerimiento:** `existing_read` debe existir Y `download_at` debe no ser None.
+
+#### 2.4.4 JavaScript del Botón
+**Archivo:** `static/js/documents.js`
+
+```javascript
+async function markAsRead(docId, btnElement) {
+    const response = await fetch(`${BASE_PATH}${API_PREFIX}/documents/${docId}/read`, {
+        method: 'POST'
+    });
+    
+    if (response.ok) {
+        const payload = await response.json();
+        openCertificateInBackground(payload.certificate_url);
+        // ...
+    } else {
+        const err = await response.json();
+        if (response.status === 409 && err.action === "download_required") {
+            alert(err.detail);
+            window.open(err.download_url, "_blank", "noopener");
+        } else {
+            alert("Error: " + err.detail);
+        }
+    }
+}
+```
+
+---
+
+### 2.5 Solución Recomendada
+
+#### 2.5.1 Verificar el tipo de la política 0038P
+
+```sql
+-- Consulta el tipo de la política
+SELECT id, code, title, doc_type, is_active FROM documents WHERE code = '0038P';
+
+-- Si el doc_type no es 'policy', actualizarlo
+UPDATE documents SET doc_type = 'policy' WHERE code = '0038P';
+```
+
+#### 2.5.2 Verificar el registro de descarga del usuario 13
+
+```sql
+-- Buscar el ID de la política 0038P
+SELECT id FROM documents WHERE code = '0038P';
+
+-- Buscar el registro de lectura del usuario 13 para esa política
+SELECT * FROM document_reads 
+WHERE user_id = 13 AND document_id = [ID_DE_0038P];
+```
+
+**Si el registro no existe:**
+- El usuario nunca descargó la política (o la descarga falló silenciosamente)
+- Solución: El usuario debe descargar la política nuevamente
+
+**Si el registro existe pero `download_at IS NULL`:**
+- Hubo un error al crear el registro
+- Solución: Actualizar manualmente:
+  ```sql
+  UPDATE document_reads SET download_at = NOW() 
+  WHERE user_id = 13 AND document_id = [ID_DE_0038P];
+  ```
+
+#### 2.5.3 Verificar el botón en la interfaz
+
+Asegurar que:
+1. El usuario está viendo la pestaña "Políticas" en `/documents/view`
+2. La política 0038P aparece en la tabla
+3. El botón "Confirmar Lectura" está visible (no muestra "Leído")
+4. La política es de tipo "policy" (no "record")
+
+#### 2.5.4 Corrección Preventiva (Opcional)
+
+Si este problema ocurre frecuentemente, considerar modificar `routers/documents.py` para registrar descargas de TODOS los tipos de documentos, no solo "policy":
+
+```python
+# Cambiar de:
+if doc.doc_type == "policy":
+    upsert_policy_download_read(...)
+
+# A:
+if doc.doc_type == "policy" or doc.doc_type == "record":
+    upsert_policy_download_read(...)
+```
+
+**Advertencia:** Esto cambiaría el comportamiento esperado. Evaluar si es deseable que los "record" también requieran confirmación de lectura.
+
+---
+
 ## 8. Estructura de Directorios Importante
 
 ```

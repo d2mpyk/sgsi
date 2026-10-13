@@ -497,7 +497,7 @@ def submit_quiz_attempt(
     certificate_relative_path, certificate_path, certificate_filename = (
         _build_lms_certificate_storage_paths(user=user, post=post, attempt=saved_attempt)
     )
-    certificate_url = f"/media/{certificate_relative_path}"
+    certificate_url = f"/sgsi/media/{certificate_relative_path}"
     certificate_record_code = (
         f"REG-LMS-{post.id}-{user.id}-{saved_attempt.id}-{int(saved_attempt.submitted_at.timestamp())}"
     )
