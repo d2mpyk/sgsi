@@ -189,3 +189,6 @@ Revisa con cuidado cambios en:
 - versión de app declarada en FastAPI: `5.3.1`
 - dependencias fijadas en `requirements.txt`; runtime verificado con Python 3.14 en el entorno local inspeccionado.
 - orientación: portal SGSI enfocado en trazabilidad de lectura y evidencia auditable
+- Ruta de despliegue:
+  - Server: 192.168.42.23
+  - Path: /var/www/html/sgsi

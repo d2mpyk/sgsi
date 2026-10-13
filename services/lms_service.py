@@ -567,9 +567,13 @@ def metrics_by_period(db: Session, period_id: int) -> dict:
     total_posts = len(posts)
     total_attempts = len(attempts)
     approved_attempts = len([attempt for attempt in attempts if attempt.is_passed])
+    
+    passed_statuses = len([row for row in status_rows if row.is_passed])
+    total_expected_statuses = total_users * total_posts
+    
     cumplimiento = (
-        round((len([row for row in status_rows if row.is_passed]) / (total_users * total_posts)) * 100, 2)
-        if total_users and total_posts
+        round((passed_statuses / total_expected_statuses) * 100, 2)
+        if total_expected_statuses
         else 0.0
     )
     aprobacion = round((approved_attempts / total_attempts) * 100, 2) if total_attempts else 0.0
@@ -584,7 +588,7 @@ def metrics_by_period(db: Session, period_id: int) -> dict:
     third_pass = len([attempt for attempt in attempts if attempt.is_passed and attempt.attempt_number == 3])
     denom_pass = approved_attempts or 1
 
-    users_pending = len([row for row in status_rows if not row.is_passed])
+    users_pending = total_users - len({row.user_id for row in status_rows if row.is_passed})
     return {
         "period": period,
         "kpis": {
@@ -648,22 +652,37 @@ def metrics_users_by_period(db: Session, period_id: int) -> list[LMSMetricUserIt
     repo = LMSRepository(db)
     users = {user.id: user for user in repo.list_users()}
     summaries = repo.list_user_summaries_for_period(period_id=period_id)
+    summaries_by_user = {summary.user_id: summary for summary in summaries}
+    posts = repo.list_published_posts()
+    total_posts = len(posts)
+    
     result: list[LMSMetricUserItem] = []
-    for summary in summaries:
-        user = users.get(summary.user_id)
-        if user is None:
-            continue
-        result.append(
-            LMSMetricUserItem(
-                user_id=user.id,
-                username=user.username,
-                total_posts=summary.total_posts,
-                approved_posts=summary.approved_posts,
-                pending_posts=summary.pending_posts,
-                compliance_percentage=summary.compliance_percentage,
-                approval_percentage=summary.approval_percentage,
+    for user_id, user in users.items():
+        summary = summaries_by_user.get(user_id)
+        if summary:
+            result.append(
+                LMSMetricUserItem(
+                    user_id=user.id,
+                    username=user.username,
+                    total_posts=summary.total_posts,
+                    approved_posts=summary.approved_posts,
+                    pending_posts=summary.pending_posts,
+                    compliance_percentage=summary.compliance_percentage,
+                    approval_percentage=summary.approval_percentage,
+                )
             )
-        )
+        else:
+            result.append(
+                LMSMetricUserItem(
+                    user_id=user.id,
+                    username=user.username,
+                    total_posts=total_posts,
+                    approved_posts=0,
+                    pending_posts=total_posts,
+                    compliance_percentage=0.0,
+                    approval_percentage=0.0,
+                )
+            )
     return sorted(result, key=lambda item: item.compliance_percentage, reverse=True)
 
 
