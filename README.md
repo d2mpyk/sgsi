@@ -192,3 +192,56 @@ Revisa con cuidado cambios en:
 - Ruta de despliegue:
   - Server: 192.168.42.23
   - Path: /var/www/html/sgsi
+
+---
+
+## 📝 Correcciones y Mejoras Recientes
+
+### 2026-10-13: Corrección de Informe LMS - Inclusión de Todos los Usuarios Activos
+
+**Problema:** El "Informe de Estado de Cumplimiento de Evaluaciones SGSI" no mostraba todos los usuarios activos del sistema, solo aquellos que habían interactuado con el LMS.
+
+**Causa:** La función `metrics_users_by_period()` en `services/lms_service.py` solo iteraba sobre usuarios con resúmenes existentes (`LMSUserPeriodSummary`), excluyendo usuarios sin interacción.
+
+**Solución:**
+- Modificado `metrics_users_by_period()` para iterar sobre TODOS los usuarios activos
+- Usuarios sin interacción muestran métricas con valores 0
+- Mejorado cálculo de KPIs en `metrics_by_period()`
+
+**Archivos modificados:**
+- `services/lms_service.py` - Funciones `metrics_users_by_period()` y `metrics_by_period()`
+
+**Documentación:**
+- `MEMORY.md` - Análisis detallado y hallazgos
+- `AGENTS.md` - Notas actualizadas sobre el problema y solución
+
+**Impacto:** El informe de métricas LMS ahora muestra correctamente todos los usuarios activos, cumpliendo con el requisito de evidencia auditable completa.
+
+---
+
+## 🔧 Diagnóstico: Problema de Confirmación de Lectura (Usuario ID=13, Política 0038P)
+
+**Síntoma:** El usuario con ID=13 descarga la política con código "0038P" pero al intentar confirmar la lectura recibe: *"Primero debe descargar la política antes de confirmar la lectura."*
+
+**Causa Raíz:** La política con código "0038P" probablemente **no es de tipo "policy"** en la base de datos. El endpoint de descarga solo registra la descarga en `DocumentRead` si `doc.doc_type == "policy"`.
+
+**Verificación:**
+```sql
+SELECT id, code, title, doc_type FROM documents WHERE code = '0038P';
+```
+
+**Solución:**
+```sql
+-- Si el doc_type no es 'policy':
+UPDATE documents SET doc_type = 'policy' WHERE code = '0038P';
+
+-- Verificar el registro de descarga:
+SELECT * FROM document_reads 
+WHERE user_id = 13 AND document_id = (SELECT id FROM documents WHERE code = '0038P');
+
+-- Si el registro no existe o download_at es NULL:
+UPDATE document_reads SET download_at = NOW() 
+WHERE user_id = 13 AND document_id = [ID_DE_0038P];
+```
+
+**Nota:** Este es un problema de datos, no de código. Ver `MEMORY.md` para análisis detallado.
